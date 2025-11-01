@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -469,9 +470,17 @@
 
         /* Animations */
         @keyframes pulse {
-            0% { box-shadow: 0 0 5px rgba(0, 255, 252, 0.7); }
-            50% { box-shadow: 0 0 20px rgba(0, 255, 252, 0.9); }
-            100% { box-shadow: 0 0 5px rgba(0, 255, 252, 0.7); }
+            0% {
+                box-shadow: 0 0 5px rgba(0, 255, 252, 0.7);
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(0, 255, 252, 0.9);
+            }
+
+            100% {
+                box-shadow: 0 0 5px rgba(0, 255, 252, 0.7);
+            }
         }
 
         .pulse-glow {
@@ -480,72 +489,74 @@
     </style>
     <link rel="stylesheet" href="assets/css/palette.css">
 </head>
+
 <body>
     <div class="container">
         <!-- Sidebar -->
         <div class="sidebar">
             <div class="logo">
                 <i class="fas fa-graduation-cap"></i>
-                <h1><a href="home.html" style="text-decoration: none;color: white;">SkillLink</a></h1>
+                <h1><a href="./index.html" style="text-decoration: none;color: white;">SkillLink</a></h1>
             </div>
-            
+
             <div class="menu-title">Main Menu</div>
             <div class="menu-item active">
                 <i class="fas fa-home"></i>
                 <span>Dashboard</span>
             </div>
-            <a href="skill_passport2.html" style="text-decoration: none;">
+            <a href="./skill passport.html" style="text-decoration: none;">
                 <div class="menu-item">
-                <i class="fas fa-book"></i>
-                <span>Skill Passport</span>
-            </div>
-            <!-- chart-line -->
+                    <i class="fas fa-book"></i>
+                    <span>Skill Passport</span>
+                </div>
+                <!-- chart-line -->
             </a>
-            <a href="challanges.html" style="text-decoration: none;">
+            <a href="./challanges.html" style="text-decoration: none;">
                 <div class="menu-item">
                     <i class="fas fa-tasks"></i>
                     <span>Assignments</span>
                 </div>
             </a>
-            <a href="calendar.html" style="text-decoration: none;">
+            <!-- <a href="calendar.html" style="text-decoration: none;">
                 <div class="menu-item">
                     <i class="fas fa-calendar-alt"></i>
                     <span>Schedule</span>
                 </div>
-            </a>
+            </a> -->
             <div class="menu-title">Resources</div>
-            <a href="library.html" style="text-decoration: none;">
+            <a href="./skillLink digital library.html" style="text-decoration: none;">
                 <div class="menu-item">
                     <i class="fas fa-book-open"></i>
                     <span>Library</span>
-                </div></a> 
-            <a href="skill_network.html" style="text-decoration: none;">
+                </div>
+            </a>
+            <a href="./skill_network.html" style="text-decoration: none;">
                 <div class="menu-item">
                     <i class="fas fa-chart-line"></i>
                     <span>Skill network</span>
                 </div>
             </a>
-            <a href="portfolio.html" style="text-decoration: none;">
+            <a href="./portfolio.html" style="text-decoration: none;">
                 <div class="menu-item">
                     <i class="fas fa-briefcase"></i>
                     <span>Portfolio</span>
                 </div>
             </a>
-            <a href="resume_builder.html" style="text-decoration: none;">
+            <a href="./resume_builder.html" style="text-decoration: none;">
                 <div class="menu-item">
                     <i class="fas fa-tasks"></i>
                     <span>Build Your Resume</span>
                 </div>
             </a>
-             
-            <a href="settings.html" style="text-decoration: none;">
+
+            <a href="./settings.html" style="text-decoration: none;">
                 <div class="menu-item">
                     <i class="fas fa-cog"></i>
                     <span>Settings</span>
                 </div>
             </a>
-             
-            <a href="landing2.html" style="text-decoration: none;">
+
+            <a href="./index.html" style="text-decoration: none;">
                 <div class="menu-item">
                     <i class="fas fa-sign-out"></i>
                     <span>Sign out</span>
@@ -560,14 +571,14 @@
                     <i class="fas fa-search"></i>
                     <input type="text" placeholder="Search courses, assignments, resources...">
                 </div>
-                <a href="profile2.html" style="text-decoration: none; color: white;">
-                <div class="user-profile">
-                    <div class="user-info">
-                        <div class="user-name">Tech Alchemists</div>
-                        <div class="user-role">Computer Science</div>
+                <a href="./profile2.html" style="text-decoration: none; color: white;">
+                    <div class="user-profile">
+                        <div class="user-info">
+                            <div class="user-name">Tech Alchemists</div>
+                            <div class="user-role">Computer Science</div>
+                        </div>
+                        <div class="user-avatar">TA</div>
                     </div>
-                    <div class="user-avatar">TA</div>
-                </div>
                 </a>
             </div>
 
@@ -640,7 +651,9 @@
                     </div>
                     <div class="course-progress">
                         <div class="progress-bar">
-                            <div class="progress-value" style="width: 75%; background: linear-gradient(45deg, var(--cyan), var(--lavender));"></div>
+                            <div class="progress-value"
+                                style="width: 75%; background: linear-gradient(45deg, var(--cyan), var(--lavender));">
+                            </div>
                         </div>
                         <div class="progress-text">
                             <span>Progress</span>
@@ -663,7 +676,9 @@
                     </div>
                     <div class="course-progress">
                         <div class="progress-bar">
-                            <div class="progress-value" style="width: 60%; background: linear-gradient(45deg, var(--cyan), var(--lavender));"></div>
+                            <div class="progress-value"
+                                style="width: 60%; background: linear-gradient(45deg, var(--cyan), var(--lavender));">
+                            </div>
                         </div>
                         <div class="progress-text">
                             <span>Progress</span>
@@ -686,7 +701,9 @@
                     </div>
                     <div class="course-progress">
                         <div class="progress-bar">
-                            <div class="progress-value" style="width: 85%; background: linear-gradient(45deg, var(--cyan), var(--lavender));"></div>
+                            <div class="progress-value"
+                                style="width: 85%; background: linear-gradient(45deg, var(--cyan), var(--lavender));">
+                            </div>
                         </div>
                         <div class="progress-text">
                             <span>Progress</span>
@@ -757,7 +774,7 @@
             const startValue = 0;
             const increment = Math.ceil(targetValue / (duration / 20));
             let currentValue = startValue;
-            
+
             const timer = setInterval(() => {
                 currentValue += increment;
                 if (currentValue >= targetValue) {
@@ -769,11 +786,11 @@
         }
 
         // Initialize counters when page loads
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             animateCounter('courses-count', 5, 1000);
             animateCounter('assignments-due', 3, 1000);
             animateCounter('upcoming-exams', 2, 1000);
-            
+
             // Create bar chart (Grade Distribution)
             const barCtx = document.getElementById('barChart').getContext('2d');
             new Chart(barCtx, {
@@ -876,4 +893,5 @@
         });
     </script>
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -458,7 +459,7 @@
             .hero-title {
                 font-size: 3rem;
             }
-            
+
             .hero-subtitle {
                 font-size: 1.2rem;
             }
@@ -477,23 +478,23 @@
                 justify-content: center;
                 transition: var(--transition);
             }
-            
+
             .nav-links.active {
                 left: 0;
             }
-            
+
             .nav-links li {
                 margin: 15px 0;
             }
-            
+
             .mobile-menu-btn {
                 display: block;
             }
-            
+
             .hero-title {
                 font-size: 2.5rem;
             }
-            
+
             .section-title {
                 font-size: 2rem;
             }
@@ -503,12 +504,14 @@
             .hero-title {
                 font-size: 2rem;
             }
-            
+
             .hero-subtitle {
                 font-size: 1rem;
             }
-            
-            .mission-card, .feature-card, .team-card {
+
+            .mission-card,
+            .feature-card,
+            .team-card {
                 padding: 20px;
             }
         }
@@ -519,13 +522,14 @@
             transform: translateY(20px);
             transition: opacity 0.6s ease, transform 0.6s ease;
         }
-        
+
         .fade-in.visible {
             opacity: 1;
             transform: translateY(0);
         }
     </style>
 </head>
+
 <body>
     <!-- Navigation -->
     <nav id="navbar">
@@ -538,11 +542,11 @@
                 <i class="fas fa-bars"></i>
             </button>
             <ul class="nav-links" id="nav-links">
-                <li><a href="home candidate.html">Home</a></li>
-                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="./home candidate.html">Home</a></li>
+                <!-- <li><a href="about.html" class="active">About</a></li> -->
                 <!-- <li><a href="reports.html"></a></li> -->
                 <!-- <li><a href="calendar.html">Calendar</a></li> -->
-                <li><a href="contact.html">Contact</a></li>
+                <li><a href="./contact.html">Contact</a></li>
             </ul>
         </div>
     </nav>
@@ -560,7 +564,9 @@
         <div class="container">
             <h2 class="section-title fade-in">Our Mission</h2>
             <div class="mission-card glass fade-in">
-                <p class="mission-text">At SkillLink, we connect students with recruiters through AI-powered mentoring, skill development, and real-time opportunities. Our platform bridges the gap between education and employment, creating a seamless pathway for career success.</p>
+                <p class="mission-text">At SkillLink, we connect students with recruiters through AI-powered mentoring,
+                    skill development, and real-time opportunities. Our platform bridges the gap between education and
+                    employment, creating a seamless pathway for career success.</p>
             </div>
         </div>
     </section>
@@ -575,28 +581,32 @@
                         <i class="fas fa-robot"></i>
                     </div>
                     <h3 class="feature-title">AI Mentor</h3>
-                    <p class="feature-description">Personalized guidance powered by AI to help students develop the right skills for their career goals.</p>
+                    <p class="feature-description">Personalized guidance powered by AI to help students develop the
+                        right skills for their career goals.</p>
                 </div>
                 <div class="feature-card glass fade-in">
                     <div class="feature-icon">
                         <i class="fas fa-chart-line"></i>
                     </div>
                     <h3 class="feature-title">Reports</h3>
-                    <p class="feature-description">Track student progress and recruiter analytics with detailed reports and insights.</p>
+                    <p class="feature-description">Track student progress and recruiter analytics with detailed reports
+                        and insights.</p>
                 </div>
                 <div class="feature-card glass fade-in">
                     <div class="feature-icon">
                         <i class="fas fa-calendar-alt"></i>
                     </div>
                     <h3 class="feature-title">Calendar</h3>
-                    <p class="feature-description">Stay on top of events, interviews, and tasks with our integrated calendar system.</p>
+                    <p class="feature-description">Stay on top of events, interviews, and tasks with our integrated
+                        calendar system.</p>
                 </div>
                 <div class="feature-card glass fade-in">
                     <div class="feature-icon">
                         <i class="fas fa-comments"></i>
                     </div>
                     <h3 class="feature-title">Direct Messaging</h3>
-                    <p class="feature-description">Seamless communication between students and recruiters for better collaboration.</p>
+                    <p class="feature-description">Seamless communication between students and recruiters for better
+                        collaboration.</p>
                 </div>
             </div>
         </div>
@@ -696,7 +706,7 @@
 
     <script>
         // Navigation shrink effect
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             const navbar = document.getElementById('navbar');
             if (window.scrollY > 50) {
                 navbar.classList.add('shrink');
@@ -706,7 +716,7 @@
         });
 
         // Mobile menu toggle
-        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+        document.getElementById('mobile-menu-btn').addEventListener('click', function () {
             document.getElementById('nav-links').classList.toggle('active');
         });
 
@@ -727,18 +737,18 @@
 
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
+            anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const targetId = this.getAttribute('href');
                 if (targetId === '#') return;
-                
+
                 const targetElement = document.querySelector(targetId);
                 if (targetElement) {
                     window.scrollTo({
                         top: targetElement.offsetTop - 80,
                         behavior: 'smooth'
                     });
-                    
+
                     // Close mobile menu if open
                     document.getElementById('nav-links').classList.remove('active');
                 }
@@ -746,4 +756,5 @@
         });
     </script>
 </body>
+
 </html>

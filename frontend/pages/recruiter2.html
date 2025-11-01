@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -441,9 +442,17 @@
 
         /* Animations */
         @keyframes pulse {
-            0% { box-shadow: 0 0 5px rgba(0, 255, 252, 0.7); }
-            50% { box-shadow: 0 0 20px rgba(0, 255, 252, 0.9); }
-            100% { box-shadow: 0 0 5px rgba(0, 255, 252, 0.7); }
+            0% {
+                box-shadow: 0 0 5px rgba(0, 255, 252, 0.7);
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(0, 255, 252, 0.9);
+            }
+
+            100% {
+                box-shadow: 0 0 5px rgba(0, 255, 252, 0.7);
+            }
         }
 
         .pulse-glow {
@@ -451,6 +460,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- Sidebar -->
@@ -459,44 +469,45 @@
                 <i class="fas fa-users"></i>
                 <h1>RecruiterPro</h1>
             </div>
-            
+
             <div class="menu-title">Main Menu</div>
             <div class="menu-item active">
                 <i class="fas fa-home"></i>
-                <a href="recruiter2.html" style="text-decoration: none; color:white"><span>Dashboard</span></a>
+                <a href="./recruiter2.html" style="text-decoration: none; color:white"><span>Dashboard</span></a>
             </div>
-            <!-- <div class="menu-item">
+            <div class="menu-item">
                 <i class="fas fa-user-friends"></i>
-                <a href="candidate_srch.html" style="text-decoration: none; color:white"><span>Candidates</span></a>
-            </div> -->
+                <a href="./candidate_srch.html" style="text-decoration: none; color:white"><span>Candidates</span></a>
+            </div>
             <div class="menu-item">
                 <i class="fas fa-briefcase"></i>
-                <a href="job_post2.html" style="text-decoration: none; color:white"><span>Jobs</span></a>
+                <a href="./job_post2.html" style="text-decoration: none; color:white"><span>Jobs</span></a>
             </div>
-            <div class="menu-item">
+            <!-- <div class="menu-item">
                 <i class="fas fa-calendar-alt"></i>
                 <a href="calendar.html" style="text-decoration: none; color:white"><span>Calendar</span></a>
-            </div>
-            
+            </div> -->
+
             <div class="menu-title">Tools</div>
             <div class="menu-item">
                 <i class="fas fa-search"></i>
-                <a href="candidate_srch.html" style="text-decoration: none; color:white"><span>Candidates</span></a>
+                <a href="./candidate_srch.html" style="text-decoration: none; color:white"><span>Candidates</span></a>
             </div>
             <div class="menu-item">
                 <i class="fas fa-comments"></i>
-                <a href="dm_system.html" style="text-decoration: none; color:white"><span>Messaging</span></a>
+                <a href="./dm_system.html" style="text-decoration: none; color:white"><span>Messaging</span></a>
             </div>
             <div class="menu-item">
                 <i class="fas fa-chart-line"></i>
-                <a href="opportunities_mng.html" style="text-decoration: none; color:white"><span>Opportunities Management</span></a>
+                <a href="./opportunities_mng.html" style="text-decoration: none; color:white"><span>Opportunities
+                        Management</span></a>
             </div>
             <div class="menu-item">
                 <i class="fas fa-cog"></i>
-                <a href="settings.html" style="text-decoration: none; color:white"><span>Settings</span></a>
+                <a href="./settings.html" style="text-decoration: none; color:white"><span>Settings</span></a>
             </div>
-             
-            <a href="landing2.html" style="text-decoration: none;">
+
+            <a href="./index.html" style="text-decoration: none;">
                 <div class="menu-item">
                     <i class="fas fa-sign-out"></i>
                     <span>Sign out</span>
@@ -717,7 +728,7 @@
             const startValue = 0;
             const increment = Math.ceil(targetValue / (duration / 20));
             let currentValue = startValue;
-            
+
             const timer = setInterval(() => {
                 currentValue += increment;
                 if (currentValue >= targetValue) {
@@ -729,11 +740,11 @@
         }
 
         // Initialize counters when page loads
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             animateCounter('new-applicants', 124, 1000);
             animateCounter('qualified', 78, 1000);
             animateCounter('pending', 46, 1000);
-            
+
             // Create bar chart
             const barCtx = document.getElementById('barChart').getContext('2d');
             new Chart(barCtx, {
@@ -837,4 +848,5 @@
         });
     </script>
 </body>
+
 </html>

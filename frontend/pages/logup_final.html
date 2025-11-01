@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,7 +32,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
+            background:
                 radial-gradient(circle at 10% 20%, rgba(0, 188, 212, 0.2) 0%, transparent 20%),
                 radial-gradient(circle at 90% 70%, rgba(187, 134, 252, 0.2) 0%, transparent 20%),
                 radial-gradient(circle at 50% 80%, rgba(255, 20, 147, 0.2) 0%, transparent 20%);
@@ -44,7 +45,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: 
+            background-image:
                 linear-gradient(rgba(0, 188, 212, 0.1) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 188, 212, 0.1) 1px, transparent 1px);
             background-size: 30px 30px;
@@ -58,7 +59,7 @@
             background: rgba(13, 25, 42, 0.6);
             border-radius: 20px;
             backdrop-filter: blur(10px);
-            box-shadow: 
+            box-shadow:
                 0 0 5px rgba(0, 188, 212, 0.7),
                 0 0 15px rgba(187, 134, 252, 0.5),
                 inset 0 0 10px rgba(255, 255, 255, 0.1);
@@ -70,20 +71,22 @@
 
         @keyframes pulse {
             0% {
-                box-shadow: 
+                box-shadow:
                     0 0 5px rgba(0, 188, 212, 0.7),
                     0 0 15px rgba(187, 134, 252, 0.5),
                     inset 0 0 10px rgba(255, 255, 255, 0.1);
             }
+
             50% {
-                box-shadow: 
+                box-shadow:
                     0 0 10px rgba(0, 188, 212, 0.8),
                     0 0 25px rgba(187, 134, 252, 0.6),
                     0 0 40px rgba(255, 20, 147, 0.4),
                     inset 0 0 15px rgba(255, 255, 255, 0.15);
             }
+
             100% {
-                box-shadow: 
+                box-shadow:
                     0 0 5px rgba(0, 188, 212, 0.7),
                     0 0 20px rgba(187, 134, 252, 0.5),
                     0 0 35px rgba(0, 188, 212, 0.3),
@@ -181,8 +184,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .form-title {
@@ -200,12 +210,13 @@
         @keyframes neonText {
             from {
                 text-shadow: 0 0 5px rgba(0, 188, 212, 0.5),
-                             0 0 10px rgba(187, 134, 252, 0.5);
+                    0 0 10px rgba(187, 134, 252, 0.5);
             }
+
             to {
                 text-shadow: 0 0 10px rgba(0, 188, 212, 0.8),
-                             0 0 20px rgba(187, 134, 252, 0.8),
-                             0 0 30px rgba(255, 20, 147, 0.6);
+                    0 0 20px rgba(187, 134, 252, 0.8),
+                    0 0 30px rgba(255, 20, 147, 0.6);
             }
         }
 
@@ -453,7 +464,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .cyber-line {
@@ -467,27 +480,27 @@
             .container {
                 border-radius: 15px;
             }
-            
+
             .navbar {
                 padding: 10px 20px;
             }
-            
+
             .logo {
                 font-size: 20px;
             }
-            
+
             .nav-links {
                 display: none;
             }
-            
+
             .form-container {
                 padding: 20px;
             }
-            
+
             .role-selection {
                 flex-direction: column;
             }
-            
+
             .otp-input {
                 width: 40px;
                 height: 40px;
@@ -496,15 +509,18 @@
         }
     </style>
 </head>
+
 <body>
     <div class="neon-grid"></div>
     <div class="container">
         <nav class="navbar">
-            <a href="#" class="logo">
+            <a href="./index.html" class="logo">
                 <i class="fas fa-link"></i>
                 <span>SkillLink</span>
             </a>
-            <a href="admin.html" style="text-decoration: none; color: white;"><div class="role-option" data-role="admin">Admin</div></a>
+            <a href="./admin.html" style="text-decoration: none; color: white;">
+                <div class="role-option" data-role="admin">Admin</div>
+            </a>
             <!-- <div class="nav-links">
                 <a href="landing2.html">Home</a>
                 <a href="#">Features</a>
@@ -516,20 +532,20 @@
         <div class="form-container">
             <div class="form-tabs">
                 <div class="tab active" id="login-tab">Login</div>
-                
+
                 <div class="tab" id="signup-tab">Sign Up</div>
-                
+
             </div>
 
             <!-- Login Form -->
             <form class="form active" id="login-form">
                 <h2 class="form-title">Welcome Back</h2>
-                
+
                 <div class="input-group">
                     <i class="fas fa-envelope"></i>
                     <input type="email" class="input-field" id="login-email" placeholder="Email Address" required>
                 </div>
-                
+
                 <div class="input-group">
                     <i class="fas fa-lock"></i>
                     <input type="password" class="input-field" id="login-password" placeholder="Password" required>
@@ -537,39 +553,39 @@
                         <i class="fas fa-eye"></i>
                     </span>
                 </div>
-                
+
                 <div class="checkbox-group">
                     <input type="checkbox" id="remember-me">
                     <label for="remember-me">Remember me</label>
                 </div>
-                
+
                 <div class="error-message" id="login-error">Invalid email or password. Please try again.</div>
-                
+
                 <button type="submit" class="btn" id="login-btn" disabled>Login</button>
-                
+
                 <div class="success-message" id="login-success">Login successful! Redirecting...</div>
             </form>
-            
+
 
             <!-- Signup Form -->
             <form class="form" id="signup-form">
                 <h2 class="form-title">Create Account</h2>
-                
+
                 <div class="input-group">
                     <i class="fas fa-user"></i>
                     <input type="text" class="input-field" id="signup-name" placeholder="Full Name" required>
                 </div>
-                
+
                 <div class="input-group">
                     <i class="fas fa-at"></i>
                     <input type="text" class="input-field" id="signup-username" placeholder="Username" required>
                 </div>
-                
+
                 <div class="input-group">
                     <i class="fas fa-envelope"></i>
                     <input type="email" class="input-field" id="signup-email" placeholder="Email Address" required>
                 </div>
-                
+
                 <div class="input-group">
                     <i class="fas fa-lock"></i>
                     <input type="password" class="input-field" id="signup-password" placeholder="Password" required>
@@ -577,30 +593,33 @@
                         <i class="fas fa-eye"></i>
                     </span>
                 </div>
-                
+
                 <div class="password-strength">
                     <div class="strength-meter" id="password-strength-meter"></div>
                 </div>
                 <div class="strength-text" id="password-strength-text">Password strength</div>
-                
+
                 <div class="input-group">
                     <i class="fas fa-lock"></i>
-                    <input type="password" class="input-field" id="signup-confirm" placeholder="Confirm Password" required>
+                    <input type="password" class="input-field" id="signup-confirm" placeholder="Confirm Password"
+                        required>
                 </div>
-                
+
                 <div class="error-message" id="password-match-error">Passwords do not match.</div>
-                
-                <h3 style="margin: 20px 0 10px; color: rgba(255, 255, 255, 0.8); text-shadow: 0 0 5px rgba(0, 188, 212, 0.5);">Select Your Role</h3>
+
+                <h3
+                    style="margin: 20px 0 10px; color: rgba(255, 255, 255, 0.8); text-shadow: 0 0 5px rgba(0, 188, 212, 0.5);">
+                    Select Your Role</h3>
                 <div class="role-selection">
                     <div class="role-option" data-role="student">Student</div>
                     <div class="role-option" data-role="recruiter">Recruiter</div>
-                    
+
                 </div>
-                
+
                 <div class="error-message" id="role-error">Please select a role.</div>
-                
+
                 <button type="submit" class="btn" id="signup-btn" disabled>Sign Up</button>
-                
+
                 <div class="otp-container" id="otp-container">
                     <h3>Enter OTP Sent to Your Email</h3>
                     <div style="margin: 20px 0;">
@@ -617,10 +636,10 @@
             </form>
         </div>
     </div>
-    
+
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // DOM Elements
             const loginTab = document.getElementById('login-tab');
             const signupTab = document.getElementById('signup-tab');
@@ -633,72 +652,72 @@
             const passwordStrengthText = document.getElementById('password-strength-text');
             const otpContainer = document.getElementById('otp-container');
             const roleOptions = document.querySelectorAll('.role-option');
-            
+
             // Tab Switching
             loginTab.addEventListener('click', () => switchForm('login'));
             signupTab.addEventListener('click', () => switchForm('signup'));
-            
+
             // Password Toggle
             setupPasswordToggle('login-toggle', 'login-password');
             setupPasswordToggle('signup-toggle', 'signup-password');
-            
+
             // Form Validation
             setupFormValidation('login-email', loginBtn);
             setupFormValidation('login-password', loginBtn);
-            
+
             setupFormValidation('signup-name', signupBtn);
             setupFormValidation('signup-username', signupBtn);
             setupFormValidation('signup-email', signupBtn);
             setupFormValidation('signup-password', signupBtn);
             setupFormValidation('signup-confirm', signupBtn);
-            
+
             // Password Strength Checker
             document.getElementById('signup-password').addEventListener('input', checkPasswordStrength);
-            
+
             // Confirm Password Check
             document.getElementById('signup-confirm').addEventListener('input', checkPasswordMatch);
-            
+
             // Role Selection
             roleOptions.forEach(option => {
-                option.addEventListener('click', function() {
+                option.addEventListener('click', function () {
                     roleOptions.forEach(opt => opt.classList.remove('selected'));
                     this.classList.add('selected');
                     document.getElementById('role-error').style.display = 'none';
                     checkSignupForm();
                 });
             });
-            
+
             // OTP Input Handling
             const otpInputs = document.querySelectorAll('.otp-input');
             otpInputs.forEach((input, index) => {
-                input.addEventListener('input', function() {
+                input.addEventListener('input', function () {
                     if (this.value.length === 1 && index < otpInputs.length - 1) {
                         otpInputs[index + 1].focus();
                     }
                 });
-                
-                input.addEventListener('keydown', function(e) {
+
+                input.addEventListener('keydown', function (e) {
                     if (e.key === 'Backspace' && this.value === '' && index > 0) {
                         otpInputs[index - 1].focus();
                     }
                 });
             });
-            
+
             // Form Submissions
-            loginForm.addEventListener('submit', function(e) {
+            loginForm.addEventListener('submit', function (e) {
                 e.preventDefault();
                 handleLogin();
             });
-            
-            signupForm.addEventListener('submit', function(e) {
+
+            signupForm.addEventListener('submit', function (e) {
                 e.preventDefault();
                 handleSignup();
             });
-            
-            verifyOtpBtn.addEventListener('click', function() {
+
+            verifyOtpBtn.addEventListener('click', function () {
                 verifyOtp();
             });
-            
+
             // Functions
             function switchForm(form) {
                 if (form === 'login') {
@@ -713,12 +732,12 @@
                     loginForm.classList.remove('active');
                 }
             }
-            
+
             function setupPasswordToggle(toggleId, passwordId) {
                 const toggle = document.getElementById(toggleId);
                 const password = document.getElementById(passwordId);
-                
-                toggle.addEventListener('click', function() {
+
+                toggle.addEventListener('click', function () {
                     if (password.type === 'password') {
                         password.type = 'text';
                         toggle.innerHTML = '<i class="fas fa-eye-slash"></i>';
@@ -728,10 +747,10 @@
                     }
                 });
             }
-            
+
             function setupFormValidation(inputId, button) {
                 const input = document.getElementById(inputId);
-                input.addEventListener('input', function() {
+                input.addEventListener('input', function () {
                     if (button.id === 'login-btn') {
                         checkLoginForm();
                     } else {
@@ -739,18 +758,18 @@
                     }
                 });
             }
-            
+
             function checkLoginForm() {
                 const email = document.getElementById('login-email').value;
                 const password = document.getElementById('login-password').value;
-                
+
                 if (email && password) {
                     loginBtn.disabled = false;
                 } else {
                     loginBtn.disabled = true;
                 }
             }
-            
+
             function checkSignupForm() {
                 const name = document.getElementById('signup-name').value;
                 const username = document.getElementById('signup-username').value;
@@ -758,23 +777,23 @@
                 const password = document.getElementById('signup-password').value;
                 const confirm = document.getElementById('signup-confirm').value;
                 const roleSelected = document.querySelector('.role-option.selected');
-                
+
                 if (name && username && email && password && confirm && roleSelected) {
                     signupBtn.disabled = false;
                 } else {
                     signupBtn.disabled = true;
                 }
             }
-            
+
             function checkPasswordStrength() {
                 const password = document.getElementById('signup-password').value;
                 let strength = 0;
-                
+
                 if (password.length >= 8) strength++;
                 if (/[A-Z]/.test(password)) strength++;
                 if (/[0-9]/.test(password)) strength++;
                 if (/[^A-Za-z0-9]/.test(password)) strength++;
-                
+
                 // Update strength meter
                 passwordStrengthMeter.className = 'strength-meter';
                 if (strength === 0) {
@@ -794,12 +813,12 @@
                     passwordStrengthText.style.color = '#23d160';
                 }
             }
-            
+
             function checkPasswordMatch() {
                 const password = document.getElementById('signup-password').value;
                 const confirm = document.getElementById('signup-confirm').value;
                 const error = document.getElementById('password-match-error');
-                
+
                 if (confirm && password !== confirm) {
                     error.style.display = 'block';
                     signupBtn.disabled = true;
@@ -808,19 +827,19 @@
                     checkSignupForm();
                 }
             }
-            
+
             function handleLogin() {
                 const email = document.getElementById('login-email').value;
                 const password = document.getElementById('login-password').value;
                 const error = document.getElementById('login-error');
                 const success = document.getElementById('login-success');
-                
+
                 // Simple validation (in a real app, this would be done server-side)
                 if (email === 'student@example.com' && password === 'Password123') {
                     error.style.display = 'none';
                     success.style.display = 'block';
                     loginBtn.innerHTML = '<span class="loader"></span> Logging in...';
-                    
+
                     // Simulate redirect
                     setTimeout(() => {
                         const role = 'student'; // This would come from server response
@@ -830,7 +849,7 @@
                     error.style.display = 'none';
                     success.style.display = 'block';
                     loginBtn.innerHTML = '<span class="loader"></span> Logging in...';
-                    
+
                     setTimeout(() => {
                         const role = 'recruiter';
                         redirectToDashboard(role);
@@ -839,7 +858,7 @@
                     error.style.display = 'none';
                     success.style.display = 'block';
                     loginBtn.innerHTML = '<span class="loader"></span> Logging in...';
-                    
+
                     setTimeout(() => {
                         const role = 'admin';
                         redirectToDashboard(role);
@@ -849,25 +868,25 @@
                     success.style.display = 'none';
                 }
             }
-            
+
             function handleSignup() {
                 const roleSelected = document.querySelector('.role-option.selected');
                 const roleError = document.getElementById('role-error');
-                
+
                 if (!roleSelected) {
                     roleError.style.display = 'block';
                     return;
                 }
-                
+
                 // Show OTP container
                 otpContainer.style.display = 'block';
                 signupBtn.style.display = 'none';
-                
+
                 // In a real app, we would send the OTP to the user's email here
                 // For demo purposes, we'll just log it
                 const demoOtp = '123456';
                 console.log(`Demo OTP: ${demoOtp}`);
-                
+
                 // Auto-fill OTP for demo purposes
                 document.getElementById('otp1').value = '1';
                 document.getElementById('otp2').value = '2';
@@ -876,7 +895,7 @@
                 document.getElementById('otp5').value = '5';
                 document.getElementById('otp6').value = '6';
             }
-            
+
             function verifyOtp() {
                 const otp1 = document.getElementById('otp1').value;
                 const otp2 = document.getElementById('otp2').value;
@@ -884,15 +903,15 @@
                 const otp4 = document.getElementById('otp4').value;
                 const otp5 = document.getElementById('otp5').value;
                 const otp6 = document.getElementById('otp6').value;
-                
+
                 const enteredOtp = otp1 + otp2 + otp3 + otp4 + otp5 + otp6;
                 const otpError = document.getElementById('otp-error');
-                
+
                 // For demo purposes, any 6-digit OTP will work
                 if (enteredOtp.length === 6) {
                     otpError.style.display = 'none';
                     verifyOtpBtn.innerHTML = '<span class="loader"></span> Verifying...';
-                    
+
                     // Simulate verification and redirect
                     setTimeout(() => {
                         const role = document.querySelector('.role-option.selected').dataset.role;
@@ -902,18 +921,19 @@
                     otpError.style.display = 'block';
                 }
             }
-            
+
             function redirectToDashboard(role) {
                 // Redirect to the appropriate dashboard based on role
                 if (role === 'student') {
-                    window.location.href = 'home_candidate.html';
+                    window.location.href = './student_dash.html';
                 } else if (role === 'recruiter') {
-                    window.location.href = 'home.html';
+                    window.location.href = './recruiter2.html';
                 } else if (role === 'admin') {
-                    window.location.href = 'admin.html';
+                    window.location.href = './admin.html';
                 }
             }
         });
     </script>
 </body>
+
 </html>

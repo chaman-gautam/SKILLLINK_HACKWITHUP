@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillLink Challenges</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --deep-navy: #0b0e14;
+            --neon-blue: #1d4ed8;
+            --cyan-glow: #22d3ee;
+            --accent-violet: #6d28d9;
+        }
+        
+        body {
+            background-color: var(--deep-navy);
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(29, 78, 216, 0.5);
+            border-radius: 12px;
+        }
+        
+        .neon-glow {
+            box-shadow: 0 0 10px rgba(29, 78, 216, 0.5), 
+                        0 0 20px rgba(29, 78, 216, 0.3),
+                        0 0 30px rgba(29, 78, 216, 0.1);
+        }
+        
+        .neon-glow:hover {
+            box-shadow: 0 0 15px rgba(29, 78, 216, 0.7), 
+                        0 0 25px rgba(29, 78, 216, 0.5),
+                        0 0 35px rgba(29, 78, 216, 0.3);
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #1d4ed8, #22d3ee);
+            background-size: 200% 100%;
+            animation: gradient-x 3s ease infinite;
+        }
+        
+        @keyframes gradient-x {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background-color: rgba(34, 211, 238, 0.7);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        .streak-ring {
+            background: conic-gradient(var(--neon-blue) 0deg, transparent 0deg);
+            transition: background 0.5s ease;
+        }
+        
+        .trust-score-ring {
+            background: conic-gradient(var(--neon-blue) 0deg, transparent 0deg);
+            transition: background 0.5s ease;
+        }
+        
+        .modal-overlay {
+            background-color: rgba(11, 14, 20, 0.8);
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .card-expand {
+            transition: all 0.3s ease;
+        }
+        
+        .card-expand:hover {
+            transform: translateY(-5px);
+        }
+        
+        .active-tab {
+            background-color: rgba(29, 78, 216, 0.2);
+            border-bottom: 2px solid var(--neon-blue);
+            box-shadow: 0 0 10px rgba(29, 78, 216, 0.5);
+        }
+        
+        .confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Particle Background -->
+    <div id="particle-container" class="fixed inset-0 pointer-events-none z-0"></div>
+    
+    <!-- Header Section -->
+    <header class="container mx-auto px-4 py-8 relative z-10">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-4xl font-bold">⚡ SkillLink Challenges</h1>
+                <p class="text-lg text-gray-300 mt-2">Complete verified challenges to boost your Trust Score and unlock badges.</p>
+            </div>
+            <button id="streak-btn" class="glass-card neon-glow px-6 py-3 rounded-lg flex items-center space-x-2 hover:bg-blue-900/20 transition-all">
+                <span>🏆</span>
+                <span>My Streaks</span>
+            </button>
+        </div>
+        <div class="h-1 w-32 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full mt-4"></div>
+    </header>
+
+    <!-- Challenge Filter Bar -->
+    <section class="container mx-auto px-4 py-6 relative z-10">
+        <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div class="flex space-x-2 overflow-x-auto pb-2">
+                <button class="filter-tab active-tab px-4 py-2 rounded-lg transition-all" data-filter="all">All</button>
+                <button class="filter-tab px-4 py-2 rounded-lg transition-all" data-filter="daily">🕓 Daily</button>
+                <button class="filter-tab px-4 py-2 rounded-lg transition-all" data-filter="weekly">📅 Weekly</button>
+                <button class="filter-tab px-4 py-2 rounded-lg transition-all" data-filter="skill">💻 Skill-Based</button>
+            </div>
+            <div class="w-full md:w-auto">
+                <input type="text" id="search-challenges" placeholder="Search challenges..." class="glass-card px-4 py-2 rounded-lg w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+            </div>
+        </div>
+    </section>
+
+    <!-- Challenge Cards Grid -->
+    <main class="container mx-auto px-4 py-8 relative z-10">
+        <div id="challenges-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Challenge cards will be dynamically inserted here -->
+        </div>
+    </main>
+
+    <!-- Submission Modal -->
+    <div id="submission-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="modal-overlay absolute inset-0"></div>
+        <div class="modal-content glass-card neon-glow p-6 rounded-xl w-full max-w-md mx-4 relative">
+            <button id="close-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white">✕</button>
+            <h2 class="text-2xl font-bold mb-4">Submit Proof</h2>
+            <form id="submission-form">
+                <div class="mb-4">
+                    <label class="block text-gray-300 mb-2">Challenge Title</label>
+                    <input type="text" id="challenge-title" class="glass-card w-full px-3 py-2 rounded-lg" readonly>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-300 mb-2">Proof Link</label>
+                    <input type="text" id="proof-link" class="glass-card w-full px-3 py-2 rounded-lg" placeholder="GitHub, YouTube, Drive, CodeSandbox...">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-300 mb-2">File Upload (Optional)</label>
+                    <input type="file" id="file-upload" class="glass-card w-full px-3 py-2 rounded-lg">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-300 mb-2">What did you learn from this challenge?</label>
+                    <textarea id="reflection" class="glass-card w-full px-3 py-2 rounded-lg h-24" placeholder="Share your learning experience..."></textarea>
+                </div>
+                <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-cyan-500 py-3 rounded-lg font-medium hover:opacity-90 transition-all">Submit Proof</button>
+            </form>
+            <p class="text-sm text-gray-400 mt-4 text-center">Your submission will be hashed and verified through SkillLink Passport.</p>
+        </div>
+    </div>
+
+    <!-- Streak Tracker Modal -->
+    <div id="streak-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="modal-overlay absolute inset-0"></div>
+        <div class="modal-content glass-card neon-glow p-6 rounded-xl w-full max-w-md mx-4 relative">
+            <button id="close-streak-modal" class="absolute top-4 right-4 text-gray-400 hover:text-white">✕</button>
+            <h2 class="text-2xl font-bold mb-6 text-center">My Progress</h2>
+            
+            <div class="flex flex-col items-center mb-8">
+                <div class="relative w-40 h-40 mb-4">
+                    <div class="absolute inset-0 rounded-full border-4 border-gray-700"></div>
+                    <div id="streak-ring" class="streak-ring absolute inset-0 rounded-full border-4 border-transparent"></div>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <span id="streak-count" class="text-3xl font-bold">7</span>
+                        <span class="text-gray-300">Days 🔥</span>
+                    </div>
+                </div>
+                <p class="text-xl font-medium">Current Streak: 7 Days</p>
+            </div>
+            
+            <div class="flex flex-col items-center mb-8">
+                <div class="relative w-32 h-32 mb-4">
+                    <div class="absolute inset-0 rounded-full border-4 border-gray-700"></div>
+                    <div id="trust-score-ring" class="trust-score-ring absolute inset-0 rounded-full border-4 border-transparent"></div>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <span id="trust-score" class="text-2xl font-bold">450</span>
+                        <span class="text-gray-300 text-sm">Trust Score</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-3">Badges Earned</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="glass-card p-3 rounded-lg flex items-center space-x-2">
+                        <span>🏅</span>
+                        <span>Consistent Learner</span>
+                    </div>
+                    <div class="glass-card p-3 rounded-lg flex items-center space-x-2">
+                        <span>🥇</span>
+                        <span>Challenge Champ</span>
+                    </div>
+                    <div class="glass-card p-3 rounded-lg flex items-center space-x-2">
+                        <span>🤖</span>
+                        <span>AI Explorer</span>
+                    </div>
+                    <div class="glass-card p-3 rounded-lg flex items-center space-x-2">
+                        <span>🌐</span>
+                        <span>Web Wizard</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confetti Canvas -->
+    <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+
+    <script>
+        // Challenge data
+        const challenges = [
+            {
+                id: 1,
+                title: "Build a Personal Portfolio Website",
+                category: "Web Development",
+                difficulty: "Easy",
+                trustPoints: 10,
+                description: "Create a responsive portfolio using HTML, CSS, and JS. Include sections for projects, about, and contact.",
+                deadline: "3 days",
+                type: "skill"
+            },
+            {
+                id: 2,
+                title: "Create AI Chatbot with Gemini API",
+                category: "AI / Machine Learning",
+                difficulty: "Hard",
+                trustPoints: 30,
+                description: "Integrate Gemini API to build an AI mentor chatbot that responds to user inputs contextually.",
+                deadline: "5 days",
+                type: "skill"
+            },
+            {
+                id: 3,
+                title: "Optimize Sorting Algorithms",
+                category: "Data Structures & Algorithms",
+                difficulty: "Medium",
+                trustPoints: 20,
+                description: "Implement and compare Merge Sort and Quick Sort efficiencies using JavaScript.",
+                deadline: "2 days",
+                type: "daily"
+            },
+            {
+                id: 4,
+                title: "Build a To-Do App with Local Storage",
+                category: "Frontend",
+                difficulty: "Easy",
+                trustPoints: 10,
+                description: "Develop a simple yet stylish To-Do List app that saves tasks using localStorage.",
+                deadline: "2 days",
+                type: "daily"
+            },
+            {
+                id: 5,
+                title: "Analyze Sentiments from Tweets",
+                category: "AI / NLP",
+                difficulty: "Hard",
+                trustPoints: 25,
+                description: "Use a pre-trained sentiment model or Gemini API to analyze tweets about AI trends.",
+                deadline: "7 days",
+                type: "weekly"
+            },
+            {
+                id: 6,
+                title: "Create a RESTful API with Node.js",
+                category: "Backend Development",
+                difficulty: "Medium",
+                trustPoints: 20,
+                description: "Build a RESTful API with CRUD operations for a blog system using Node.js and Express.",
+                deadline: "4 days",
+                type: "skill"
+            }
+        ];
+
+        // DOM Elements
+        const challengesGrid = document.getElementById('challenges-grid');
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        const searchInput = document.getElementById('search-challenges');
+        const streakBtn = document.getElementById('streak-btn');
+        const streakModal = document.getElementById('streak-modal');
+        const closeStreakModal = document.getElementById('close-streak-modal');
+        const submissionModal = document.getElementById('submission-modal');
+        const closeModal = document.getElementById('close-modal');
+        const submissionForm = document.getElementById('submission-form');
+        const challengeTitleInput = document.getElementById('challenge-title');
+        const streakRing = document.getElementById('streak-ring');
+        const trustScoreRing = document.getElementById('trust-score-ring');
+        const streakCount = document.getElementById('streak-count');
+        const trustScore = document.getElementById('trust-score');
+        const particleContainer = document.getElementById('particle-container');
+
+        // State
+        let currentFilter = 'all';
+        let currentSearch = '';
+        let currentChallengeId = null;
+        let userStreak = 7;
+        let userTrustScore = 450;
+
+        // Initialize the page
+        function init() {
+            renderChallenges();
+            setupEventListeners();
+            createParticles();
+            updateStreakRing();
+            updateTrustScoreRing();
+        }
+
+        // Render challenges based on filter and search
+        function renderChallenges() {
+            challengesGrid.innerHTML = '';
+            
+            const filteredChallenges = challenges.filter(challenge => {
+                const matchesFilter = currentFilter === 'all' || challenge.type === currentFilter;
+                const matchesSearch = challenge.title.toLowerCase().includes(currentSearch.toLowerCase()) || 
+                                     challenge.category.toLowerCase().includes(currentSearch.toLowerCase());
+                return matchesFilter && matchesSearch;
+            });
+            
+            filteredChallenges.forEach(challenge => {
+                const challengeCard = createChallengeCard(challenge);
+                challengesGrid.appendChild(challengeCard);
+            });
+        }
+
+        // Create a challenge card element
+        function createChallengeCard(challenge) {
+            const card = document.createElement('div');
+            card.className = 'glass-card neon-glow card-expand p-6 rounded-xl';
+            card.dataset.id = challenge.id;
+            
+            // Difficulty color mapping
+            const difficultyColors = {
+                'Easy': 'border-green-500 text-green-400',
+                'Medium': 'border-yellow-500 text-yellow-400',
+                'Hard': 'border-red-500 text-red-400'
+            };
+            
+            card.innerHTML = `
+                <div class="flex justify-between items-start mb-4">
+                    <h3 class="text-xl font-semibold">${challenge.title}</h3>
+                    <span class="text-xs px-2 py-1 rounded-full border ${difficultyColors[challenge.difficulty]}">${challenge.difficulty}</span>
+                </div>
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-sm text-cyan-300">${challenge.category}</span>
+                    <span class="text-sm bg-blue-900/30 px-2 py-1 rounded">+${challenge.trustPoints} Trust Points</span>
+                </div>
+                <div class="mb-4">
+                    <div class="h-2 w-full bg-gray-700 rounded-full overflow-hidden">
+                        <div class="progress-bar h-full rounded-full"></div>
+                    </div>
+                </div>
+                <p class="text-gray-300 mb-4 hidden md:block">${challenge.description}</p>
+                <div class="flex justify-between items-center text-sm text-gray-400 mb-4">
+                    <span>Deadline: ${challenge.deadline}</span>
+                    <span class="flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                        </svg>
+                        ${challenge.deadline}
+                    </span>
+                </div>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="text-xs bg-gray-800/50 px-2 py-1 rounded">#${challenge.category.split(' ')[0]}</span>
+                    <span class="text-xs bg-gray-800/50 px-2 py-1 rounded">#${challenge.difficulty}</span>
+                </div>
+                <button class="submit-btn w-full bg-gradient-to-r from-blue-600 to-cyan-500 py-2 rounded-lg font-medium hover:opacity-90 transition-all">Submit Proof</button>
+            `;
+            
+            // Add event listeners for the card
+            const submitBtn = card.querySelector('.submit-btn');
+            submitBtn.addEventListener('click', () => openSubmissionModal(challenge.id));
+            
+            return card;
+        }
+
+        // Open submission modal
+        function openSubmissionModal(challengeId) {
+            currentChallengeId = challengeId;
+            const challenge = challenges.find(c => c.id === challengeId);
+            challengeTitleInput.value = challenge.title;
+            submissionModal.classList.remove('hidden');
+        }
+
+        // Close submission modal
+        function closeSubmissionModal() {
+            submissionModal.classList.add('hidden');
+            submissionForm.reset();
+        }
+
+        // Open streak modal
+        function openStreakModal() {
+            streakModal.classList.remove('hidden');
+        }
+
+        // Close streak modal
+        function closeStreakModalFunc() {
+            streakModal.classList.add('hidden');
+        }
+
+        // Handle form submission
+        function handleSubmission(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            const submitBtn = submissionForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Submitting...';
+            submitBtn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Update user stats
+                userTrustScore += 10;
+                trustScore.textContent = userTrustScore;
+                updateTrustScoreRing();
+                
+                // Show success animation
+                triggerConfetti();
+                
+                // Show success message
+                showToast('✅ Submission Received — Verification Pending.');
+                
+                // Reset form and close modal
+                submissionForm.reset();
+                closeSubmissionModal();
+                
+                // Reset button
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 1500);
+        }
+
+        // Update streak ring visualization
+        function updateStreakRing() {
+            const percentage = (userStreak / 30) * 360; // 30 days max streak
+            streakRing.style.background = `conic-gradient(var(--neon-blue) ${percentage}deg, transparent ${percentage}deg)`;
+            streakCount.textContent = userStreak;
+        }
+
+        // Update trust score ring visualization
+        function updateTrustScoreRing() {
+            const percentage = (userTrustScore / 1000) * 360; // 1000 max trust score
+            trustScoreRing.style.background = `conic-gradient(var(--neon-blue) ${percentage}deg, transparent ${percentage}deg)`;
+            trustScore.textContent = userTrustScore;
+        }
+
+        // Trigger confetti animation
+        function triggerConfetti() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#1d4ed8', '#22d3ee', '#6d28d9']
+            });
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-4 right-4 glass-card neon-glow px-6 py-3 rounded-lg z-50';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Create animated particles
+        function createParticles() {
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random position
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                
+                // Random size and opacity
+                const size = Math.random() * 3 + 1;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.opacity = Math.random() * 0.5 + 0.2;
+                
+                particleContainer.appendChild(particle);
+                
+                // Animate particle
+                animateParticle(particle);
+            }
+        }
+
+        // Animate a single particle
+        function animateParticle(particle) {
+            const duration = Math.random() * 10 + 10; // 10-20 seconds
+            const delay = Math.random() * 5;
+            
+            particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
+            
+            // Add keyframes for floating animation
+            if (!document.getElementById('particle-keyframes')) {
+                const style = document.createElement('style');
+                style.id = 'particle-keyframes';
+                style.textContent = `
+                    @keyframes float {
+                        0%, 100% {
+                            transform: translate(0, 0);
+                        }
+                        25% {
+                            transform: translate(${Math.random() * 20 - 10}px, ${Math.random() * 20 - 10}px);
+                        }
+                        50% {
+                            transform: translate(${Math.random() * 20 - 10}px, ${Math.random() * 20 - 10}px);
+                        }
+                        75% {
+                            transform: translate(${Math.random() * 20 - 10}px, ${Math.random() * 20 - 10}px);
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Filter tabs
+            filterTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    filterTabs.forEach(t => t.classList.remove('active-tab'));
+                    tab.classList.add('active-tab');
+                    currentFilter = tab.dataset.filter;
+                    renderChallenges();
+                });
+            });
+            
+            // Search input
+            searchInput.addEventListener('input', () => {
+                currentSearch = searchInput.value;
+                renderChallenges();
+            });
+            
+            // Streak button
+            streakBtn.addEventListener('click', openStreakModal);
+            
+            // Modal close buttons
+            closeModal.addEventListener('click', closeSubmissionModal);
+            closeStreakModal.addEventListener('click', closeStreakModalFunc);
+            
+            // Form submission
+            submissionForm.addEventListener('submit', handleSubmission);
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target === submissionModal) {
+                    closeSubmissionModal();
+                }
+                if (e.target === streakModal) {
+                    closeStreakModalFunc();
+                }
+            });
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

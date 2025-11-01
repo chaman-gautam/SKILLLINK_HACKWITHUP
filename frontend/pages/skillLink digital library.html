@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillLink Digital Library</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#0e0e10',
+                        primary: '#2563eb',
+                        accent: '#7c3aed',
+                        highlight: '#22d3ee',
+                    },
+                    fontFamily: {
+                        'rubik': ['Rubik', 'sans-serif'],
+                    },
+                    animation: {
+                        'glow': 'glow 3s ease-in-out infinite alternate',
+                        'fadeIn': 'fadeIn 0.5s ease-in-out',
+                    },
+                    keyframes: {
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px #2563eb, 0 0 10px #2563eb, 0 0 15px #2563eb' },
+                            '100%': { boxShadow: '0 0 10px #7c3aed, 0 0 20px #7c3aed, 0 0 30px #7c3aed' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: #0e0e10;
+            color: #f3f4f6;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .card-hover:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(37, 99, 235, 0.5);
+        }
+        
+        .gradient-underline {
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            height: 3px;
+            width: 100px;
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+        
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+        
+        .glow-border {
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.2);
+        }
+        
+        .tab-active {
+            background: linear-gradient(90deg, #2563eb, #7c3aed);
+            color: white;
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
+        }
+        
+        .ai-glow-bar {
+            height: 4px;
+            background: linear-gradient(90deg, #2563eb, #7c3aed, #22d3ee, #7c3aed, #2563eb);
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .bookmark-btn.active {
+            color: #fbbf24;
+        }
+        
+        .search-glow:focus {
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-dark min-h-screen font-rubik">
+    <!-- Header -->
+    <header class="py-8 px-4 text-center">
+        <div class="ai-glow-bar w-full mb-4"></div>
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">📚 SkillLink Digital Library</h1>
+        <p class="text-lg text-gray-300 max-w-2xl mx-auto">Your personalized hub for courses, guides, tutorials, and books.</p>
+        <div class="gradient-underline mt-4"></div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 pb-16">
+        <!-- Search Bar -->
+        <div class="mb-8">
+            <input type="text" id="searchInput" placeholder="Search courses, guides, tutorials, books..." 
+                   class="w-full p-4 rounded-lg bg-gray-800 border border-gray-700 text-white search-glow focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="flex flex-wrap justify-center gap-2 mb-8">
+            <button class="tab-btn px-6 py-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-all duration-300" data-category="all">All</button>
+            <button class="tab-btn px-6 py-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-all duration-300" data-category="Courses">Courses</button>
+            <button class="tab-btn px-6 py-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-all duration-300" data-category="Guides">Guides</button>
+            <button class="tab-btn px-6 py-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-all duration-300" data-category="Tutorials">Tutorials</button>
+            <button class="tab-btn px-6 py-3 rounded-full bg-gray-800 hover:bg-gray-700 transition-all duration-300" data-category="Digital Books">Digital Books</button>
+        </div>
+
+        <!-- Resource Grid -->
+        <div id="resourceGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <!-- Resources will be dynamically inserted here -->
+        </div>
+
+        <!-- Bookmarked Section -->
+        <div id="bookmarkedSection" class="mt-16">
+            <h2 class="text-2xl font-bold mb-6 flex items-center">
+                <span class="mr-2">⭐</span> Your Bookmarked Resources
+            </h2>
+            <div id="bookmarkedGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Bookmarked items will be dynamically inserted here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Book Reader Modal -->
+    <div id="bookModal" class="fixed inset-0 z-50 flex items-center justify-center hidden modal-overlay">
+        <div class="bg-gray-800 rounded-xl w-11/12 max-w-4xl mx-auto p-6 glow-border">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="modalTitle" class="text-xl font-bold"></h3>
+                <button id="closeModal" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <div class="bg-gray-900 rounded-lg p-4">
+                <iframe id="bookFrame" class="w-full h-[70vh] rounded" frameborder="0"></iframe>
+            </div>
+            <div class="mt-4 flex justify-end">
+                <button id="closeModalBtn" class="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full hover:shadow-[0_0_12px_#2563eb] transition-all duration-300">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data
+        const resources = [
+            // COURSES
+            {
+                title: "Complete C++ DSA Course",
+                creator: "Apna College",
+                category: "Courses",
+                description: "Master Data Structures & Algorithms in C++ with full notes.",
+                link: "https://www.youtube.com/playlist?list=PLfqMhTWNBTe0b2nM6JHVCnAkhQRGiZMSJ",
+                thumbnail: "📚"
+            },
+            {
+                title: "Full Stack Web Development Bootcamp",
+                creator: "CodeWithHarry",
+                category: "Courses",
+                description: "Learn HTML, CSS, JS, React, and Node.js from scratch.",
+                link: "https://www.youtube.com/playlist?list=PLu0W_9lII9agICnT8t4iYVSZ3eykIAOME",
+                thumbnail: "💻"
+            },
+            {
+                title: "Machine Learning A-Z",
+                creator: "Kirill Eremenko",
+                category: "Courses",
+                description: "Hands-on Python and R for data science and machine learning.",
+                link: "https://www.udemy.com/course/machinelearning/",
+                thumbnail: "🤖"
+            },
+            {
+                title: "iOS Development with Swift",
+                creator: "Angela Yu",
+                category: "Courses",
+                description: "Build iOS apps using Swift and Xcode with practical projects.",
+                link: "https://www.udemy.com/course/ios-13-app-development-bootcamp/",
+                thumbnail: "📱"
+            },
+
+            // GUIDES
+            {
+                title: "Git & GitHub Complete Guide",
+                creator: "Apna College",
+                category: "Guides",
+                description: "Learn commits, branches, merges, and version control workflow.",
+                link: "https://www.youtube.com/watch?v=Ez8F0nW6S-w",
+                thumbnail: "📝"
+            },
+            {
+                title: "Python for Beginners",
+                creator: "CodeWithHarry",
+                category: "Guides",
+                description: "Learn Python fundamentals in one video.",
+                link: "https://www.youtube.com/watch?v=gfDE2a7MKjA",
+                thumbnail: "🐍"
+            },
+            {
+                title: "JavaScript ES6+ Guide",
+                creator: "Traversy Media",
+                category: "Guides",
+                description: "Modern JavaScript features and best practices.",
+                link: "https://www.youtube.com/watch?v=NCwa_xi0Uuc",
+                thumbnail: "⚡"
+            },
+            {
+                title: "Docker & Kubernetes Guide",
+                creator: "TechWorld with Nana",
+                category: "Guides",
+                description: "Containerization and orchestration from basics to advanced.",
+                link: "https://www.youtube.com/watch?v=3c-iBn73dDE",
+                thumbnail: "🐳"
+            },
+
+            // TUTORIALS
+            {
+                title: "Portfolio Website Project",
+                creator: "CodeWithHarry",
+                category: "Tutorials",
+                description: "Build your personal website using HTML, CSS, and JS.",
+                link: "https://www.youtube.com/watch?v=J2b4N2__R0E",
+                thumbnail: "🌐"
+            },
+            {
+                title: "OOPs in Java Explained",
+                creator: "Apna College",
+                category: "Tutorials",
+                description: "Understand Java OOPs with real-world examples.",
+                link: "https://www.youtube.com/watch?v=BSVKUk58K6U",
+                thumbnail: "☕"
+            },
+            {
+                title: "React Firebase App Tutorial",
+                creator: "The Net Ninja",
+                category: "Tutorials",
+                description: "Build a full-stack app with React and Firebase.",
+                link: "https://www.youtube.com/watch?v=iq7gGwGc0hA",
+                thumbnail: "🔥"
+            },
+            {
+                title: "Flutter Mobile App Development",
+                creator: "Flutter",
+                category: "Tutorials",
+                description: "Create cross-platform apps with Flutter and Dart.",
+                link: "https://www.youtube.com/watch?v=1ukSR1GRtMU",
+                thumbnail: "📲"
+            },
+
+            // DIGITAL BOOKS
+            {
+                title: "Clean Code",
+                creator: "Robert C. Martin",
+                category: "Digital Books",
+                description: "A handbook of software craftsmanship and coding discipline.",
+                link: "https://drive.google.com/file/d/1zCleanCode-sample/view",
+                thumbnail: "📖"
+            },
+            {
+                title: "Python Crash Course",
+                creator: "Eric Matthes",
+                category: "Digital Books",
+                description: "A fast-paced introduction to programming with Python.",
+                link: "https://drive.google.com/file/d/1xPyCrash-sample/view",
+                thumbnail: "🐍"
+            },
+            {
+                title: "Introduction to Algorithms",
+                creator: "Thomas H. Cormen",
+                category: "Digital Books",
+                description: "Comprehensive guide to algorithms and data structures.",
+                link: "https://drive.google.com/file/d/1xAlgo-sample/view",
+                thumbnail: "🔍"
+            },
+            {
+                title: "The Pragmatic Programmer",
+                creator: "Andrew Hunt & David Thomas",
+                category: "Digital Books",
+                description: "Your journey to mastery in software development.",
+                link: "https://drive.google.com/file/d/1pPragmatic-sample/view",
+                thumbnail: "👨‍💻"
+            }
+        ];
+
+        // DOM Elements
+        const resourceGrid = document.getElementById('resourceGrid');
+        const bookmarkedGrid = document.getElementById('bookmarkedGrid');
+        const searchInput = document.getElementById('searchInput');
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const bookModal = document.getElementById('bookModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const bookFrame = document.getElementById('bookFrame');
+        const closeModal = document.getElementById('closeModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+
+        // State variables
+        let currentCategory = 'all';
+        let currentSearch = '';
+        let bookmarkedItems = JSON.parse(localStorage.getItem('bookmarkedItems')) || [];
+
+        // Initialize the app
+        function init() {
+            renderResources();
+            renderBookmarkedItems();
+            setupEventListeners();
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Search input
+            searchInput.addEventListener('input', (e) => {
+                currentSearch = e.target.value.toLowerCase();
+                renderResources();
+            });
+
+            // Tab buttons
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Update active tab
+                    tabButtons.forEach(btn => btn.classList.remove('tab-active'));
+                    button.classList.add('tab-active');
+                    
+                    // Update current category
+                    currentCategory = button.dataset.category;
+                    renderResources();
+                });
+            });
+
+            // Modal close buttons
+            closeModal.addEventListener('click', () => {
+                bookModal.classList.add('hidden');
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                bookModal.classList.add('hidden');
+            });
+
+            // Close modal when clicking outside
+            bookModal.addEventListener('click', (e) => {
+                if (e.target === bookModal) {
+                    bookModal.classList.add('hidden');
+                }
+            });
+        }
+
+        // Filter resources based on category and search
+        function getFilteredResources() {
+            return resources.filter(resource => {
+                const matchesCategory = currentCategory === 'all' || resource.category === currentCategory;
+                const matchesSearch = 
+                    resource.title.toLowerCase().includes(currentSearch) ||
+                    resource.creator.toLowerCase().includes(currentSearch) ||
+                    resource.description.toLowerCase().includes(currentSearch) ||
+                    resource.category.toLowerCase().includes(currentSearch);
+                
+                return matchesCategory && matchesSearch;
+            });
+        }
+
+        // Render resources to the grid
+        function renderResources() {
+            const filteredResources = getFilteredResources();
+            
+            resourceGrid.innerHTML = '';
+            
+            if (filteredResources.length === 0) {
+                resourceGrid.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <p class="text-xl text-gray-400">No resources found. Try a different search or category.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            filteredResources.forEach((resource, index) => {
+                const isBookmarked = bookmarkedItems.some(item => 
+                    item.title === resource.title && item.creator === resource.creator
+                );
+                
+                const resourceCard = document.createElement('div');
+                resourceCard.className = `bg-gray-800 rounded-xl p-6 card-hover glow-border animate-fadeIn`;
+                resourceCard.style.animationDelay = `${index * 0.1}s`;
+                
+                resourceCard.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="text-4xl">${resource.thumbnail}</div>
+                        <button class="bookmark-btn text-2xl ${isBookmarked ? 'active' : ''}" data-resource='${JSON.stringify(resource)}'>
+                            ${isBookmarked ? '★' : '☆'}
+                        </button>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">${resource.title}</h3>
+                    <p class="text-gray-400 mb-2">By ${resource.creator}</p>
+                    <p class="text-gray-300 mb-4">${resource.description}</p>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="px-3 py-1 bg-gray-700 rounded-full text-sm">${resource.category}</span>
+                        ${resource.category === 'Digital Books' ? 
+                            `<button class="open-book-btn px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full hover:shadow-[0_0_12px_#2563eb] transition-all duration-300" data-resource='${JSON.stringify(resource)}'>
+                                Read Now
+                            </button>` :
+                            `<a href="${resource.link}" target="_blank" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full hover:shadow-[0_0_12px_#2563eb] transition-all duration-300">
+                                View
+                            </a>`
+                        }
+                    </div>
+                `;
+                
+                resourceGrid.appendChild(resourceCard);
+            });
+            
+            // Add event listeners to bookmark buttons
+            document.querySelectorAll('.bookmark-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const resource = JSON.parse(button.dataset.resource);
+                    toggleBookmark(resource);
+                });
+            });
+            
+            // Add event listeners to open book buttons
+            document.querySelectorAll('.open-book-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const resource = JSON.parse(button.dataset.resource);
+                    openBookModal(resource);
+                });
+            });
+        }
+
+        // Toggle bookmark status
+        function toggleBookmark(resource) {
+            const index = bookmarkedItems.findIndex(item => 
+                item.title === resource.title && item.creator === resource.creator
+            );
+            
+            if (index === -1) {
+                // Add to bookmarks
+                bookmarkedItems.push(resource);
+            } else {
+                // Remove from bookmarks
+                bookmarkedItems.splice(index, 1);
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('bookmarkedItems', JSON.stringify(bookmarkedItems));
+            
+            // Re-render
+            renderResources();
+            renderBookmarkedItems();
+        }
+
+        // Render bookmarked items
+        function renderBookmarkedItems() {
+            bookmarkedGrid.innerHTML = '';
+            
+            if (bookmarkedItems.length === 0) {
+                bookmarkedGrid.innerHTML = `
+                    <div class="col-span-full text-center py-8">
+                        <p class="text-gray-400">No bookmarked resources yet. Click the star icon on any resource to bookmark it.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            bookmarkedItems.forEach((resource, index) => {
+                const bookmarkedCard = document.createElement('div');
+                bookmarkedCard.className = `bg-gray-800 rounded-xl p-6 card-hover glow-border animate-fadeIn`;
+                bookmarkedCard.style.animationDelay = `${index * 0.1}s`;
+                
+                bookmarkedCard.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="text-4xl">${resource.thumbnail}</div>
+                        <button class="bookmark-btn text-2xl active" data-resource='${JSON.stringify(resource)}'>
+                            ★
+                        </button>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">${resource.title}</h3>
+                    <p class="text-gray-400 mb-2">By ${resource.creator}</p>
+                    <p class="text-gray-300 mb-4">${resource.description}</p>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="px-3 py-1 bg-gray-700 rounded-full text-sm">${resource.category}</span>
+                        ${resource.category === 'Digital Books' ? 
+                            `<button class="open-book-btn px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full hover:shadow-[0_0_12px_#2563eb] transition-all duration-300" data-resource='${JSON.stringify(resource)}'>
+                                Read Now
+                            </button>` :
+                            `<a href="${resource.link}" target="_blank" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full hover:shadow-[0_0_12px_#2563eb] transition-all duration-300">
+                                View
+                            </a>`
+                        }
+                    </div>
+                `;
+                
+                bookmarkedGrid.appendChild(bookmarkedCard);
+            });
+            
+            // Add event listeners to bookmark buttons in bookmarked section
+            document.querySelectorAll('#bookmarkedGrid .bookmark-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const resource = JSON.parse(button.dataset.resource);
+                    toggleBookmark(resource);
+                });
+            });
+            
+            // Add event listeners to open book buttons in bookmarked section
+            document.querySelectorAll('#bookmarkedGrid .open-book-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const resource = JSON.parse(button.dataset.resource);
+                    openBookModal(resource);
+                });
+            });
+        }
+
+        // Open book modal
+        function openBookModal(resource) {
+            modalTitle.textContent = `${resource.title} by ${resource.creator}`;
+            bookFrame.src = resource.link;
+            bookModal.classList.remove('hidden');
+        }
+
+        // Initialize the app
+        init();
+        
+        // Set the first tab as active initially
+        document.querySelector('.tab-btn[data-category="all"]').classList.add('tab-active');
+    </script>
+</body>
+</html>

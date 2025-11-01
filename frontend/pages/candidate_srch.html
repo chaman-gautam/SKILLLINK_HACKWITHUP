@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,7 +31,7 @@
             width: 100%;
             height: 100%;
             background: radial-gradient(circle at 10% 20%, rgba(0, 31, 63, 0.7) 0%, rgba(0, 31, 63, 0.3) 40%, transparent 70%),
-                        radial-gradient(circle at 90% 80%, rgba(0, 86, 179, 0.6) 0%, rgba(0, 31, 63, 0.3) 40%, transparent 70%);
+                radial-gradient(circle at 90% 80%, rgba(0, 86, 179, 0.6) 0%, rgba(0, 31, 63, 0.3) 40%, transparent 70%);
             z-index: -1;
         }
 
@@ -63,8 +64,13 @@
         }
 
         @keyframes shine {
-            0% { transform: translateX(-100%) rotate(30deg); }
-            100% { transform: translateX(100%) rotate(30deg); }
+            0% {
+                transform: translateX(-100%) rotate(30deg);
+            }
+
+            100% {
+                transform: translateX(100%) rotate(30deg);
+            }
         }
 
         h1 {
@@ -235,12 +241,12 @@
             border-radius: 50%;
         }
 
-        input:checked + .slider {
+        input:checked+.slider {
             background-color: #00a2ff;
             box-shadow: 0 0 10px rgba(0, 162, 255, 0.8);
         }
 
-        input:checked + .slider:before {
+        input:checked+.slider:before {
             transform: translateX(26px);
         }
 
@@ -276,11 +282,22 @@
             margin: 10px 0;
         }
 
+        .candidate-section {
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+        }
+
         .candidates-grid {
-            flex: 1;
+            /* flex: 1;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
+            gap: 25px; */
+
+            display: flex;
+            width: 100%;
+            flex-wrap: wrap;
+
         }
 
         .candidate-card {
@@ -290,6 +307,9 @@
             transition: all 0.3s ease;
             box-shadow: 0 0 15px rgba(0, 162, 255, 0.3);
             position: relative;
+            margin-left: 2rem;
+            margin-bottom: 2rem;
+            min-width: 440px;
         }
 
         .candidate-card:hover {
@@ -446,7 +466,7 @@
             .main-content {
                 flex-direction: column;
             }
-            
+
             .filters-sidebar {
                 flex: 1;
             }
@@ -457,12 +477,12 @@
                 flex-direction: column;
                 align-items: center;
             }
-            
+
             .search-bar {
                 width: 100%;
                 margin-bottom: 15px;
             }
-            
+
             .advanced-search-btn {
                 margin-left: 0;
                 width: 100%;
@@ -484,9 +504,11 @@
             0% {
                 box-shadow: 0 0 5px rgba(0, 162, 255, 0.5);
             }
+
             50% {
                 box-shadow: 0 0 20px rgba(0, 162, 255, 0.8);
             }
+
             100% {
                 box-shadow: 0 0 5px rgba(0, 162, 255, 0.5);
             }
@@ -515,6 +537,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -586,7 +609,7 @@
                     Filters
                     <button class="reset-filters">Reset</button>
                 </h2>
-                
+
                 <div class="filter-group">
                     <h3>
                         <i class="fas fa-code"></i>
@@ -661,7 +684,8 @@
                     <!-- Candidate 1 -->
                     <div class="candidate-card glow">
                         <div class="card-header">
-                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Candidate" class="candidate-img">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Candidate"
+                                class="candidate-img">
                             <h2 class="candidate-name">Sarah Johnson</h2>
                             <p class="candidate-title">Full Stack Developer</p>
                             <span class="trust-score">87%</span>
@@ -684,7 +708,8 @@
                             </div>
                         </div>
                         <div class="quick-preview">
-                            <p>5+ years of experience building scalable web applications. Previously worked at TechCorp.</p>
+                            <p>5+ years of experience building scalable web applications. Previously worked at TechCorp.
+                            </p>
                             <div class="action-buttons">
                                 <button class="btn btn-primary">View Profile</button>
                                 <button class="btn btn-secondary">Message</button>
@@ -695,7 +720,8 @@
                     <!-- Candidate 2 -->
                     <div class="candidate-card">
                         <div class="card-header">
-                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Candidate" class="candidate-img">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Candidate"
+                                class="candidate-img">
                             <h2 class="candidate-name">Michael Chen</h2>
                             <p class="candidate-title">Blockchain Developer</p>
                             <span class="trust-score">92%</span>
@@ -718,7 +744,8 @@
                             </div>
                         </div>
                         <div class="quick-preview">
-                            <p>Expert in DeFi protocols and NFT marketplaces. Contributed to major Ethereum projects.</p>
+                            <p>Expert in DeFi protocols and NFT marketplaces. Contributed to major Ethereum projects.
+                            </p>
                             <div class="action-buttons">
                                 <button class="btn btn-primary">View Profile</button>
                                 <button class="btn btn-secondary">Message</button>
@@ -729,7 +756,8 @@
                     <!-- Candidate 3 -->
                     <div class="candidate-card">
                         <div class="card-header">
-                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Candidate" class="candidate-img">
+                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Candidate"
+                                class="candidate-img">
                             <h2 class="candidate-name">Jessica Williams</h2>
                             <p class="candidate-title">UX/UI Designer</p>
                             <span class="trust-score">78%</span>
@@ -751,7 +779,8 @@
                             </div>
                         </div>
                         <div class="quick-preview">
-                            <p>Creates intuitive and beautiful user interfaces. Specializes in Web3 and fintech applications.</p>
+                            <p>Creates intuitive and beautiful user interfaces. Specializes in Web3 and fintech
+                                applications.</p>
                             <div class="action-buttons">
                                 <button class="btn btn-primary">View Profile</button>
                                 <button class="btn btn-secondary">Message</button>
@@ -762,7 +791,8 @@
                     <!-- Candidate 4 -->
                     <div class="candidate-card">
                         <div class="card-header">
-                            <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Candidate" class="candidate-img">
+                            <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Candidate"
+                                class="candidate-img">
                             <h2 class="candidate-name">David Kim</h2>
                             <p class="candidate-title">DevOps Engineer</p>
                             <span class="trust-score">85%</span>
@@ -785,7 +815,8 @@
                             </div>
                         </div>
                         <div class="quick-preview">
-                            <p>Automates and optimizes deployment pipelines. Ensures high availability and scalability.</p>
+                            <p>Automates and optimizes deployment pipelines. Ensures high availability and scalability.
+                            </p>
                             <div class="action-buttons">
                                 <button class="btn btn-primary">View Profile</button>
                                 <button class="btn btn-secondary">Message</button>
@@ -807,18 +838,18 @@
     <script>
         // Add glow effect to search bar when focused
         const searchInput = document.querySelector('.search-input');
-        
+
         searchInput.addEventListener('focus', () => {
             searchInput.classList.add('glow');
         });
-        
+
         searchInput.addEventListener('blur', () => {
             searchInput.classList.remove('glow');
         });
 
         // Toggle skill pills
         const skillPills = document.querySelectorAll('.skill-pill');
-        
+
         skillPills.forEach(pill => {
             pill.addEventListener('click', () => {
                 pill.classList.toggle('active');
@@ -827,12 +858,12 @@
 
         // Add animation to candidate cards on hover
         const candidateCards = document.querySelectorAll('.candidate-card');
-        
+
         candidateCards.forEach(card => {
             card.addEventListener('mouseenter', () => {
                 card.classList.add('glow');
             });
-            
+
             card.addEventListener('mouseleave', () => {
                 card.classList.remove('glow');
             });
@@ -841,7 +872,7 @@
         // Update trust score value
         const trustRange = document.getElementById('trust-range');
         const trustValue = document.getElementById('trust-value');
-        
+
         trustRange.addEventListener('input', () => {
             trustValue.textContent = trustRange.value;
         });
@@ -849,7 +880,7 @@
         // Update experience value
         const expRange = document.getElementById('exp-range');
         const expValue = document.getElementById('exp-value');
-        
+
         expRange.addEventListener('input', () => {
             expValue.textContent = expRange.value;
         });
@@ -857,14 +888,14 @@
         // Toggle advanced filters
         const advancedSearchBtn = document.querySelector('.advanced-search-btn');
         const advancedFilters = document.getElementById('advancedFilters');
-        
+
         advancedSearchBtn.addEventListener('click', () => {
             advancedFilters.classList.toggle('active');
         });
 
         // Pagination buttons
         const paginationBtns = document.querySelectorAll('.pagination-btn');
-        
+
         paginationBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 paginationBtns.forEach(b => b.classList.remove('active'));
@@ -874,32 +905,33 @@
 
         // Reset filters
         const resetFiltersBtn = document.querySelector('.reset-filters');
-        
+
         resetFiltersBtn.addEventListener('click', () => {
             // Reset skill pills
             skillPills.forEach(pill => {
                 pill.classList.remove('active');
             });
-            
+
             // Reset trust score
             trustRange.value = 70;
             trustValue.textContent = '70';
-            
+
             // Reset experience
             expRange.value = 5;
             expValue.textContent = '5';
-            
+
             // Reset toggles
             document.getElementById('skills-toggle').checked = true;
             document.getElementById('nfts-toggle').checked = false;
             document.getElementById('trust-toggle').checked = true;
             document.getElementById('exp-toggle').checked = false;
-            
+
             // Reset search
             searchInput.value = '';
-            
+
             alert('Filters have been reset to default values!');
         });
     </script>
 </body>
+
 </html>
