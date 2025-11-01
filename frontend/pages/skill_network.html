@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillLink - Skill Network</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2a60fe;
+            --secondary: #8a2be2;
+            --dark-bg: #0a0a1a;
+            --light-bg: #f0f2f5;
+            --text-dark: #ffffff;
+            --text-light: #333333;
+            --card-dark: rgba(25, 25, 50, 0.6);
+            --card-light: rgba(255, 255, 255, 0.8);
+            --glow: 0 0 10px var(--primary), 0 0 20px var(--primary);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark-bg), #0d1b3e, #2d0c50);
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body.light-mode {
+            background: linear-gradient(135deg, #a7c3ff, #d9c7ff, #e6d9ff);
+            color: var(--text-light);
+        }
+
+        /* Navbar */
+        .navbar {
+            position: sticky;
+            top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: rgba(10, 10, 26, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .light-mode .navbar {
+            background: rgba(240, 242, 245, 0.9);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .light-mode .logo {
+            color: var(--text-light);
+        }
+
+        .logo i {
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0.8rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .light-mode .nav-links a {
+            color: var(--text-light);
+        }
+
+        .nav-links a:hover {
+            background: rgba(42, 96, 254, 0.2);
+            box-shadow: var(--glow);
+        }
+
+        .theme-toggle {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            box-shadow: var(--glow);
+            transform: scale(1.05);
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 5rem 5%;
+            min-height: 80vh;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(10, 27, 62, 0.8), rgba(45, 12, 80, 0.8));
+        }
+
+        .light-mode .hero {
+            background: linear-gradient(135deg, rgba(167, 195, 255, 0.7), rgba(217, 199, 255, 0.8), rgba(230, 217, 255, 0.8));
+        }
+
+        .hero-icon {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-shadow: var(--glow);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        .cta-button:hover {
+            box-shadow: var(--glow);
+            transform: scale(1.05);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* About Section */
+        .about {
+            margin-bottom: 5rem;
+        }
+
+        .glass-card {
+            background: var(--card-dark);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(42, 96, 254, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .light-mode .glass-card {
+            background: var(--card-light);
+            border: 1px solid rgba(42, 96, 254, 0.2);
+        }
+
+        .glass-card p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        /* Demo Section */
+        .demo {
+            margin-bottom: 5rem;
+        }
+
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            padding: 0.8rem 1.5rem;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 30px;
+            border: 1px solid var(--primary);
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .light-mode .search-input {
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--text-light);
+        }
+
+        .search-input:focus {
+            box-shadow: var(--glow);
+        }
+
+        .graph-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .light-mode .graph-container {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        #skill-graph {
+            width: 100%;
+            height: 100%;
+        }
+
+        .tooltip {
+            position: absolute;
+            padding: 10px;
+            background: rgba(10, 10, 30, 0.9);
+            border: 1px solid var(--primary);
+            border-radius: 5px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            color: white;
+            font-size: 0.9rem;
+            box-shadow: var(--glow);
+            z-index: 100;
+        }
+
+        .light-mode .tooltip {
+            background: rgba(240, 240, 255, 0.95);
+            color: var(--text-light);
+        }
+
+        /* How It Helps Section */
+        .benefits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 5rem;
+        }
+
+        .benefit-card {
+            background: var(--card-dark);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(42, 96, 254, 0.3);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .light-mode .benefit-card {
+            background: var(--card-light);
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--glow);
+        }
+
+        .benefit-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .benefit-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .benefit-card p {
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(90deg, var(--dark-bg), #1a1a3a, #2d0c50);
+            padding: 3rem 5%;
+            text-align: center;
+        }
+
+        .light-mode footer {
+            background: linear-gradient(90deg, #a7c3ff, #d9c7ff, #e6d9ff);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .light-mode .footer-links a {
+            color: var(--text-light);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            text-shadow: var(--glow);
+        }
+
+        .copyright {
+            opacity: 0.8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .graph-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-brain"></i>
+            <span>SkillLink</span>
+        </div>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="portfolio.html">portfolio</a>
+            <a href="calendar.html">Calendar</a>
+            <a href="resume_builder.html">Resume Builder</a>
+            <a href="Notifications.html">Notifications</a>
+            <a href="help&support.html">Support</a>
+        </div>
+        <button class="theme-toggle" id="theme-toggle">Toggle Theme</button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-icon">
+            <i class="fas fa-project-diagram"></i>
+        </div>
+        <h1>Skill Network</h1>
+        <p>Visualize how skills connect and build upon each other in an interactive network graph.</p>
+        <button class="cta-button">Explore Your Skill Network</button>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- About Section -->
+        <section class="about">
+            <h2 class="section-title">About Skill Network</h2>
+            <div class="glass-card">
+                <p>Skill Network allows you to explore how your abilities interlink. Whether you're a student or recruiter, you can see how core skills branch into advanced areas, making learning and hiring more meaningful.</p>
+            </div>
+        </section>
+
+        <!-- Interactive Demo -->
+        <section class="demo">
+            <h2 class="section-title">Interactive Demo</h2>
+            <div class="search-bar">
+                <input type="text" class="search-input" id="skill-search" placeholder="Search for a skill...">
+            </div>
+            <div class="graph-container">
+                <canvas id="skill-graph"></canvas>
+                <div class="tooltip" id="tooltip"></div>
+            </div>
+        </section>
+
+        <!-- How It Helps Section -->
+        <section class="how-it-helps">
+            <h2 class="section-title">How Skill Network Helps</h2>
+            <div class="benefits">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>For Students</h3>
+                    <p>Track your learning journey and understand how skills build upon each other to plan your career path effectively.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h3>For Recruiters</h3>
+                    <p>Identify candidate strengths and skill connections to find the perfect match for your organization's needs.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3>For Everyone</h3>
+                    <p>Discover how skills connect across disciplines and uncover new learning opportunities to expand your expertise.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="privacy_policy.html">Privacy Policy</a>
+            <a href="terms&conditions.html">Terms & Conditions</a>
+            <a href="contact.html">Contact Us</a>
+        </div>
+        <p class="copyright">© 2025 SkillLink. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            themeToggle.textContent = document.body.classList.contains('light-mode') ? 
+                'Dark Mode' : 'Light Mode';
+        });
+
+        // Skill Graph Simulation
+        const canvas = document.getElementById('skill-graph');
+        const ctx = canvas.getContext('2d');
+        const tooltip = document.getElementById('tooltip');
+        const searchInput = document.getElementById('skill-search');
+        
+        // Set canvas size
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.offsetWidth;
+            canvas.height = canvas.parentElement.offsetHeight;
+        }
+        
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        
+        // Skill data
+        const skills = [
+            { id: 1, name: 'HTML', description: 'HyperText Markup Language - the standard markup language for documents designed to be displayed in a web browser.', x: 0, y: 0, radius: 40, connections: [2], color: '#e34c26' },
+            { id: 2, name: 'CSS', description: 'Cascading Style Sheets - used for describing the presentation of a document written in HTML.', x: 0, y: 0, radius: 40, connections: [3], color: '#264de4' },
+            { id: 3, name: 'JavaScript', description: 'A programming language that enables interactive web pages and is an essential part of web applications.', x: 0, y: 0, radius: 40, connections: [4, 5], color: '#f0db4f' },
+            { id: 4, name: 'React', description: 'A JavaScript library for building user interfaces, particularly single-page applications.', x: 0, y: 0, radius: 40, connections: [], color: '#61dafb' },
+            { id: 5, name: 'Node.js', description: 'An open-source, cross-platform JavaScript runtime environment that executes JavaScript code outside a web browser.', x: 0, y: 0, radius: 40, connections: [], color: '#68a063' }
+        ];
+        
+        // Initialize positions in a circular layout
+        function initPositions() {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = Math.min(canvas.width, canvas.height) / 3;
+            
+            skills.forEach((skill, i) => {
+                const angle = (i / skills.length) * 2 * Math.PI;
+                skill.x = centerX + radius * Math.cos(angle);
+                skill.y = centerY + radius * Math.sin(angle);
+            });
+        }
+        
+        // Draw the skill graph
+        function drawGraph() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw connections
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = 'rgba(42, 96, 254, 0.5)';
+            
+            skills.forEach(skill => {
+                skill.connections.forEach(connId => {
+                    const target = skills.find(s => s.id === connId);
+                    if (target) {
+                        ctx.beginPath();
+                        ctx.moveTo(skill.x, skill.y);
+                        ctx.lineTo(target.x, target.y);
+                        ctx.stroke();
+                    }
+                });
+            });
+            
+            // Draw nodes
+            skills.forEach(skill => {
+                ctx.beginPath();
+                ctx.arc(skill.x, skill.y, skill.radius, 0, Math.PI * 2);
+                ctx.fillStyle = skill.color;
+                ctx.fill();
+                
+                // Add glow effect
+                ctx.shadowColor = skill.color;
+                ctx.shadowBlur = 15;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                
+                // Draw skill name
+                ctx.font = 'bold 16px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#ffffff';
+                ctx.fillText(skill.name, skill.x, skill.y);
+            });
+        }
+        
+        // Handle mouse interactions
+        let selectedNode = null;
+        let offsetX, offsetY;
+        
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            
+            // Check if a node was clicked
+            for (let i = skills.length - 1; i >= 0; i--) {
+                const skill = skills[i];
+                const dx = mouseX - skill.x;
+                const dy = mouseY - skill.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance <= skill.radius) {
+                    selectedNode = skill;
+                    offsetX = dx;
+                    offsetY = dy;
+                    break;
+                }
+            }
+        });
+        
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            
+            // Show tooltip on hover
+            let hoveredSkill = null;
+            for (const skill of skills) {
+                const dx = mouseX - skill.x;
+                const dy = mouseY - skill.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance <= skill.radius) {
+                    hoveredSkill = skill;
+                    break;
+                }
+            }
+            
+            if (hoveredSkill) {
+                tooltip.style.opacity = 1;
+                tooltip.innerHTML = `<strong>${hoveredSkill.name}</strong><br>${hoveredSkill.description}`;
+                tooltip.style.left = (e.clientX + 10) + 'px';
+                tooltip.style.top = (e.clientY + 10) + 'px';
+            } else {
+                tooltip.style.opacity = 0;
+            }
+            
+            // Move selected node
+            if (selectedNode) {
+                selectedNode.x = mouseX - offsetX;
+                selectedNode.y = mouseY - offsetY;
+                drawGraph();
+            }
+        });
+        
+        canvas.addEventListener('mouseup', () => {
+            selectedNode = null;
+        });
+        
+        canvas.addEventListener('mouseleave', () => {
+            selectedNode = null;
+            tooltip.style.opacity = 0;
+        });
+        
+        // Search functionality
+        searchInput.addEventListener('input', () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            if (searchTerm) {
+                skills.forEach(skill => {
+                    if (skill.name.toLowerCase().includes(searchTerm)) {
+                        skill.radius = 50; // Highlight
+                    } else {
+                        skill.radius = 40; // Reset
+                    }
+                });
+            } else {
+                skills.forEach(skill => {
+                    skill.radius = 40; // Reset all
+                });
+            }
+            
+            drawGraph();
+        });
+        
+        // Initialize and draw the graph
+        initPositions();
+        drawGraph();
+        
+        // Animate the graph
+        function animate() {
+            // Add subtle movement to nodes for visual effect
+            if (!selectedNode) {
+                skills.forEach(skill => {
+                    skill.x += (Math.random() - 0.5) * 0.5;
+                    skill.y += (Math.random() - 0.5) * 0.5;
+                    
+                    // Keep nodes within canvas bounds
+                    skill.x = Math.max(skill.radius, Math.min(canvas.width - skill.radius, skill.x));
+                    skill.y = Math.max(skill.radius, Math.min(canvas.height - skill.radius, skill.y));
+                });
+                
+                drawGraph();
+            }
+            
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+    </script>
+</body>
+</html>

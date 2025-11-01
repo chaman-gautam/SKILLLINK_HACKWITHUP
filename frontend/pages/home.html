@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillSync - Futuristic Learning Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Orbitron:wght@600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #0B1226;
+            --cyan: #00D1FF;
+            --arctic-blue: #4CC3FF;
+            --lavender: #A8A7FF;
+            --snow: #F7FAFF;
+            --dark-navy: #070D1F;
+        }
+
+        body {
+            background-color: var(--navy);
+            color: var(--snow);
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Particles/Neural Network Background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: rgba(7, 13, 31, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(0, 209, 255, 0.2);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--cyan), var(--lavender));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(0, 209, 255, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--snow);
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a:not(.register):after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(to right, var(--cyan), var(--lavender));
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            text-shadow: 0 0 10px var(--cyan);
+        }
+
+        .register {
+            background: linear-gradient(135deg, var(--cyan), var(--lavender));
+            color: var(--navy);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            box-shadow: 0 0 15px rgba(0, 209, 255, 0.5);
+        }
+
+        .register:hover {
+            box-shadow: 0 0 20px rgba(0, 209, 255, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--snow);
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .icon-btn:hover {
+            color: var(--cyan);
+            text-shadow: 0 0 10px var(--cyan);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: linear-gradient(135deg, var(--cyan), var(--lavender));
+            color: var(--navy);
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 11px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .user-profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--cyan), var(--lavender));
+            color: var(--navy);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 209, 255, 0.5);
+            transition: all 0.3s;
+        }
+
+        .user-profile:hover {
+            box-shadow: 0 0 15px rgba(0, 209, 255, 0.8);
+            transform: scale(1.05);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 60px 0;
+        }
+
+        .hero-content {
+            max-width: 650px;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--snow), var(--cyan));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 15px rgba(0, 209, 255, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: var(--arctic-blue);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--cyan), var(--lavender));
+            color: var(--navy);
+            padding: 15px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(0, 209, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button:before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+            transform: rotate(-45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                left: -50%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        .cta-button:hover {
+            box-shadow: 0 0 30px rgba(0, 209, 255, 0.8);
+            transform: translateY(-3px);
+        }
+
+        /* Hologram Container */
+        .hologram-container {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50%;
+            height: 400px;
+            perspective: 1000px;
+        }
+
+        .hologram {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate3d(0.5, 1, 0, 0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate3d(0.5, 1, 0, 5deg);
+            }
+        }
+
+        .neural-network {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .node {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--cyan);
+            box-shadow: 0 0 15px var(--cyan);
+            transform: translateZ(20px);
+        }
+
+        .connection {
+            position: absolute;
+            background: rgba(0, 209, 255, 0.3);
+            box-shadow: 0 0 5px var(--cyan);
+            transform-origin: 0 0;
+        }
+
+        /* Content Sections */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--cyan), var(--lavender));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 15px rgba(0, 209, 255, 0.3);
+        }
+
+        .section-content {
+            background: rgba(7, 13, 31, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(76, 195, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-content:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--cyan), var(--lavender));
+        }
+
+        .section-content p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* Testimonials */
+        .testimonial {
+            margin-top: 40px;
+            padding: 30px;
+            background: rgba(7, 13, 31, 0.8);
+            border-radius: 15px;
+            border-left: 5px solid var(--cyan);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .testimonial-text:before {
+            content: '"';
+            font-family: sans-serif;
+            font-size: 4rem;
+            color: var(--cyan);
+            opacity: 0.3;
+            position: absolute;
+            left: 0;
+            top: -20px;
+        }
+
+        .testimonial-author {
+            font-weight: 700;
+            color: var(--cyan);
+            font-size: 1.2rem;
+        }
+
+        .testimonial-role {
+            color: var(--lavender);
+            font-size: 1rem;
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            background: rgba(7, 13, 31, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(76, 195, 255, 0.2);
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--cyan);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--cyan), var(--lavender));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            color: var(--snow);
+        }
+
+        .feature-card p {
+            color: var(--arctic-blue);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(to bottom, var(--dark-navy), #050915);
+            padding: 60px 0 30px;
+            border-top: 1px solid rgba(76, 195, 255, 0.2);
+        }
+
+        .footer-cta {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .footer-cta h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--cyan), var(--lavender));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .footer-cta p {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            font-size: 1.1rem;
+            color: var(--arctic-blue);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .footer-links a {
+            color: var(--snow);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--cyan);
+            text-shadow: 0 0 10px var(--cyan);
+        }
+
+        .copyright {
+            width: 100%;
+            text-align: center;
+            margin-top: 40px;
+            color: var(--arctic-blue);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hologram-container {
+                position: relative;
+                width: 100%;
+                height: 300px;
+                margin-top: 40px;
+            }
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 40px 0;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .section-content {
+                padding: 20px;
+            }
+
+            .feature-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="particles-js"></div>
+
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">Skill Link</div>
+
+                <div class="nav-links">
+                    <!-- <a href="./landing2.html">Home</a> -->
+                    <a href="./about.html">About</a>
+                    <a href="recruiter2.html">Dashboard</a>
+
+                    <a href="./Ai_mentor_final.html">AI Mentor</a>
+                    <!-- <a href="./challanges.html">Challenges</a> -->
+                    <a href="./opportunities2.html">Opportunities</a>
+                    <!-- <a href="./futures.html">Futures</a> -->
+                    <!-- <a href="./testimonials.html">Testimonials</a> -->
+
+                    <a href="./contact.html">Contact</a>
+                    <!-- <a href="./register.html" class="register">Register</a> -->
+                </div>
+                <div class="nav-icons">
+                   <a href="Notifications.html"> <button class="icon-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button></a>
+                    <a href="./profile2.html">
+                        <div class="user-profile">TA</div>
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Master Skills in a Connected Way</h1>
+                <p>SkillSync helps you understand how skills connect and build upon each other for effective learning.
+                </p>
+                <a href="recruiter2.html" class="cta-button">Get Started Now</a>
+            </div>
+
+            <div class="hologram-container">
+                <div class="hologram">
+                    <div class="neural-network" id="neural-network"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">About Us</h2>
+            <div class="section-content">
+                <p>SkillSync was founded in 2020 with a mission to revolutionize online learning. Our platform combines
+                    cutting-edge technology with educational best practices to create an immersive learning experience
+                    that helps users understand how skills connect and build upon each other.</p>
+                <p>Our team of educators, designers, and developers are passionate about creating tools that make
+                    learning more engaging, effective, and enjoyable for everyone.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">What Learners Say</h2>
+            <div class="section-content">
+                <div class="testimonial">
+                    <p class="testimonial-text">This platform completely transformed how I approach learning. The visual
+                        skill network helped me understand relationships between concepts that I never would have seen
+                        otherwise.</p>
+                    <div class="testimonial-author">Jane Doe</div>
+                    <div class="testimonial-role">Data Scientist</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Our Features</h2>
+            <div class="features-grid">
+                <a href="skill_net.html"  style="text-decoration: none; color: inherit;">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>Skill Network</h3>
+                        <p>Visualize how skills connect and build upon each other in an interactive network graph.</p>
+                    </div>
+                </a>
+                <a href="Ai_mentor_final.html" style="text-decoration: none"color="inherit">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3>AI Mentor</h3>
+                        <p>Get personalized guidance and recommendations from our AI-powered learning assistant.</p>
+                    </div>
+                </a>
+                <a href="challanges.html" style="text-decoration: none"color="inherit">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <h3>Challenges</h3>
+                        <p>Test your skills with practical challenges that reinforce your learning journey.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-cta">
+                <h2>Ready to Transform Your Learning?</h2>
+                <p>Join thousands of learners who are already using SkillSync to master new skills efficiently.</p>
+                <a href="recruiter2.html" class="cta-button">Get Started Now</a>
+            </div>
+
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="privacy_policy.html">Privacy Policy</a>
+                    <a href="terms&conditions.html">Terms of Service</a>
+                    <a href="contact.html">Contact Us</a>
+                </div>
+                <p class="copyright">&copy; 2025 SkillSync. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Particles.js configuration
+        document.addEventListener('DOMContentLoaded', function () {
+            particlesJS('particles-js', {
+                particles: {
+                    number: {
+                        value: 80,
+                        density: {
+                            enable: true,
+                            value_area: 800
+                        }
+                    },
+                    color: {
+                        value: "#00D1FF"
+                    },
+                    shape: {
+                        type: "circle",
+                        stroke: {
+                            width: 0,
+                            color: "#000000"
+                        }
+                    },
+                    opacity: {
+                        value: 0.5,
+                        random: true,
+                        anim: {
+                            enable: true,
+                            speed: 1,
+                            opacity_min: 0.1,
+                            sync: false
+                        }
+                    },
+                    size: {
+                        value: 3,
+                        random: true,
+                        anim: {
+                            enable: true,
+                            speed: 2,
+                            size_min: 0.1,
+                            sync: false
+                        }
+                    },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: "#4CC3FF",
+                        opacity: 0.4,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 1,
+                        direction: "none",
+                        random: true,
+                        straight: false,
+                        out_mode: "out",
+                        bounce: false,
+                        attract: {
+                            enable: false,
+                            rotateX: 600,
+                            rotateY: 1200
+                        }
+                    }
+                },
+                interactivity: {
+                    detect_on: "canvas",
+                    events: {
+                        onhover: {
+                            enable: true,
+                            mode: "grab"
+                        },
+                        onclick: {
+                            enable: true,
+                            mode: "push"
+                        },
+                        resize: true
+                    },
+                    modes: {
+                        grab: {
+                            distance: 140,
+                            line_linked: {
+                                opacity: 1
+                            }
+                        },
+                        push: {
+                            particles_nb: 4
+                        }
+                    }
+                },
+                retina_detect: true
+            });
+
+            // Create neural network animation
+            createNeuralNetwork();
+        });
+
+        function createNeuralNetwork() {
+            const container = document.getElementById('neural-network');
+            const nodes = [];
+            const connections = [];
+
+            // Create nodes
+            for (let i = 0; i < 15; i++) {
+                const node = document.createElement('div');
+                node.className = 'node';
+
+                // Random position within container
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const z = Math.random() * 40 - 20;
+
+                node.style.left = `${x}%`;
+                node.style.top = `${y}%`;
+                node.style.transform = `translateZ(${z}px)`;
+
+                // Add animation
+                node.style.animation = `glow 2s infinite ${i * 0.2}s`;
+
+                container.appendChild(node);
+                nodes.push({ element: node, x, y, z });
+            }
+
+            // Create connections between nodes
+            nodes.forEach((node, i) => {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    if (Math.random() > 0.7) { // Only connect some nodes
+                        const otherNode = nodes[j];
+                        const dx = node.x - otherNode.x;
+                        const dy = node.y - otherNode.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < 50) { // Only connect nearby nodes
+                            const connection = document.createElement('div');
+                            connection.className = 'connection';
+
+                            const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+
+                            connection.style.width = `${distance}%`;
+                            connection.style.height = '1px';
+                            connection.style.left = `${node.x}%`;
+                            connection.style.top = `${node.y}%`;
+                            connection.style.transform = `rotate(${angle}deg)`;
+                            connection.style.opacity = 0.7 - (distance / 50);
+
+                            container.appendChild(connection);
+                            connections.push(connection);
+                        }
+                    }
+                }
+            });
+
+            // Animate nodes
+            setInterval(() => {
+                nodes.forEach(node => {
+                    const dx = (Math.random() - 0.5) * 0.5;
+                    const dy = (Math.random() - 0.5) * 0.5;
+
+                    node.x = Math.max(5, Math.min(95, node.x + dx));
+                    node.y = Math.max(5, Math.min(95, node.y + dy));
+
+                    node.element.style.left = `${node.x}%`;
+                    node.element.style.top = `${node.y}%`;
+                });
+
+                // Update connections (simplified)
+                connections.forEach(conn => {
+                    conn.style.opacity = Math.random() * 0.5 + 0.3;
+                });
+            }, 2000);
+        }
+    </script>
+</body>
+
+</html>

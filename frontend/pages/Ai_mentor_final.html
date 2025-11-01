@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Mentor - Your Personal Guide</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+            background: linear-gradient(to right, #00dbde, #fc00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex: 1;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .suggestions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .suggestion-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 20px;
+            padding: 12px 20px;
+            color: white;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            backdrop-filter: blur(5px);
+        }
+
+        .suggestion-btn:hover {
+            background: linear-gradient(135deg, #6e48aa, #9d50bb);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(142, 68, 173, 0.4);
+        }
+
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 15px;
+            border-radius: 18px;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #0072ff, #00c6ff);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .ai-message {
+            align-self: flex-start;
+            background: linear-gradient(135deg, #4776E6, #8E54E9);
+            color: white;
+            border-bottom-left-radius: 5px;
+        }
+
+        .ai-message-content {
+            line-height: 1.6;
+        }
+
+        .ai-message-content p {
+            margin-bottom: 12px;
+        }
+
+        .ai-message-content ul, .ai-message-content ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .ai-message-content li {
+            margin-bottom: 8px;
+        }
+
+        .ai-message-content strong {
+            font-weight: 600;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 25px;
+            backdrop-filter: blur(5px);
+        }
+
+        #message-input {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        #message-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        #send-btn {
+            background: linear-gradient(135deg, #4776E6, #8E54E9);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        #send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(142, 84, 233, 0.4);
+        }
+
+        .typing-indicator {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 20px;
+            border-radius: 18px;
+            display: none;
+        }
+
+        .typing-indicator span {
+            height: 10px;
+            width: 10px;
+            float: left;
+            margin: 0 2px;
+            background-color: white;
+            display: block;
+            border-radius: 50%;
+            opacity: 0.4;
+        }
+
+        .typing-indicator span:nth-of-type(1) {
+            animation: typing 1s infinite;
+        }
+
+        .typing-indicator span:nth-of-type(2) {
+            animation: typing 1s 0.33s infinite;
+        }
+
+        .typing-indicator span:nth-of-type(3) {
+            animation: typing 1s 0.66s infinite;
+        }
+
+        .clear-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            color: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            align-self: flex-end;
+        }
+
+        .clear-btn:hover {
+            background: rgba(255, 50, 50, 0.5);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes typing {
+            0%,
+            100% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .message {
+                max-width: 90%;
+            }
+            
+            .suggestions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>AI Mentor</h1>
+        <p>Your personal guide to knowledge and growth</p>
+    </div>
+
+    <div class="container">
+        <div class="suggestions">
+            <button class="suggestion-btn" data-question="What can you help me with?">
+                <i class="fas fa-question-circle"></i> What can you help me with?
+            </button>
+            <button class="suggestion-btn" data-question="Tell me about machine learning">
+                <i class="fas fa-brain"></i> Tell me about machine learning
+            </button>
+            <button class="suggestion-btn" data-question="How to improve my coding skills?">
+                <i class="fas fa-code"></i> How to improve my coding skills?
+            </button>
+            <button class="suggestion-btn" data-question="Career advice for developers">
+                <i class="fas fa-briefcase"></i> Career advice for developers
+            </button>
+        </div>
+
+        <div class="chat-container" id="chat-container">
+            <!-- Messages will be added here dynamically -->
+            <div class="message ai-message">
+                <div class="ai-message-content">
+                    Hi there! I'm your AI Mentor. How can I assist you with your learning journey today?
+                </div>
+            </div>
+        </div>
+
+        <div class="typing-indicator" id="typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <div class="input-container">
+            <input type="text" id="message-input" placeholder="Type your message here...">
+            <button id="send-btn">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+
+        <button class="clear-btn" id="clear-btn">
+            <i class="fas fa-trash"></i> Clear Conversation
+        </button>
+    </div>
+
+    <script>
+        // DOM Elements
+        const chatContainer = document.getElementById('chat-container');
+        const messageInput = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const suggestionBtns = document.querySelectorAll('.suggestion-btn');
+        
+        // Replace with your actual Gemini API key
+        const apiKey = "AIzaSyDffbldqQ5TKVf5fbVlA1w4dHhJE7kZoyA";
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        
+        // Initialize chat history
+        let chatHistory = [];
+        
+        // Function to format AI response text
+        function formatAIText(text) {
+            // Replace markdown-style bold with HTML
+            text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            // Replace markdown-style italic with HTML
+            text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            
+            // Split into paragraphs (double newlines)
+            let paragraphs = text.split(/\n\s*\n/);
+            
+            // Process each paragraph
+            let formattedHtml = '';
+            
+            for (let paragraph of paragraphs) {
+                paragraph = paragraph.trim();
+                if (!paragraph) continue;
+                
+                // Check if this is a list
+                if (paragraph.includes('* ') || paragraph.includes('- ')) {
+                    // Split into lines
+                    let lines = paragraph.split('\n');
+                    let inList = false;
+                    
+                    for (let line of lines) {
+                        line = line.trim();
+                        if (line.startsWith('* ') || line.startsWith('- ')) {
+                            if (!inList) {
+                                formattedHtml += '<ul>';
+                                inList = true;
+                            }
+                            formattedHtml += `<li>${line.substring(2)}</li>`;
+                        } else {
+                            if (inList) {
+                                formattedHtml += '</ul>';
+                                inList = false;
+                            }
+                            formattedHtml += `<p>${line}</p>`;
+                        }
+                    }
+                    
+                    if (inList) {
+                        formattedHtml += '</ul>';
+                    }
+                } else {
+                    // Regular paragraph
+                    formattedHtml += `<p>${paragraph}</p>`;
+                }
+            }
+            
+            return formattedHtml;
+        }
+        
+        // Function to add message to chat
+        function addMessage(text, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(isUser ? 'user-message' : 'ai-message');
+            
+            if (isUser) {
+                messageDiv.textContent = text;
+            } else {
+                // Format AI response with HTML
+                const contentDiv = document.createElement('div');
+                contentDiv.classList.add('ai-message-content');
+                contentDiv.innerHTML = formatAIText(text);
+                messageDiv.appendChild(contentDiv);
+            }
+            
+            chatContainer.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            // Add to chat history
+            chatHistory.push({
+                role: isUser ? 'user' : 'model',
+                parts: [{ text: text }]
+            });
+        }
+        
+        // Function to show typing indicator
+        function showTypingIndicator() {
+            typingIndicator.style.display = 'block';
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // Function to hide typing indicator
+        function hideTypingIndicator() {
+            typingIndicator.style.display = 'none';
+        }
+        
+        // Function to send message to Gemini API
+        async function sendMessageToGemini(message) {
+            showTypingIndicator();
+            
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contents: [
+                            {
+                                role: "user",
+                                parts: [{ text: message }]
+                            }
+                        ]
+                    })
+                });
+                
+                const data = await response.json();
+                hideTypingIndicator();
+                
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    const aiResponse = data.candidates[0].content.parts[0].text;
+                    addMessage(aiResponse, false);
+                } else {
+                    throw new Error('Invalid response format from API');
+                }
+            } catch (error) {
+                hideTypingIndicator();
+                console.error('Error:', error);
+                addMessage("Sorry, I'm having trouble connecting to the AI service. Please check your API key and try again.", false);
+            }
+        }
+        
+        // Function to handle sending message
+        function handleSendMessage() {
+            const message = messageInput.value.trim();
+            if (message) {
+                addMessage(message, true);
+                messageInput.value = '';
+                sendMessageToGemini(message);
+            }
+        }
+        
+        // Event Listeners
+        sendBtn.addEventListener('click', handleSendMessage);
+        
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleSendMessage();
+            }
+        });
+        
+        clearBtn.addEventListener('click', () => {
+            // Clear chat container except for the first AI message
+            while (chatContainer.children.length > 1) {
+                chatContainer.removeChild(chatContainer.lastChild);
+            }
+            
+            // Clear chat history
+            chatHistory = [];
+        });
+        
+        // Add event listeners to suggestion buttons
+        suggestionBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const question = btn.getAttribute('data-question');
+                addMessage(question, true);
+                sendMessageToGemini(question);
+            });
+        });
+        
+        // Initial focus on input
+        messageInput.focus();
+    </script>
+</body>
+</html>

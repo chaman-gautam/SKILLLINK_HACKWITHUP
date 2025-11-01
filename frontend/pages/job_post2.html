@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Opportunity</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+            color: #e6f1ff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background elements */
+        .glow-circle {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(70px);
+            opacity: 0.2;
+            z-index: -1;
+            animation: pulse 15s infinite alternate;
+        }
+
+        .circle-1 {
+            width: 400px;
+            height: 400px;
+            background: #4cc9f0;
+            top: 10%;
+            left: 5%;
+            animation-delay: 1s;
+        }
+
+        .circle-2 {
+            width: 600px;
+            height: 600px;
+            background: #4361ee;
+            bottom: 5%;
+            right: 5%;
+            animation-delay: 3s;
+        }
+
+        .circle-3 {
+            width: 300px;
+            height: 300px;
+            background: #f72585;
+            top: 50%;
+            left: 80%;
+            animation-delay: 5s;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.2;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.3;
+            }
+            100% {
+                transform: scale(0.9);
+                opacity: 0.25;
+            }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(13, 25, 42, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3), 
+                        0 0 45px rgba(77, 150, 255, 0.2);
+            padding: 30px;
+            margin: 20px 0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 
+                        0 0 60px rgba(77, 150, 255, 0.3);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #4cc9f0, #4361ee, #f72585);
+            /*-webkit-background-clip: text;*/
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(76, 201, 240, 0.3);
+            animation: titleGlow 3s infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% {
+                text-shadow: 0 0 15px rgba(76, 201, 240, 0.3);
+            }
+            100% {
+                text-shadow: 0 0 25px rgba(76, 201, 240, 0.6), 
+                             0 0 35px rgba(76, 201, 240, 0.4);
+            }
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .category-tags {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .category-tag {
+            padding: 12px 25px;
+            border-radius: 50px;
+            background: rgba(26, 36, 56, 0.7);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(76, 201, 240, 0.2);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .category-tag:hover::before {
+            left: 100%;
+        }
+
+        .category-tag:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px rgba(76, 201, 240, 0.4);
+        }
+
+        .category-tag.active {
+            background: linear-gradient(90deg, #4361ee, #4cc9f0);
+            color: #0a192f;
+            box-shadow: 0 0 15px rgba(76, 201, 240, 0.6);
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #4cc9f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 10px;
+            background: rgba(15, 30, 50, 0.6);
+            border: 1px solid rgba(76, 201, 240, 0.3);
+            color: #e6f1ff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #4cc9f0;
+            box-shadow: 0 0 15px rgba(76, 201, 240, 0.5);
+            transform: translateY(-2px);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .character-count {
+            text-align: right;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            opacity: 0.7;
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-item input {
+            width: auto;
+        }
+
+        .skills-input-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            min-height: 50px;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(15, 30, 50, 0.6);
+            border: 1px solid rgba(76, 201, 240, 0.3);
+        }
+
+        .skill-tag {
+            background: linear-gradient(90deg, #4361ee, #4cc9f0);
+            color: #0a192f;
+            padding: 6px 12px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .skill-tag i {
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .skill-tag i:hover {
+            color: #f72585;
+        }
+
+        .skills-input {
+            flex: 1;
+            min-width: 100px;
+            border: none;
+            background: transparent;
+            color: #e6f1ff;
+            outline: none;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 220px;
+            margin: 30px auto 10px;
+            padding: 16px;
+            background: linear-gradient(90deg, #4361ee, #4cc9f0);
+            color: #0a192f;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(76, 201, 240, 0.5);
+            z-index: 1;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #4cc9f0, #4361ee);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .submit-btn:hover::before {
+            opacity: 1;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(76, 201, 240, 0.8);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .ripple {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            background: rgba(13, 25, 42, 0.9);
+            border: 1px solid rgba(76, 201, 240, 0.3);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            transform: translateX(100%);
+            transition: transform 0.5s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            border-left: 4px solid #4cc9f0;
+        }
+
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            width: 100%;
+            background: linear-gradient(90deg, #4361ee, #4cc9f0);
+            animation: progress 3s linear forwards;
+        }
+
+        @keyframes progress {
+            from {
+                width: 100%;
+            }
+            to {
+                width: 0%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .category-tags {
+                flex-wrap: wrap;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Glowing background elements -->
+    <div class="glow-circle circle-1"></div>
+    <div class="glow-circle circle-2"></div>
+    <div class="glow-circle circle-3"></div>
+
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-rocket"></i> Post Opportunity</h1>
+            <p class="subtitle">Share your opportunity with the community</p>
+        </header>
+
+        <div class="category-tags">
+            <div class="category-tag active" data-category="internship">
+                <i class="fas fa-graduation-cap"></i> Internship
+            </div>
+            <div class="category-tag" data-category="job">
+                <i class="fas fa-briefcase"></i> Job
+            </div>
+            <div class="category-tag" data-category="hackathon">
+                <i class="fas fa-laptop-code"></i> Hackathon
+            </div>
+        </div>
+
+        <form id="opportunity-form">
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-info-circle"></i> Basic Information</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="title">Opportunity Title</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="title" placeholder="e.g. Frontend Developer Intern" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="company">Company/Organization</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="company" placeholder="e.g. TechCorp Inc." required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="location" placeholder="e.g. Remote, New York, etc." required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="apply-link">Application Link</label>
+                        <div class="input-wrapper">
+                            <input type="url" id="apply-link" placeholder="https://..." required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-calendar"></i> Duration & Dates</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="start-date">Start Date</label>
+                        <div class="input-wrapper">
+                            <input type="date" id="start-date" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="duration">Duration</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="duration" placeholder="e.g. 3 months, 6 months, etc.">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="deadline">Application Deadline</label>
+                        <div class="input-wrapper">
+                            <input type="date" id="deadline" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-file-alt"></i> Description</h2>
+                <div class="form-group">
+                    <label for="description">Opportunity Description</label>
+                    <div class="input-wrapper">
+                        <textarea id="description" placeholder="Describe the opportunity, responsibilities, requirements, etc." maxlength="1000" required></textarea>
+                    </div>
+                    <div class="character-count"><span id="char-count">0</span>/1000 characters</div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-tags"></i> Tags & Skills</h2>
+                <div class="form-group">
+                    <label>Required Skills (Type and press Enter to add)</label>
+                    <div class="skills-input-container" id="skills-container">
+                        <!-- Skills will be added here dynamically -->
+                        <input type="text" class="skills-input" id="skills-input" placeholder="Type a skill and press Enter">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Opportunity Type</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="remote" name="type" value="remote">
+                            <label for="remote">Remote</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="full-time" name="type" value="full-time">
+                            <label for="full-time">Full-time</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="part-time" name="type" value="part-time">
+                            <label for="part-time">Part-time</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="paid" name="type" value="paid">
+                            <label for="paid">Paid</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submit-btn">
+                <i class="fas fa-paper-plane"></i> Post Opportunity
+            </button>
+        </form>
+    </div>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <div>
+            <h4>Success!</h4>
+            <p>Your opportunity has been posted successfully.</p>
+        </div>
+        <div class="progress-bar"></div>
+    </div>
+
+    <footer>
+        <p>© 2023 Opportunity Platform | Connecting Talent with Opportunities</p>
+    </footer>
+
+    <script>
+        // Category tags interaction
+        const categoryTags = document.querySelectorAll('.category-tag');
+        categoryTags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                categoryTags.forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                
+                // Show different form sections based on category
+                const category = tag.getAttribute('data-category');
+                updateFormForCategory(category);
+            });
+        });
+
+        function updateFormForCategory(category) {
+            // In a real application, this would show/hide different form fields
+            console.log(`Category changed to: ${category}`);
+        }
+
+        // Ripple effect for submit button
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.addEventListener('mouseenter', function(e) {
+            createRippleEffect(this, e);
+        });
+
+        function createRippleEffect(element, e) {
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            
+            const rect = element.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size/2;
+            const y = e.clientY - rect.top - size/2;
+            
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+            
+            element.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        }
+
+        // Form submission
+        const form = document.getElementById('opportunity-form');
+        const notification = document.getElementById('notification');
+        
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Add a slight delay to show the ripple effect
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
+            
+            // Simulate form submission
+            setTimeout(() => {
+                showNotification();
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Post Opportunity';
+                form.reset();
+                clearSkills();
+            }, 1500);
+        });
+
+        function showNotification() {
+            notification.classList.add('show', 'success');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Add glowing effect to input fields on focus
+        const inputs = document.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.style.filter = 'drop-shadow(0 0 8px rgba(76, 201, 240, 0.7))';
+            });
+            
+            input.addEventListener('blur', () => {
+                input.parentElement.style.filter = 'none';
+            });
+        });
+
+        // Character count for description
+        const description = document.getElementById('description');
+        const charCount = document.getElementById('char-count');
+        
+        description.addEventListener('input', () => {
+            const count = description.value.length;
+            charCount.textContent = count;
+            
+            if (count > 900) {
+                charCount.style.color = '#f72585';
+            } else {
+                charCount.style.color = '#e6f1ff';
+            }
+        });
+
+        // Skills input functionality
+        const skillsInput = document.getElementById('skills-input');
+        const skillsContainer = document.getElementById('skills-container');
+        const skills = [];
+        
+        skillsInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && skillsInput.value.trim() !== '') {
+                e.preventDefault();
+                addSkill(skillsInput.value.trim());
+                skillsInput.value = '';
+            }
+        });
+
+        function addSkill(skill) {
+            if (skills.includes(skill)) return;
+            
+            skills.push(skill);
+            
+            const skillTag = document.createElement('div');
+            skillTag.className = 'skill-tag';
+            skillTag.innerHTML = `
+                ${skill}
+                <i class="fas fa-times" onclick="removeSkill('${skill}', this)"></i>
+            `;
+            
+            skillsContainer.insertBefore(skillTag, skillsInput);
+        }
+
+        function removeSkill(skill, element) {
+            const index = skills.indexOf(skill);
+            if (index !== -1) {
+                skills.splice(index, 1);
+                element.parentElement.remove();
+            }
+        }
+
+        function clearSkills() {
+            skills.length = 0;
+            document.querySelectorAll('.skill-tag').forEach(tag => tag.remove());
+        }
+
+        // Make removeSkill function available globally
+        window.removeSkill = removeSkill;
+
+        // Add hover effect to container
+        const container = document.querySelector('.container');
+        container.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            container.style.setProperty('--mouse-x', `${x}px`);
+            container.style.setProperty('--mouse-y', `${y}px`);
+        });
+    </script>
+</body>
+</html>

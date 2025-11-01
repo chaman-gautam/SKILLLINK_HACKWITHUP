@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEON Skill Passport</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        :root {
+            --neon-blue: #08f7fe;
+            --neon-pink: #fe53bb;
+            --neon-green: #09fbd3;
+            --neon-yellow: #f5d300;
+            --neon-purple: #7122fa;
+            --dark-bg: #0f0c29;
+            --darker-bg: #07051a;
+            --card-bg: rgba(15, 12, 41, 0.8);
+            --card-border: rgba(8, 247, 254, 0.3);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --glow-intensity: 8px;
+        }
+        
+        body {
+            background: var(--darker-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(8, 247, 254, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(254, 83, 187, 0.15) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .grid-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(8, 247, 254, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(8, 247, 254, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            position: relative;
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--neon-blue);
+            text-shadow: 
+                0 0 5px var(--neon-blue),
+                0 0 10px var(--neon-blue),
+                0 0 20px var(--neon-blue),
+                0 0 40px var(--neon-blue);
+            animation: pulsate 2s infinite alternate;
+            position: relative;
+            display: inline-block;
+        }
+        
+        @keyframes pulsate {
+            0% {
+                text-shadow: 
+                    0 0 5px var(--neon-blue),
+                    0 0 10px var(--neon-blue),
+                    0 0 20px var(--neon-blue),
+                    0 0 40px var(--neon-blue);
+            }
+            100% {
+                text-shadow: 
+                    0 0 10px var(--neon-blue),
+                    0 0 20px var(--neon-blue),
+                    0 0 40px var(--neon-blue),
+                    0 0 80px var(--neon-blue);
+            }
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 4px;
+            background: var(--neon-pink);
+            border-radius: 2px;
+            box-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin: 30px 0;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Stats Overview */
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            min-width: 220px;
+            text-align: center;
+            border: 1px solid var(--card-border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(8, 247, 254, 0.2);
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            z-index: -1;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink), var(--neon-green), var(--neon-yellow));
+            background-size: 400% 400%;
+            animation: glowing-border 3s ease infinite;
+            border-radius: 16px;
+        }
+        
+        @keyframes glowing-border {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 0 25px rgba(8, 247, 254, 0.4);
+        }
+        
+        .stat-value {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(8, 247, 254, 0.5);
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Upload Zone */
+        .upload-container {
+            background: rgba(15, 12, 41, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px auto;
+            max-width: 700px;
+            text-align: center;
+            border: 2px dashed rgba(8, 247, 254, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(8, 247, 254, 0.1);
+        }
+        
+        .upload-container::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink), var(--neon-purple));
+            z-index: -1;
+            filter: blur(20px);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            animation: pulse 3s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.2; }
+            50% { opacity: 0.4; }
+            100% { opacity: 0.2; }
+        }
+        
+        .upload-container.drag-over {
+            border-color: var(--neon-blue);
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(8, 247, 254, 0.4);
+        }
+        
+        .upload-container.drag-over::before {
+            opacity: 0.6;
+        }
+        
+        .upload-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: var(--neon-blue);
+            text-shadow: 0 0 15px var(--neon-blue);
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .upload-text {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .upload-btn {
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(8, 247, 254, 0.5);
+            position: relative;
+            overflow: hidden;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .upload-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: 0.5s;
+        }
+        
+        .upload-btn:hover::before {
+            left: 100%;
+        }
+        
+        .upload-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(8, 247, 254, 0.8);
+        }
+        
+        /* Progress bar */
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-green));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+        
+        /* Toggle Switch */
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            gap: 15px;
+        }
+        
+        .toggle-text {
+            font-size: 1.1rem;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            transition: .4s;
+            border-radius: 34px;
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-yellow));
+            box-shadow: 0 0 10px var(--neon-pink);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+        
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--card-border);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(8, 247, 254, 0.3);
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+        }
+        
+        .card.verified::before {
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px rgba(8, 247, 254, 0.5);
+        }
+        
+        .verified-badge {
+            color: var(--neon-green);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            text-shadow: 0 0 5px var(--neon-green);
+        }
+        
+        .unverified-badge {
+            color: var(--neon-yellow);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            text-shadow: 0 0 5px var(--neon-yellow);
+        }
+        
+        .card-content {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+        
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .blockchain-proof {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            color: var(--neon-blue);
+        }
+        
+        .blockchain-proof:hover {
+            color: var(--neon-pink);
+            text-shadow: 0 0 5px var(--neon-pink);
+        }
+        
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .card-btn {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+        
+        .card-btn:hover {
+            background: var(--neon-blue);
+            color: var(--darker-bg);
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+        
+        /* Search bar */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: var(--card-bg);
+            border-radius: 50px;
+            padding: 8px 20px;
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 0 15px rgba(8, 247, 254, 0.1);
+        }
+        
+        .search-bar input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            padding: 8px;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .search-bar i {
+            color: var(--neon-blue);
+            margin-right: 10px;
+            text-shadow: 0 0 5px var(--neon-blue);
+        }
+        
+        /* Confetti canvas */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: var(--darker-bg);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid var(--neon-blue);
+            position: relative;
+            box-shadow: 0 0 30px var(--neon-blue);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, var(--neon-green), var(--neon-blue));
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            z-index: 1002;
+            font-weight: 600;
+        }
+        
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .upload-container {
+                padding: 20px;
+            }
+            
+            .stats-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stat-card {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+        
+        /* Cyberpunk scanline effect */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, 
+                rgba(255, 255, 255, 0.03) 50%, 
+                rgba(0, 0, 0, 0.1) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.2;
+        }
+        
+        /* File upload preview */
+        .file-preview {
+            margin-top: 20px;
+            display: none;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid var(--neon-blue);
+        }
+        
+        .file-preview h3 {
+            color: var(--neon-blue);
+            margin-bottom: 10px;
+            text-shadow: 0 0 5px var(--neon-blue);
+        }
+        
+        .file-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .file-info span {
+            font-size: 0.9rem;
+        }
+        
+        .file-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .file-action-btn {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+        
+        .file-action-btn:hover {
+            background: var(--neon-blue);
+            color: var(--darker-bg);
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+        
+        .file-action-btn.remove {
+            background: rgba(254, 83, 187, 0.2);
+        }
+        
+        .file-action-btn.remove:hover {
+            background: var(--neon-pink);
+            box-shadow: 0 0 10px var(--neon-pink);
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-lines"></div>
+    <div class="scanlines"></div>
+    
+    <div class="container">
+        <header>
+            <h1>NEON PASSPORT</h1>
+            <p class="subtitle">Manage and showcase your verified skills with <span style="color: var(--neon-blue); text-shadow: 0 0 5px var(--neon-blue);">blockchain-powered</span> verification in a <span style="color: var(--neon-pink); text-shadow: 0 0 5px var(--neon-pink);">cyberpunk</span> style</p>
+            
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Total Skills</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Verified</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">In Progress</div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="search-container">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search skills and credentials...">
+            </div>
+        </div>
+        
+        <div class="upload-container" id="uploadZone">
+            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+            <h2 class="upload-text">Drag & Drop to Upload Your Documents</h2>
+            <p>Supported formats: PDF, PNG, JPG (Max 10MB)</p>
+            <button class="upload-btn" id="browseBtn">Browse Files</button>
+            <input type="file" id="fileInput" style="display: none;" accept=".pdf,.png,.jpg,.jpeg">
+            
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            
+            <div class="file-preview" id="filePreview">
+                <h3>Selected File</h3>
+                <div class="file-info">
+                    <span id="fileName">No file selected</span>
+                    <span id="fileSize"></span>
+                </div>
+                <div class="file-actions">
+                    <button class="file-action-btn" id="uploadFileBtn">Upload</button>
+                    <button class="file-action-btn remove" id="removeFileBtn">Remove</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="toggle-container">
+            <span class="toggle-text">Show All</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="verifiedToggle">
+                <span class="slider"></span>
+            </label>
+            <span class="toggle-text">Verified Only</span>
+        </div>
+        
+        <div class="cards-grid" id="cardsContainer">
+            <!-- Cards will be generated here -->
+        </div>
+    </div>
+    
+    <canvas id="confetti-canvas"></canvas>
+    
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i> Document successfully uploaded!
+    </div>
+    
+    <div class="modal" id="blockchainModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <h2 style="color: var(--neon-blue); text-shadow: 0 0 5px var(--neon-blue);">Blockchain Verification Details</h2>
+            <p id="modalHash" style="word-break: break-all; margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 10px; font-family: monospace; color: var(--neon-green);"></p>
+            <p>This document has been verified on the blockchain and is tamper-proof.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const uploadZone = document.getElementById('uploadZone');
+            const fileInput = document.getElementById('fileInput');
+            const browseBtn = document.getElementById('browseBtn');
+            const verifiedToggle = document.getElementById('verifiedToggle');
+            const cardsContainer = document.getElementById('cardsContainer');
+            const confettiCanvas = document.getElementById('confetti-canvas');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            const searchInput = document.getElementById('searchInput');
+            const notification = document.getElementById('notification');
+            const blockchainModal = document.getElementById('blockchainModal');
+            const closeModal = document.getElementById('closeModal');
+            const modalHash = document.getElementById('modalHash');
+            const filePreview = document.getElementById('filePreview');
+            const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            const uploadFileBtn = document.getElementById('uploadFileBtn');
+            const removeFileBtn = document.getElementById('removeFileBtn');
+            
+            let selectedFile = null;
+            
+            // Sample data for demonstration
+            let documents = JSON.parse(localStorage.getItem('skillPassportDocs')) || [
+                { 
+                    id: 1, 
+                    title: 'Web Development Certificate', 
+                    description: 'Advanced web development with React and Node.js', 
+                    date: '2023-06-15', 
+                    verified: true,
+                    hash: '0x4f8a6e4fd2c56b4e4a5a7d3b1a2c4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2',
+                    file: { name: 'web_dev_certificate.pdf', size: '2.4 MB' }
+                },
+                { 
+                    id: 2, 
+                    title: 'UX Design Diploma', 
+                    description: 'User experience design principles and practices', 
+                    date: '2023-05-22', 
+                    verified: true,
+                    hash: '0x7b3c9e1a2f8d3e5c7a9b4d6e8f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9',
+                    file: { name: 'ux_design_diploma.pdf', size: '3.1 MB' }
+                },
+                { 
+                    id: 3, 
+                    title: 'Python Programming', 
+                    description: 'Data science with Python and Pandas', 
+                    date: '2023-07-10', 
+                    verified: false,
+                    hash: '',
+                    file: { name: 'python_course.pdf', size: '5.2 MB' }
+                },
+                { 
+                    id: 4, 
+                    title: 'Blockchain Fundamentals', 
+                    description: 'Understanding blockchain technology and applications', 
+                    date: '2023-08-05', 
+                    verified: true,
+                    hash: '0x9d5e2a7b4c1f3e8a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8',
+                    file: { name: 'blockchain_cert.pdf', size: '1.8 MB' }
+                },
+                { 
+                    id: 5, 
+                    title: 'Digital Marketing', 
+                    description: 'SEO, SEM and social media marketing strategies', 
+                    date: '2023-07-28', 
+                    verified: false,
+                    hash: '',
+                    file: { name: 'digital_marketing.pdf', size: '4.3 MB' }
+                },
+                { 
+                    id: 6, 
+                    title: 'Cloud Architecture', 
+                    description: 'AWS and Azure cloud infrastructure design', 
+                    date: '2023-06-30', 
+                    verified: true,
+                    hash: '0x3c7a9e4d2b8f1c5e6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0',
+                    file: { name: 'cloud_arch_cert.pdf', size: '2.7 MB' }
+                }
+            ];
+            
+            // Initialize the view
+            renderCards();
+            updateStats();
+            
+            // File selection handling
+            browseBtn.addEventListener('click', () => {
+                fileInput.click();
+            });
+            
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    selectedFile = e.target.files[0];
+                    showFilePreview(selectedFile);
+                }
+            });
+            
+            // Upload file button
+            uploadFileBtn.addEventListener('click', () => {
+                if (selectedFile) {
+                    handleFiles([selectedFile]);
+                }
+            });
+            
+            // Remove file button
+            removeFileBtn.addEventListener('click', () => {
+                selectedFile = null;
+                fileInput.value = '';
+                hideFilePreview();
+            });
+            
+            function showFilePreview(file) {
+                fileName.textContent = file.name;
+                fileSize.textContent = formatFileSize(file.size);
+                filePreview.style.display = 'block';
+            }
+            
+            function hideFilePreview() {
+                filePreview.style.display = 'none';
+                fileName.textContent = 'No file selected';
+                fileSize.textContent = '';
+            }
+            
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            // Drag and drop functionality
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadZone.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadZone.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadZone.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                uploadZone.classList.add('drag-over');
+            }
+            
+            function unhighlight() {
+                uploadZone.classList.remove('drag-over');
+            }
+            
+            uploadZone.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                if (files.length > 0) {
+                    selectedFile = files[0];
+                    showFilePreview(selectedFile);
+                }
+            }
+            
+            function handleFiles(files) {
+                if (files.length > 0) {
+                    // Show progress bar
+                    progressContainer.style.display = 'block';
+                    progressBar.style.width = '0%';
+                    
+                    // Simulate upload process
+                    simulateUpload(files[0]);
+                }
+            }
+            
+            function simulateUpload(file) {
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 10;
+                    if (progress >= 100) {
+                        progress = 100;
+                        clearInterval(interval);
+                        
+                        // Add a new unverified document
+                        const newDoc = {
+                            id: documents.length + 1,
+                            title: file.name.split('.')[0].replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+                            description: 'Uploaded on ' + new Date().toLocaleDateString(),
+                            date: new Date().toISOString().split('T')[0],
+                            verified: false,
+                            hash: '',
+                            file: {
+                                name: file.name,
+                                size: formatFileSize(file.size)
+                            }
+                        };
+                        
+                        documents.unshift(newDoc);
+                        saveDocuments();
+                        renderCards();
+                        updateStats();
+                        
+                        // Show success message
+                        uploadZone.innerHTML = '<i class="fas fa-check-circle upload-icon" style="color: var(--neon-green); text-shadow: 0 0 15px var(--neon-green);"></i><h2 class="upload-text">Upload Successful!</h2><p>Your document is being verified</p>';
+                        progressContainer.style.display = 'none';
+                        
+                        // Show notification
+                        showNotification();
+                        
+                        // Trigger confetti animation
+                        triggerConfetti();
+                        
+                        // Reset upload zone after delay
+                        setTimeout(() => {
+                            uploadZone.innerHTML = `<i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                <h2 class="upload-text">Drag & Drop to Upload Your Documents</h2>
+                                <p>Supported formats: PDF, PNG, JPG (Max 10MB)</p>
+                                <button class="upload-btn" id="browseBtn">Browse Files</button>
+                                <input type="file" id="fileInput" style="display: none;" accept=".pdf,.png,.jpg,.jpeg">
+                                <div class="progress-container" id="progressContainer">
+                                    <div class="progress-bar" id="progressBar"></div>
+                                </div>
+                                <div class="file-preview" id="filePreview">
+                                    <h3>Selected File</h3>
+                                    <div class="file-info">
+                                        <span id="fileName">No file selected</span>
+                                        <span id="fileSize"></span>
+                                    </div>
+                                    <div class="file-actions">
+                                        <button class="file-action-btn" id="uploadFileBtn">Upload</button>
+                                        <button class="file-action-btn remove" id="removeFileBtn">Remove</button>
+                                    </div>
+                                </div>`;
+                            
+                            // Reinitialize event listeners
+                            document.getElementById('browseBtn').addEventListener('click', () => {
+                                document.getElementById('fileInput').click();
+                            });
+                            document.getElementById('fileInput').addEventListener('change', (e) => {
+                                if (e.target.files.length > 0) {
+                                    selectedFile = e.target.files[0];
+                                    showFilePreview(selectedFile);
+                                }
+                            });
+                            document.getElementById('uploadFileBtn').addEventListener('click', () => {
+                                if (selectedFile) {
+                                    handleFiles([selectedFile]);
+                                }
+                            });
+                            document.getElementById('removeFileBtn').addEventListener('click', () => {
+                                selectedFile = null;
+                                document.getElementById('fileInput').value = '';
+                                hideFilePreview();
+                            });
+                            
+                            progressContainer.style.display = 'none';
+                            hideFilePreview();
+                        }, 3000);
+                    }
+                    
+                    progressBar.style.width = progress + '%';
+                }, 200);
+            }
+            
+            // Toggle functionality
+            verifiedToggle.addEventListener('change', renderCards);
+            
+            // Search functionality
+            searchInput.addEventListener('input', renderCards);
+            
+            // Modal functionality
+            closeModal.addEventListener('click', () => {
+                blockchainModal.style.display = 'none';
+            });
+            
+            window.addEventListener('click', (e) => {
+                if (e.target === blockchainModal) {
+                    blockchainModal.style.display = 'none';
+                }
+            });
+            
+            function renderCards() {
+                const showVerifiedOnly = verifiedToggle.checked;
+                const searchTerm = searchInput.value.toLowerCase();
+                
+                const filteredDocs = documents.filter(doc => {
+                    const matchesVerification = showVerifiedOnly ? doc.verified : true;
+                    const matchesSearch = doc.title.toLowerCase().includes(searchTerm) || 
+                                         doc.description.toLowerCase().includes(searchTerm);
+                    return matchesVerification && matchesSearch;
+                });
+                
+                cardsContainer.innerHTML = '';
+                
+                if (filteredDocs.length === 0) {
+                    cardsContainer.innerHTML = '<div class="no-results" style="text-align: center; grid-column: 1 / -1; padding: 40px; color: var(--text-secondary);">No documents found. Try adjusting your search or filter.</div>';
+                    return;
+                }
+                
+                filteredDocs.forEach(doc => {
+                    const card = document.createElement('div');
+                    card.className = `card ${doc.verified ? 'verified' : ''}`;
+                    
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <h3 class="card-title">${doc.title}</h3>
+                            <span class="${doc.verified ? 'verified-badge' : 'unverified-badge'}">
+                                <i class="fas ${doc.verified ? 'fa-check-circle' : 'fa-clock'}"></i>
+                                ${doc.verified ? 'Verified' : 'Pending'}
+                            </span>
+                        </div>
+                        <div class="card-content">
+                            <p>${doc.description}</p>
+                            ${doc.file ? `<p><strong>File:</strong> ${doc.file.name} (${doc.file.size})</p>` : ''}
+                        </div>
+                        <div class="card-footer">
+                            <span>Added: ${doc.date}</span>
+                            ${doc.verified ? `
+                                <span class="blockchain-proof" data-hash="${doc.hash}">
+                                    <i class="fas fa-link"></i>
+                                    Blockchain Proof
+                                </span>
+                            ` : ''}
+                        </div>
+                        <div class="card-actions">
+                            <button class="card-btn"><i class="fas fa-eye"></i> View</button>
+                            <button class="card-btn"><i class="fas fa-download"></i> Download</button>
+                            ${!doc.verified ? `<button class="card-btn"><i class="fas fa-trash"></i> Delete</button>` : ''}
+                        </div>
+                    `;
+                    
+                    // Add click event to blockchain proof
+                    if (doc.verified) {
+                        const proofElement = card.querySelector('.blockchain-proof');
+                        proofElement.addEventListener('click', () => {
+                            modalHash.textContent = proofElement.getAttribute('data-hash');
+                            blockchainModal.style.display = 'flex';
+                        });
+                    }
+                    
+                    cardsContainer.appendChild(card);
+                });
+            }
+            
+            function updateStats() {
+                const total = documents.length;
+                const verified = documents.filter(doc => doc.verified).length;
+                const pending = total - verified;
+                
+                document.querySelectorAll('.stat-card')[0].querySelector('.stat-value').textContent = total;
+                document.querySelectorAll('.stat-card')[1].querySelector('.stat-value').textContent = verified;
+                document.querySelectorAll('.stat-card')[2].querySelector('.stat-value').textContent = pending;
+            }
+            
+            function saveDocuments() {
+                localStorage.setItem('skillPassportDocs', JSON.stringify(documents));
+            }
+            
+            function showNotification() {
+                notification.classList.add('show');
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Confetti animation
+            function triggerConfetti() {
+                const canvas = confettiCanvas;
+                const ctx = canvas.getContext('2d');
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                
+                const confettiParticles = [];
+                const confettiCount = 200;
+                const colors = [getComputedStyle(document.documentElement).getPropertyValue('--neon-blue').trim(), 
+                               getComputedStyle(document.documentElement).getPropertyValue('--neon-pink').trim(), 
+                               getComputedStyle(document.documentElement).getPropertyValue('--neon-green').trim(), 
+                               getComputedStyle(document.documentElement).getPropertyValue('--neon-yellow').trim(), 
+                               getComputedStyle(document.documentElement).getPropertyValue('--neon-purple').trim()];
+                
+                for (let i = 0; i < confettiCount; i++) {
+                    confettiParticles.push({
+                        x: Math.random() * canvas.width,
+                        y: -Math.random() * canvas.height,
+                        size: Math.random() * 10 + 5,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        speed: Math.random() * 3 + 2,
+                        angle: Math.random() * 360,
+                        rotation: Math.random() * 360,
+                        rotationSpeed: Math.random() * 5 + 2
+                    });
+                }
+                
+                function drawConfetti() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    let particlesLeft = false;
+                    
+                    confettiParticles.forEach(particle => {
+                        ctx.save();
+                        ctx.translate(particle.x, particle.y);
+                        ctx.rotate(particle.rotation * Math.PI / 180);
+                        
+                        ctx.fillStyle = particle.color;
+                        ctx.fillRect(-particle.size / 2, -particle.size / 2, particle.size, particle.size);
+                        
+                        ctx.restore();
+                        
+                        particle.y += particle.speed;
+                        particle.x += Math.sin(particle.angle * Math.PI / 180) * 2;
+                        particle.rotation += particle.rotationSpeed;
+                        
+                        if (particle.y < canvas.height) {
+                            particlesLeft = true;
+                        }
+                    });
+                    
+                    if (particlesLeft) {
+                        requestAnimationFrame(drawConfetti);
+                    } else {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    }
+                }
+                
+                drawConfetti();
+            }
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                confettiCanvas.width = window.innerWidth;
+                confettiCanvas.height = window.innerHeight;
+            });
+            
+            // Simulate automatic verification of some documents
+            setInterval(() => {
+                const unverifiedDocs = documents.filter(doc => !doc.verified);
+                if (unverifiedDocs.length > 0) {
+                    // Randomly verify one document
+                    const randomIndex = Math.floor(Math.random() * unverifiedDocs.length);
+                    const docToVerify = unverifiedDocs[randomIndex];
+                    
+                    // Generate a fake hash
+                    docToVerify.hash = '0x' + Array.from({length: 64}, () => 
+                        Math.floor(Math.random() * 16).toString(16)).join('');
+                    docToVerify.verified = true;
+                    
+                    saveDocuments();
+                    renderCards();
+                    updateStats();
+                    
+                    // Show notification if the document was recently uploaded
+                    if (Date.now() - new Date(docToVerify.date).getTime() < 300000) { // 5 minutes
+                        notification.querySelector('i').className = 'fas fa-certificate';
+                        notification.innerHTML = '<i class="fas fa-certificate"></i> ' + docToVerify.title + ' has been verified!';
+                        showNotification();
+                    }
+                }
+            }, 30000); // Check every 30 seconds
+        });
+    </script>
+</body>
+</html>

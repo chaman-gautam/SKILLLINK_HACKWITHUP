@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Navy Glowing Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Raleway', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+            color: #e6f1ff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header & Navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 15px 25px;
+            border-radius: 15px;
+            background: rgba(10, 25, 47, 0.8);
+            box-shadow: 0 0 20px rgba(32, 130, 242, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #64ffda;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.7);
+        }
+
+        .logo span {
+            color: #2082f2;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            color: #ccd6f6;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover, nav a.active {
+            color: #64ffda;
+            background: rgba(32, 130, 242, 0.2);
+            box-shadow: 0 0 15px rgba(32, 130, 242, 0.3);
+        }
+
+        .theme-toggle {
+            background: rgba(23, 42, 69, 0.8);
+            color: #64ffda;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(32, 130, 242, 0.3);
+            box-shadow: 0 0 15px rgba(32, 130, 242, 0.5);
+        }
+
+        /* Profile Header */
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 40px;
+            position: relative;
+            padding: 40px 30px;
+            border-radius: 20px;
+            background: rgba(10, 25, 47, 0.8);
+            box-shadow: 0 0 25px rgba(32, 130, 242, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .avatar-container {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .avatar {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #64ffda;
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.5);
+            animation: glow 3s infinite alternate;
+        }
+
+        .trust-ring {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 3px solid #2082f2;
+            border-radius: 50%;
+            border-top-color: transparent;
+            transform: rotate(45deg);
+            box-shadow: 0 0 15px rgba(32, 130, 242, 0.7);
+            animation: spin 10s linear infinite;
+        }
+
+        .trust-score {
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(32, 130, 242, 0.8);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(32, 130, 242, 0.7);
+        }
+
+        .profile-info {
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .profile-info h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.7);
+            background: linear-gradient(90deg, #64ffda, #2082f2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .profile-info p {
+            font-size: 1.2rem;
+            color: #a8b2d1;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #64ffda;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #a8b2d1;
+        }
+
+        /* Skill Badges */
+        .skill-badges {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(23, 42, 69, 0.8);
+            color: #64ffda;
+            padding: 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: float 6s ease-in-out infinite;
+            width: 100px;
+        }
+
+        .badge i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .badge:nth-child(2) {
+            animation-delay: 1s;
+        }
+
+        .badge:nth-child(3) {
+            animation-delay: 2s;
+        }
+
+        .badge:nth-child(4) {
+            animation-delay: 3s;
+        }
+
+        .badge:nth-child(5) {
+            animation-delay: 4s;
+        }
+
+        .badge:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.6);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+            background: rgba(23, 42, 69, 0.8);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(32, 130, 242, 0.3);
+        }
+
+        .tab {
+            padding: 15px 30px;
+            background: rgba(23, 42, 69, 0.8);
+            color: #ccd6f6;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tab.active {
+            background: rgba(32, 130, 242, 0.3);
+            color: #64ffda;
+            border: 2px solid #2082f2;
+            box-shadow: 0 0 15px rgba(32, 130, 242, 0.5);
+        }
+
+        .tab:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px rgba(32, 130, 242, 0.5);
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: rgba(23, 42, 69, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(32, 130, 242, 0.4);
+        }
+
+        .card-header {
+            padding: 20px;
+            background: rgba(32, 130, 242, 0.2);
+            border-bottom: 1px solid rgba(100, 255, 218, 0.3);
+        }
+
+        .card-header h3 {
+            font-size: 1.5rem;
+            color: #64ffda;
+            text-shadow: 0 0 5px rgba(100, 255, 218, 0.5);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-body p {
+            color: #a8b2d1;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background: rgba(10, 25, 47, 0.6);
+            border-top: 1px solid rgba(100, 255, 218, 0.2);
+        }
+
+        .card-tag {
+            background: rgba(32, 130, 242, 0.3);
+            color: #64ffda;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Progress Bars */
+        .progress-container {
+            margin: 20px 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: #ccd6f6;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(10, 25, 47, 0.5);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-value {
+            height: 100%;
+            background: linear-gradient(90deg, #2082f2, #64ffda);
+            border-radius: 4px;
+            box-shadow: 0 0 8px rgba(100, 255, 218, 0.5);
+        }
+
+        /* Expanded Card */
+        .card-expanded {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 85%;
+            max-width: 900px;
+            max-height: 85vh;
+            background: rgba(23, 42, 69, 0.97);
+            border-radius: 20px;
+            z-index: 100;
+            box-shadow: 0 0 40px rgba(32, 130, 242, 0.6);
+            overflow: hidden;
+            transition: transform 0.5s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-expanded.active {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .card-expanded-header {
+            padding: 25px;
+            background: rgba(32, 130, 242, 0.2);
+            border-bottom: 1px solid rgba(100, 255, 218, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-expanded-content {
+            padding: 30px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        .close-btn {
+            background: rgba(32, 130, 242, 0.3);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 0, 0, 0.6);
+            transform: rotate(90deg);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 25, 47, 0.95);
+            backdrop-filter: blur(5px);
+            z-index: 99;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Social Links */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .social-link {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(23, 42, 69, 0.8);
+            color: #64ffda;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.3);
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.6);
+            color: #2082f2;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px;
+            border-top: 1px solid rgba(100, 255, 218, 0.2);
+            color: #a8b2d1;
+        }
+
+        /* Animations */
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 30px rgba(100, 255, 218, 0.9), 0 0 40px rgba(100, 255, 218, 0.6);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(45deg);
+            }
+            100% {
+                transform: rotate(405deg);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Scroll to Top */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(32, 130, 242, 0.8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(32, 130, 242, 0.5);
+            z-index: 98;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .scroll-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            background: rgba(100, 255, 218, 0.8);
+            transform: translateY(-5px);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: rgba(23, 42, 69, 0.95);
+            color: #64ffda;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.4);
+            z-index: 101;
+            transform: translateX(100%);
+            transition: transform 0.5s ease;
+            backdrop-filter: blur(10px);
+            border-left: 4px solid #64ffda;
+        }
+
+        .notification.active {
+            transform: translateX(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .cards-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .profile-header {
+                padding: 30px 20px;
+            }
+            
+            .avatar {
+                width: 130px;
+                height: 130px;
+            }
+            
+            .profile-info h1 {
+                font-size: 2.2rem;
+            }
+            
+            .profile-stats {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+            
+            .card-expanded {
+                width: 95%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .tab {
+                padding: 12px 20px;
+            }
+            
+            .card-expanded-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="overlay"></div>
+    <div class="notification">Welcome to my profile!</div>
+    <div class="scroll-to-top"><i class="fas fa-arrow-up"></i></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">Skill <span>Link</span></div>
+            <nav>
+                <ul>
+                    <li><a href="home.html" class="active">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <!-- <li><a href="portfolio.html">Portfolio</a></li> -->
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle">Toggle Theme</button>
+        </header>
+        
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="avatar-container">
+                <img src="img.jpg" alt="Profile Avatar" class="avatar">
+                <div class="trust-ring"></div>
+                <div class="trust-score">Trust Score: 92%</div>
+            </div>
+            
+            <div class="profile-info">
+                <h1>Tech Alchemists</h1>
+                <p>Full Stack Developer & UI/UX Designer with 5+ years of experience. Passionate about creating interactive, accessible, and performant web applications. I specialize in React, Node.js, and modern CSS frameworks.</p>
+                
+                <div class="profile-stats">
+                    <div class="stat">
+                        <div class="stat-value">42</div>
+                        <div class="stat-label">Projects</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">18</div>
+                        <div class="stat-label">Clients</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">96%</div>
+                        <div class="stat-label">Satisfaction</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="skill-badges">
+                <div class="badge">
+                    <i class="fab fa-js"></i>
+                    <span>JS</span>
+                </div>
+                <div class="badge">
+                    <i class="fab fa-react"></i>
+                    <span>React</span>
+                </div>
+                <div class="badge">
+                    <i class="fab fa-node-js"></i>
+                    <span>Node</span>
+                </div>
+                <div class="badge">
+                    <i class="fas fa-database"></i>
+                    <span>DB</span>
+                </div>
+                <div class="badge">
+                    <i class="fas fa-paint-brush"></i>
+                    <span>UI/UX</span>
+                </div>
+            </div>
+
+            <div class="social-links">
+                <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a>
+            </div>
+        </div>
+        
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" data-target="skills">
+                <i class="fas fa-code"></i> Skills
+            </div>
+            <div class="tab" data-target="projects">
+                <i class="fas fa-project-diagram"></i> Projects
+            </div>
+            <div class="tab" data-target="docs">
+                <i class="fas fa-file-certificate"></i> Verified Docs
+            </div>
+            <div class="tab" data-target="experience">
+                <i class="fas fa-briefcase"></i> Experience
+            </div>
+        </div>
+        
+        <!-- Content Sections -->
+        <div class="content-section active" id="skills">
+            <div class="cards-container">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Frontend Development</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Expert in HTML5, CSS3, JavaScript, React, Vue.js, and responsive design principles.</p>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>React</span>
+                                <span>95%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-value" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Vue.js</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-value" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>JavaScript</span>
+                                <span>98%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-value" style="width: 98%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Backend Development</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Skilled in Node.js, Express, Python, Django, RESTful APIs, database design with SQL and MongoDB.</p>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Node.js</span>
+                                <span>92%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-value" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Python</span>
+                                <span>88%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-value" style="width: 88%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>MongoDB</span>
+                                <span>90%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-value" style="width: 90%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>UI/UX Design</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Proficient in Figma, Adobe XD, user research, wireframing, prototyping, and creating design systems.</p>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Figma</span>
+                                <span>94%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-value" style="width: 94%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Adobe XD</span>
+                                <span>87%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-value" style="width: 87%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Wireframing</span>
+                                <span>96%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-value" style="width: 96%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-section" id="projects">
+            <div class="cards-container">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>E-Commerce Platform</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Full-stack e-commerce solution with React frontend, Node.js backend, and MongoDB. Features user authentication, payment processing, and admin dashboard.</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-tag">React</div>
+                        <div class="card-tag">Node.js</div>
+                        <div class="card-tag">MongoDB</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Task Management App</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>A drag-and-drop task management application with real-time updates, team collaboration features, and productivity analytics.</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-tag">Vue.js</div>
+                        <div class="card-tag">Firebase</div>
+                        <div class="card-tag">WebSockets</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Health & Fitness Tracker</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Mobile-first web application for tracking workouts and nutrition with data visualization, goal setting, and social features.</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-tag">React Native</div>
+                        <div class="card-tag">GraphQL</div>
+                        <div class="card-tag">D3.js</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-section" id="docs">
+            <div class="cards-container">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>University Degree</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Bachelor of Science in Computer Science from Stanford University. Verified transcript available upon request.</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-tag">Education</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Professional Certifications</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>AWS Certified Developer, Google UX Design Certificate, and React Certification. All credentials verified and up to date.</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-tag">AWS</div>
+                        <div class="card-tag">Google</div>
+                        <div class="card-tag">React</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Work Experience Verification</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Verified employment history from previous companies including Google, Microsoft, and Airbnb. References available.</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-tag">Google</div>
+                        <div class="card-tag">Microsoft</div>
+                        <div class="card-tag">Airbnb</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section" id="experience">
+            <div class="cards-container">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Senior Frontend Developer</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Google</strong> | 2020 - Present</p>
+                        <p>Leading frontend development for Google's consumer products team. Implementing responsive UIs and optimizing performance.</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-tag">React</div>
+                        <div class="card-tag">TypeScript</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Full Stack Developer</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Microsoft</strong> | 2017 - 2020</p>
+                        <p>Developed full-stack applications using .NET Core and React. Collaborated with design teams to create user-friendly interfaces.</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-tag">.NET Core</div>
+                        <div class="card-tag">React</div>
+                        <div class="card-tag">Azure</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>UI/UX Designer</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Airbnb</strong> | 2015 - 2017</p>
+                        <p>Created wireframes, prototypes, and design systems for Airbnb's web platform. Conducted user research and usability testing.</p>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-tag">Figma</div>
+                        <div class="card-tag">UX Research</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Expanded Card -->
+    <div class="card-expanded">
+        <div class="card-expanded-header">
+            <h2>Project Details</h2>
+            <div class="close-btn"><i class="fas fa-times"></i></div>
+        </div>
+        <div class="card-expanded-content">
+            <!-- Content will be inserted via JavaScript -->
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2023 Skill Link. All rights reserved.</p>
+        <p>Designed with <i class="fas fa-heart" style="color: #64ffda;"></i> by Alex Morgan</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Initialize particles.js
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: 100, density: { enable: true, value_area: 800 } },
+                    color: { value: "#2082f2" },
+                    shape: { type: "circle" },
+                    opacity: { value: 0.5, random: true },
+                    size: { value: 3, random: true },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: "#64ffda",
+                        opacity: 0.4,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 2,
+                        direction: "none",
+                        random: true,
+                        out_mode: "out",
+                        bounce: false
+                    }
+                },
+                interactivity: {
+                    detect_on: "canvas",
+                    events: {
+                        onhover: { enable: true, mode: "repulse" },
+                        onclick: { enable: true, mode: "push" },
+                        resize: true
+                    }
+                },
+                retina_detect: true
+            });
+            
+            // Show notification on load
+            setTimeout(() => {
+                const notification = document.querySelector('.notification');
+                notification.classList.add('active');
+                
+                setTimeout(() => {
+                    notification.classList.remove('active');
+                }, 3000);
+            }, 1000);
+            
+            // Tab functionality
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = tab.getAttribute('data-target');
+                    
+                    // Update active tab
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    // Show corresponding content section
+                    document.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    document.getElementById(target).classList.add('active');
+                });
+            });
+            
+            // Card expansion functionality
+            const cards = document.querySelectorAll('.card');
+            const expandedCard = document.querySelector('.card-expanded');
+            const expandedContent = document.querySelector('.card-expanded-content');
+            const overlay = document.querySelector('.overlay');
+            const closeBtn = document.querySelector('.close-btn');
+            
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const title = card.querySelector('h3').textContent;
+                    const body = card.querySelector('p').textContent;
+                    const tags = [];
+                    card.querySelectorAll('.card-tag').forEach(tag => {
+                        tags.push(tag.textContent);
+                    });
+                    
+                    expandedContent.innerHTML = `
+                        <h3>${title}</h3>
+                        <p>${body}</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl eu ultricies lacinia, nunc nisl aliquam nisl, eu aliquam nisl nunc eu nisl. Nullam auctor, nisl eu ultricies lacinia, nunc nisl aliquam nisl, eu aliquam nisl nunc eu nisl.</p>
+                        <p>Sed vitae nisl euismod, aliquet nunc eu, ultricies nisl. Nullam auctor, nisl eu ultricies lacinia, nunc nisl aliquam nisl, eu aliquam nisl nunc eu nisl.</p>
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Project Completion</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-value" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <h4>Technologies Used:</h4>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0;">
+                            ${tags.map(tag => `<div class="card-tag">${tag}</div>`).join('')}
+                        </div>
+                        <div style="margin-top: 30px; display: flex; gap: 15px;">
+                            <button class="theme-toggle">View Live Demo</button>
+                            <button class="theme-toggle">GitHub Repository</button>
+                        </div>
+                    `;
+                    
+                    expandedCard.classList.add('active');
+                    overlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+            
+            // Close expanded card
+            closeBtn.addEventListener('click', closeCard);
+            overlay.addEventListener('click', closeCard);
+            
+            function closeCard() {
+                expandedCard.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+            
+            // Add keyboard escape functionality
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeCard();
+                }
+            });
+            
+            // Scroll to top functionality
+            const scrollBtn = document.querySelector('.scroll-to-top');
+            
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    scrollBtn.classList.add('active');
+                } else {
+                    scrollBtn.classList.remove('active');
+                }
+            });
+            
+            scrollBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Theme toggle functionality
+            const themeToggle = document.querySelector('.theme-toggle');
+            let isDarkMode = true;
+            
+            themeToggle.addEventListener('click', () => {
+                isDarkMode = !isDarkMode;
+                
+                if (isDarkMode) {
+                    document.body.style.background = 'linear-gradient(135deg, #0a192f 0%, #112240 100%)';
+                    themeToggle.textContent = 'Toggle Theme';
+                } else {
+                    document.body.style.background = 'linear-gradient(135deg, #c9d6ff 0%, #e2e2e2 100%)';
+                    themeToggle.textContent = 'Dark Mode';
+                }
+            });
+            
+            // Animate stats counting up
+            const statValues = document.querySelectorAll('.stat-value');
+            const statsSection = document.querySelector('.profile-stats');
+            let statsAnimated = false;
+            
+            function animateStats() {
+                if (statsAnimated) return;
+                
+                const statData = [42, 18, 96];
+                
+                statValues.forEach((stat, index) => {
+                    let current = 0;
+                    const target = statData[index];
+                    const increment = target / 50;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            stat.textContent = target + (index === 2 ? '%' : '');
+                            clearInterval(timer);
+                        } else {
+                            stat.textContent = Math.floor(current) + (index === 2 ? '%' : '');
+                        }
+                    }, 30);
+                });
+                
+                statsAnimated = true;
+            }
+            
+            // Intersection Observer for stats animation
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateStats();
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            observer.observe(statsSection);
+        });
+    </script>
+</body>
+</html>

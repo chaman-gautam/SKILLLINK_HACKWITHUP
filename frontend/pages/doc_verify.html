@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Document Verification</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --navy: #001f3f;
+            --navy-light: #0a2a5a;
+            --navy-glow: rgba(0, 162, 255, 0.7);
+            --green: #2ecc71;
+            --red: #e74c3c;
+            --gold: #ffd700;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 50%, var(--navy) 100%);
+            color: #f0f8ff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px var(--navy-glow);
+            background: linear-gradient(to right, #f0f8ff, #a0d8ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0, 31, 63, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(0, 162, 255, 0.3);
+            box-shadow: 0 0 15px rgba(0, 162, 255, 0.2);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 0 0 10px var(--navy-glow);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            gap: 20px;
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(0, 31, 63, 0.7);
+            color: white;
+            font-size: 1rem;
+            border: 1px solid rgba(0, 162, 255, 0.3);
+            box-shadow: 0 0 15px rgba(0, 162, 255, 0.1);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--navy-glow);
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 15px;
+        }
+
+        .filter-btn {
+            padding: 12px 20px;
+            background: rgba(0, 31, 63, 0.7);
+            border: 1px solid rgba(0, 162, 255, 0.3);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: rgba(0, 162, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 162, 255, 0.3);
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .document-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 31, 63, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .document-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 162, 255, 0.1) 0%, transparent 70%);
+            transform: rotate(0deg);
+            transition: transform 1s ease;
+            z-index: -1;
+        }
+
+        .document-card:hover::before {
+            transform: rotate(180deg);
+        }
+
+        .document-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 36px rgba(0, 81, 255, 0.25);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .doc-type {
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .doc-type i {
+            color: var(--navy-glow);
+        }
+
+        .doc-id {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            background: rgba(0, 31, 63, 0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .card-content {
+            margin-bottom: 25px;
+        }
+
+        .doc-detail {
+            display: flex;
+            margin-bottom: 12px;
+        }
+
+        .detail-label {
+            width: 140px;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .detail-value {
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .card-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            outline: none;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-approve {
+            background: rgba(46, 204, 113, 0.2);
+            color: var(--green);
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.3);
+            border: 1px solid rgba(46, 204, 113, 0.5);
+        }
+
+        .btn-reject {
+            background: rgba(231, 76, 60, 0.2);
+            color: var(--red);
+            box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
+            border: 1px solid rgba(231, 76, 60, 0.5);
+        }
+
+        .btn-view {
+            background: rgba(41, 128, 185, 0.2);
+            color: #2980b9;
+            box-shadow: 0 0 10px rgba(41, 128, 185, 0.3);
+            border: 1px solid rgba(41, 128, 185, 0.5);
+            flex: 0.5;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        .badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, var(--green), #1d9d60);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.7);
+            display: none;
+            animation: pulse 2s infinite;
+            z-index: 10;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(46, 204, 113, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+            }
+        }
+
+        .reviewed-section {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px var(--navy-glow);
+        }
+
+        .reviewed-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 30px;
+        }
+
+        .reviewed-doc {
+            transform: translateX(-100%);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .reviewed-doc.slide-in {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .verified .badge {
+            display: block;
+        }
+
+        .verified .card-actions {
+            display: none;
+        }
+
+        .document-image {
+            height: 160px;
+            margin: 15px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .document-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .document-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 31, 63, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .document-image:hover .image-overlay {
+            opacity: 1;
+        }
+
+        .view-doc-btn {
+            padding: 10px 20px;
+            background: var(--navy-glow);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            opacity: 0.7;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: rgba(0, 31, 63, 0.9);
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.5s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--green);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--red);
+        }
+
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: var(--green);
+            animation: progress 3s linear;
+        }
+
+        .toast.error .progress-bar::after {
+            background: var(--red);
+        }
+
+        @keyframes progress {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+
+        @media (max-width: 768px) {
+            .cards-container, .reviewed-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .filter-options {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-shield-alt"></i> Document Verification Portal</h1>
+            <p class="subtitle">Verify documents with blockchain-powered security and advanced validation algorithms</p>
+        </header>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number" id="total-docs">12</div>
+                <div class="stat-label">Total Documents</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="pending-docs">8</div>
+                <div class="stat-label">Pending Verification</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="verified-docs">4</div>
+                <div class="stat-label">Verified</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="rejected-docs">0</div>
+                <div class="stat-label">Rejected</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search documents..." id="search-input">
+            </div>
+            <div class="filter-options">
+                <button class="filter-btn active">All</button>
+                <button class="filter-btn">Pending</button>
+                <button class="filter-btn">Verified</button>
+                <button class="filter-btn">Rejected</button>
+            </div>
+        </div>
+
+        <main>
+            <div class="cards-container" id="documents-container">
+                <!-- Document Card 1 -->
+                <div class="document-card">
+                    <div class="badge"><i class="fas fa-lock"></i> Blockchain Verified</div>
+                    <div class="card-header">
+                        <div class="doc-type"><i class="fas fa-passport"></i> Passport</div>
+                        <div class="doc-id">ID: #P-7892</div>
+                    </div>
+                    <div class="document-image">
+                        <img src="https://placehold.co/600x400/001f3f/ffffff?text=Passport" alt="Passport Document">
+                        <div class="image-overlay">
+                            <button class="view-doc-btn">View Document</button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="doc-detail">
+                            <span class="detail-label">Issued By:</span>
+                            <span class="detail-value">Department of State</span>
+                        </div>
+                        <div class="doc-detail">
+                            <span class="detail-label">Issue Date:</span>
+                            <span class="detail-value">March 15, 2022</span>
+                        </div>
+                        <div class="doc-detail">
+                            <span class="detail-label">Expiry Date:</span>
+                            <span class="detail-value">March 14, 2032</span>
+                        </div>
+                        <div class="doc-detail">
+                            <span class="detail-label">Status:</span>
+                            <span class="detail-value">Pending Verification</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>
+                        <button class="btn btn-approve"><i class="fas fa-check"></i> Approve</button>
+                        <button class="btn btn-reject"><i class="fas fa-times"></i> Reject</button>
+                    </div>
+                </div>
+
+                <!-- Document Card 2 -->
+                <div class="document-card">
+                    <div class="badge"><i class="fas fa-lock"></i> Blockchain Verified</div>
+                    <div class="card-header">
+                        <div class="doc-type"><i class="fas fa-id-card"></i> Driver's License</div>
+                        <div class="doc-id">ID: #DL-4567</div>
+                    </div>
+                    <div class="document-image">
+                        <img src="https://placehold.co/600x400/001f3f/ffffff?text=Driver+License" alt="Driver's License">
+                        <div class="image-overlay">
+                            <button class="view-doc-btn">View Document</button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="doc-detail">
+                            <span class="detail-label">Issued By:</span>
+                            <span class="detail-value">DMV California</span>
+                        </div>
+                        <div class="doc-detail">
+                            <span class="detail-label">Issue Date:</span>
+                            <span class="detail-value">January 8, 2023</span>
+                        </div>
+                        <div class="doc-detail">
+                            <span class="detail-label">Expiry Date:</span>
+                            <span class="detail-value">January 7, 2028</span>
+                        </div>
+                        <div class="doc-detail">
+                            <span class="detail-label">Status:</span>
+                            <span class="detail-value">Pending Verification</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>
+                        <button class="btn btn-approve"><i class="fas fa-check"></i> Approve</button>
+                        <button class="btn btn-reject"><i class="fas fa-times"></i> Reject</button>
+                    </div>
+                </div>
+
+                <!-- Document Card 3 -->
+                <div class="document-card">
+                    <div class="badge"><i class="fas fa-lock"></i> Blockchain Verified</div>
+                    <div class="card-header">
+                        <div class="doc-type"><i class="fas fa-graduation-cap"></i> University Diploma</div>
+                        <div class="doc-id">ID: #UD-1597</div>
+                    </div>
+                    <div class="document-image">
+                        <img src="https://placehold.co/600x400/001f3f/ffffff?text=Diploma" alt="University Diploma">
+                        <div class="image-overlay">
+                            <button class="view-doc-btn">View Document</button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <div class="doc-detail">
+                            <span class="detail-label">Issued By:</span>
+                            <span class="detail-value">Stanford University</span>
+                        </div>
+                        <div class="doc-detail">
+                            <span class="detail-label">Issue Date:</span>
+                            <span class="detail-value">June 5, 2021</span>
+                        </div>
+                        <div class="doc-detail">
+                            <span class="detail-label">Degree:</span>
+                            <span class="detail-value">Master of Science</span>
+                        </div>
+                        <div class="doc-detail">
+                            <span class="detail-label">Status:</span>
+                            <span class="detail-value">Pending Verification</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-view"><i class="fas fa-eye"></i> View</button>
+                        <button class="btn btn-approve"><i class="fas fa-check"></i> Approve</button>
+                        <button class="btn btn-reject"><i class="fas fa-times"></i> Reject</button>
+                    </div>
+                </div>
+            </div>
+
+            <section class="reviewed-section">
+                <h2 class="section-title">Verified Documents</h2>
+                <div class="reviewed-cards" id="verified-container">
+                    <!-- Verified documents will appear here -->
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Secure Document Verification System • Powered by Blockchain Technology • <span id="current-year">2023</span></p>
+        </footer>
+    </div>
+
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message">Document verified successfully!</span>
+        <div class="progress-bar"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year in footer
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            // Initialize stats
+            let totalDocs = 12;
+            let pendingDocs = 8;
+            let verifiedDocs = 4;
+            let rejectedDocs = 0;
+            
+            // Update stats
+            function updateStats() {
+                document.getElementById('total-docs').textContent = totalDocs;
+                document.getElementById('pending-docs').textContent = pendingDocs;
+                document.getElementById('verified-docs').textContent = verifiedDocs;
+                document.getElementById('rejected-docs').textContent = rejectedDocs;
+            }
+            
+            // Show toast notification
+            function showToast(message, isSuccess = true) {
+                const toast = document.getElementById('toast');
+                const toastMessage = document.getElementById('toast-message');
+                const toastIcon = toast.querySelector('i');
+                
+                toastMessage.textContent = message;
+                
+                if (isSuccess) {
+                    toast.className = 'toast success';
+                    toastIcon.className = 'fas fa-check-circle';
+                } else {
+                    toast.className = 'toast error';
+                    toastIcon.className = 'fas fa-exclamation-circle';
+                }
+                
+                toast.classList.add('show');
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Filter functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    // In a real app, this would filter the documents
+                    showToast(`Filtered by: ${this.textContent}`);
+                });
+            });
+            
+            // Search functionality
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('input', function() {
+                if (this.value.length > 2) {
+                    // In a real app, this would search documents
+                    console.log(`Searching for: ${this.value}`);
+                }
+            });
+            
+            // View document functionality
+            const viewButtons = document.querySelectorAll('.btn-view, .view-doc-btn');
+            viewButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    showToast('Document preview opened in modal');
+                });
+            });
+            
+            // Approve/Reject functionality
+            const approveButtons = document.querySelectorAll('.btn-approve');
+            const rejectButtons = document.querySelectorAll('.btn-reject');
+            const verifiedContainer = document.getElementById('verified-container');
+            
+            approveButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const card = this.closest('.document-card');
+                    verifyDocument(card, true);
+                });
+            });
+            
+            rejectButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const card = this.closest('.document-card');
+                    verifyDocument(card, false);
+                });
+            });
+            
+            function verifyDocument(card, isApproved) {
+                // Clone the card
+                const clonedCard = card.cloneNode(true);
+                
+                // Remove action buttons from cloned card
+                const actions = clonedCard.querySelector('.card-actions');
+                if (actions) {
+                    actions.remove();
+                }
+                
+                // Update status based on approval
+                const statusElement = clonedCard.querySelector('.detail-value:last-child');
+                if (statusElement) {
+                    if (isApproved) {
+                        statusElement.textContent = 'Verified ✓';
+                        statusElement.style.color = '#2ecc71';
+                        showToast('Document approved and blockchain verified!');
+                    } else {
+                        statusElement.textContent = 'Rejected ✗';
+                        statusElement.style.color = '#e74c3c';
+                        showToast('Document rejected', false);
+                    }
+                }
+                
+                // Add verified class if approved
+                if (isApproved) {
+                    clonedCard.classList.add('verified');
+                    verifiedDocs++;
+                    pendingDocs--;
+                } else {
+                    rejectedDocs++;
+                    pendingDocs--;
+                    // For rejected documents, change border color
+                    clonedCard.style.border = '1px solid rgba(231, 76, 60, 0.5)';
+                    clonedCard.style.boxShadow = '0 8px 32px rgba(231, 76, 60, 0.2)';
+                }
+                
+                // Update stats
+                updateStats();
+                
+                // Add slide-in class after a short delay for animation
+                clonedCard.classList.add('reviewed-doc');
+                verifiedContainer.appendChild(clonedCard);
+                
+                setTimeout(() => {
+                    clonedCard.classList.add('slide-in');
+                }, 10);
+                
+                // Remove the original card with a fade-out effect
+                card.style.opacity = '0';
+                card.style.transition = 'opacity 0.5s ease';
+                
+                setTimeout(() => {
+                    card.remove();
+                }, 500);
+            }
+            
+            // Initialize stats
+            updateStats();
+        });
+    </script>
+</body>
+</html>

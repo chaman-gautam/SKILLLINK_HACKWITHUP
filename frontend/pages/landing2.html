@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillLink - Connect Skills to Opportunities</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --secondary: #06b6d4;
+            --accent: #10b981;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f1f5f9;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+
+        /* Custom gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 3D Card Effects */
+        .card-3d {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: transform 0.5s ease;
+        }
+
+        .card-3d:hover {
+            transform: rotateY(10deg) rotateX(5deg) translateY(-10px);
+        }
+
+        .card-inner {
+            transform: translateZ(20px);
+        }
+
+        /* Floating animation */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Glowing effect */
+        .glow {
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+        }
+
+        /* Particle background */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        /* Scroll animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--darker);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            border-radius: 5px;
+        }
+
+        /* Button hover effects */
+        .btn-hover {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .btn-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-hover:hover::before {
+            left: 100%;
+        }
+
+        /* Skill meter animation */
+        .skill-meter {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .skill-progress {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            width: 0;
+            transition: width 1.5s ease-in-out;
+        }
+
+        /* Typewriter effect */
+        .typewriter {
+            overflow: hidden;
+            border-right: 3px solid var(--primary);
+            white-space: nowrap;
+            margin: 0 auto;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0
+            }
+
+            to {
+                width: 100%
+            }
+        }
+
+        @keyframes blink-caret {
+
+            from,
+            to {
+                border-color: transparent
+            }
+
+            50% {
+                border-color: var(--primary)
+            }
+        }
+
+        /* Pulse animation */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Background shapes */
+        .bg-shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .shape-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+            top: -250px;
+            right: -250px;
+        }
+
+        .shape-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--secondary);
+            bottom: -150px;
+            left: -150px;
+        }
+
+        /* Testimonial card flip */
+        .testimonial-card {
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+            perspective: 1000px;
+        }
+
+        .testimonial-card:hover {
+            transform: rotateY(180deg);
+        }
+
+        .testimonial-front,
+        .testimonial-back {
+            backface-visibility: hidden;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .testimonial-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 text-white">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-gray-900/90 backdrop-blur-md shadow-lg border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 font-bold text-2xl gradient-text">SkillLink</div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <!-- <a href="#home"
+                            class="text-gray-300 hover:text-purple-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a> -->
+                        <!-- <a href="#features"
+                            class="text-gray-300 hover:text-purple-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Features</a>
+                        <a href="#skills"
+                            class="text-gray-300 hover:text-purple-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Skills</a>
+                        <a href="#testimonials"
+                            class="text-gray-300 hover:text-purple-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Testimonials</a>
+                        <a href="#opportunities"
+                            class="text-gray-300 hover:text-purple-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Opportunities</a> -->
+                        <a href="logup_final.html"
+                            class="bg-gradient-to-r from-purple-600 to-cyan-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:shadow-lg transition-all btn-hover">Get
+                            Started</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-gray-300 hover:text-purple-400">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden hidden bg-gray-800 border-t border-gray-700">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <!-- <a href="#home"
+                    class="text-gray-300 hover:text-purple-400 block px-3 py-2 rounded-md text-base font-medium">Home</a> -->
+                <a href="#features"
+                    class="text-gray-300 hover:text-purple-400 block px-3 py-2 rounded-md text-base font-medium">Features</a>
+                <a href="#skills"
+                    class="text-gray-300 hover:text-purple-400 block px-3 py-2 rounded-md text-base font-medium">Skills</a>
+                <a href="#testimonials"
+                    class="text-gray-300 hover:text-purple-400 block px-3 py-2 rounded-md text-base font-medium">Testimonials</a>
+                <a href="#opportunities"
+                    class="text-gray-300 hover:text-purple-400 block px-3 py-2 rounded-md text-base font-medium">Opportunities</a>
+                <a href="logup_final.html"
+                    class="bg-gradient-to-r from-purple-600 to-cyan-500 text-white block px-3 py-2 rounded-md text-base font-medium mt-2 btn-hover">Get
+                    Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+        <div class="bg-shape shape-1"></div>
+        <div class="bg-shape shape-2"></div>
+
+        <div class="absolute inset-0 overflow-hidden" id="particles-js"></div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
+            <div class="fade-in">
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold mb-6">
+                    <span class="gradient-text">Connect Skills</span>
+                    <br>
+                    <span class="gradient-text">To Opportunities</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-300 mb-10 max-w-3xl mx-auto typewriter">
+                    Your digital passport to verified skills, AI-powered career guidance, and global opportunities.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="logup_final.html">
+                        <button
+                        class="bg-gradient-to-r from-purple-600 to-cyan-500 text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 btn-hover pulse">
+                        Get Started
+                        </button>
+                    </a>
+                    <a href="#opportunities">
+                        <button
+                            class="border-2 border-purple-500 text-purple-400 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-purple-900/30 transition-all transform hover:scale-105 btn-hover">
+                            Explore Opportunities
+                        </button>
+                    </a>
+                </div>
+
+                <!-- Stats Bar -->
+                <div class="grid grid-cols-3 gap-8 mt-16 max-w-2xl mx-auto">
+                    <div class="text-center">
+                        <div class="text-3xl md:text-4xl font-bold gradient-text" id="counter1">0</div>
+                        <div class="text-gray-400">Students Connected</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl md:text-4xl font-bold gradient-text" id="counter2">0</div>
+                        <div class="text-gray-400">Skills Verified</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl md:text-4xl font-bold gradient-text" id="counter3">0</div>
+                        <div class="text-gray-400">Jobs Matched</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <!-- <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2">
+            <div class="flex flex-col items-center text-gray-400">
+                <span class="text-sm mb-2">Scroll Down</span>
+                <i class="fas fa-chevron-down animate-bounce"></i>
+            </div>
+        </div> -->
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 gradient-text">How SkillLink Works For You</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    We bridge the gap between your skills and real-world opportunities through innovative technology.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 mb-20">
+                <!-- Feature 1: Skill Passport -->
+                <div class="card-3d bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 hover:glow fade-in">
+                    <div class="card-inner">
+                        <div
+                            class="w-16 h-16 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg flex items-center justify-center mb-6 floating">
+                            <i class="fas fa-passport text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Skill Passport</h3>
+                        <p class="text-gray-400">Digitally verify, store, and showcase your skills with
+                            blockchain-backed credentials that employers trust.</p>
+                        <button class="mt-4 text-cyan-400 hover:text-cyan-300 transition-colors flex items-center">
+                            Learn More <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Feature 2: AI Career Mentor -->
+                <div class="card-3d bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 hover:glow fade-in">
+                    <div class="card-inner">
+                        <div
+                            class="w-16 h-16 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg flex items-center justify-center mb-6 floating">
+                            <i class="fas fa-robot text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">AI Career Mentor</h3>
+                        <p class="text-gray-400">Get personalized career guidance, skill recommendations, and learning
+                            paths powered by artificial intelligence.</p>
+                        <button class="mt-4 text-cyan-400 hover:text-cyan-300 transition-colors flex items-center">
+                            Learn More <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Feature 3: Opportunities Hub -->
+                <div class="card-3d bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 hover:glow fade-in">
+                    <div class="card-inner">
+                        <div
+                            class="w-16 h-16 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-lg flex items-center justify-center mb-6 floating">
+                            <i class="fas fa-briefcase text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Opportunities Hub</h3>
+                        <p class="text-gray-400">Access curated job opportunities, internships, and projects matched to
+                            your skill profile and career goals.</p>
+                        <button class="mt-4 text-cyan-400 hover:text-cyan-300 transition-colors flex items-center">
+                            Learn More <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 bg-gray-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 gradient-text">Track Your Skill Development</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Monitor your progress and identify areas for improvement with our interactive skill tracker.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="fade-in">
+                    <div class="mb-8">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-300">Web Development</span>
+                            <span class="text-cyan-400" id="web-dev-percent">0%</span>
+                        </div>
+                        <div class="skill-meter">
+                            <div class="skill-progress" id="web-dev-progress"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-300">Data Analysis</span>
+                            <span class="text-cyan-400" id="data-percent">0%</span>
+                        </div>
+                        <div class="skill-meter">
+                            <div class="skill-progress" id="data-progress"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-300">UI/UX Design</span>
+                            <span class="text-cyan-400" id="design-percent">0%</span>
+                        </div>
+                        <div class="skill-meter">
+                            <div class="skill-progress" id="design-progress"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-8">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-300">Project Management</span>
+                            <span class="text-cyan-400" id="pm-percent">0%</span>
+                        </div>
+                        <div class="skill-meter">
+                            <div class="skill-progress" id="pm-progress"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fade-in">
+                    <div class="bg-gray-800 p-8 rounded-xl border border-gray-700 card-3d">
+                        <div class="card-inner">
+                            <h3 class="text-2xl font-bold mb-4 gradient-text">Skill Assessment</h3>
+                            <p class="text-gray-300 mb-6">Take our comprehensive skill assessment to get a detailed
+                                analysis of your strengths and areas for improvement.</p>
+                            <button
+                                class="bg-gradient-to-r from-purple-600 to-cyan-500 text-white px-6 py-3 rounded-lg font-semibold w-full hover:shadow-lg transition-all btn-hover">
+                                Start Assessment
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 gradient-text">What Our Users Say</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Join thousands of learners and professionals who have transformed their careers with SkillLink.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card h-80 relative fade-in">
+                    <div
+                        class="testimonial-front bg-gray-800 p-6 rounded-xl border border-gray-700 h-full flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center mb-4">
+                                <div
+                                    class="w-12 h-12 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                    SJ</div>
+                                <div class="ml-4">
+                                    <div class="font-semibold text-white">Sarah Johnson</div>
+                                    <div class="text-cyan-400 text-sm">Software Developer</div>
+                                </div>
+                            </div>
+                            <div class="flex mb-4 text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="text-gray-300 italic">"SkillLink helped me transition from retail to tech in just
+                                6 months. The AI mentor identified exactly which skills I needed."</p>
+                        </div>
+                        <div class="text-center text-gray-500 text-sm mt-4">
+                            <i class="fas fa-sync-alt mr-2"></i> Hover to flip
+                        </div>
+                    </div>
+                    <div
+                        class="testimonial-back bg-gradient-to-br from-purple-900 to-cyan-900 p-6 rounded-xl h-full flex flex-col justify-center items-center text-center">
+                        <h4 class="text-white font-bold text-xl mb-2">Career Transition</h4>
+                        <p class="text-gray-200 mb-4">Retail → Tech</p>
+                        <div class="bg-black/30 p-4 rounded-lg">
+                            <p class="text-sm text-gray-300">"Before SkillLink, I had no tech experience. Now I'm a
+                                full-stack developer at a leading tech company."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card h-80 relative fade-in">
+                    <div
+                        class="testimonial-front bg-gray-800 p-6 rounded-xl border border-gray-700 h-full flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center mb-4">
+                                <div
+                                    class="w-12 h-12 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                    MC</div>
+                                <div class="ml-4">
+                                    <div class="font-semibold text-white">Michael Chen</div>
+                                    <div class="text-cyan-400 text-sm">Data Analyst</div>
+                                </div>
+                            </div>
+                            <div class="flex mb-4 text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="text-gray-300 italic">"The skill verification gave me credibility when applying
+                                for remote jobs. I landed my dream role at an international company."</p>
+                        </div>
+                        <div class="text-center text-gray-500 text-sm mt-4">
+                            <i class="fas fa-sync-alt mr-2"></i> Hover to flip
+                        </div>
+                    </div>
+                    <div
+                        class="testimonial-back bg-gradient-to-br from-purple-900 to-cyan-900 p-6 rounded-xl h-full flex flex-col justify-center items-center text-center">
+                        <h4 class="text-white font-bold text-xl mb-2">Remote Work Success</h4>
+                        <p class="text-gray-200 mb-4">Local → International</p>
+                        <div class="bg-black/30 p-4 rounded-lg">
+                            <p class="text-sm text-gray-300">"SkillLink's verification system made my self-taught skills
+                                credible to international employers."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card h-80 relative fade-in">
+                    <div
+                        class="testimonial-front bg-gray-800 p-6 rounded-xl border border-gray-700 h-full flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center mb-4">
+                                <div
+                                    class="w-12 h-12 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                    ER</div>
+                                <div class="ml-4">
+                                    <div class="font-semibold text-white">Emma Rodriguez</div>
+                                    <div class="text-cyan-400 text-sm">UX Designer</div>
+                                </div>
+                            </div>
+                            <div class="flex mb-4 text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="text-gray-300 italic">"As a self-taught designer, SkillLink provided the
+                                validation I needed. The opportunities hub connected me with amazing clients."</p>
+                        </div>
+                        <div class="text-center text-gray-500 text-sm mt-4">
+                            <i class="fas fa-sync-alt mr-2"></i> Hover to flip
+                        </div>
+                    </div>
+                    <div
+                        class="testimonial-back bg-gradient-to-br from-purple-900 to-cyan-900 p-6 rounded-xl h-full flex flex-col justify-center items-center text-center">
+                        <h4 class="text-white font-bold text-xl mb-2">Freelance Success</h4>
+                        <p class="text-gray-200 mb-4">Self-taught → Professional</p>
+                        <div class="bg-black/30 p-4 rounded-lg">
+                            <p class="text-sm text-gray-300">"I went from zero clients to a fully booked schedule thanks
+                                to SkillLink's opportunity matching."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Opportunities Section -->
+    <section id="opportunities" class="py-20 bg-gray-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 gradient-text">Latest Opportunities</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Discover job openings, internships, and projects tailored to your skills and interests.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Opportunity 1 -->
+                <div
+                    class="bg-gray-800 p-6 rounded-xl border border-gray-700 hover:glow transition-all duration-300 fade-in">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Frontend Developer</h3>
+                            <p class="text-cyan-400">TechCorp Inc.</p>
+                        </div>
+                        <span class="bg-green-900 text-green-300 text-xs px-2 py-1 rounded-full">Remote</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">We're looking for a skilled frontend developer to join our dynamic
+                        team building next-generation web applications.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-300">$80k - $110k</span>
+                        <button class="text-cyan-400 hover:text-cyan-300 transition-colors text-sm font-medium">
+                            Apply Now <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Opportunity 2 -->
+                <div
+                    class="bg-gray-800 p-6 rounded-xl border border-gray-700 hover:glow transition-all duration-300 fade-in">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Data Scientist</h3>
+                            <p class="text-cyan-400">DataFlow Analytics</p>
+                        </div>
+                        <span class="bg-purple-900 text-purple-300 text-xs px-2 py-1 rounded-full">Hybrid</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">Join our data science team to develop machine learning models that
+                        drive business insights and decision-making.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-300">$95k - $130k</span>
+                        <button class="text-cyan-400 hover:text-cyan-300 transition-colors text-sm font-medium">
+                            Apply Now <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Opportunity 3 -->
+                <div
+                    class="bg-gray-800 p-6 rounded-xl border border-gray-700 hover:glow transition-all duration-300 fade-in">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-white">UX/UI Designer</h3>
+                            <p class="text-cyan-400">CreativeMinds Agency</p>
+                        </div>
+                        <span class="bg-blue-900 text-blue-300 text-xs px-2 py-1 rounded-full">On-site</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">We need a creative UX/UI designer to craft beautiful and intuitive
+                        user experiences for our client projects.</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-300">$70k - $95k</span>
+                        <button class="text-cyan-400 hover:text-cyan-300 transition-colors text-sm font-medium">
+                            Apply Now <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-12 fade-in">
+                <button
+                    class="bg-gradient-to-r from-purple-600 to-cyan-500 text-white px-8 py-3 rounded-lg font-semibold hover:shadow-lg transition-all btn-hover">
+                    View All Opportunities
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="contact" class="py-20 relative overflow-hidden bg-gradient-to-r from-purple-900/50 to-cyan-900/50">
+        <div class="absolute inset-0 bg-gradient-to-r from-purple-900 to-cyan-900 opacity-20"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="fade-in">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Ready to Transform Your Career?</h2>
+                <p class="text-xl text-cyan-100 mb-10 max-w-3xl mx-auto">
+                    Join SkillLink today and take the first step towards connecting your skills with life-changing
+                    opportunities.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button
+                        class="bg-white text-purple-600 px-8 py-4 rounded-lg font-bold text-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105 btn-hover">
+                        Join Now - It's Free
+                    </button>
+                    <button
+                        class="border-2 border-white text-white px-8 py-4 rounded-lg font-bold text-lg hover:bg-white/10 transition-all transform hover:scale-105 btn-hover">
+                        Schedule a Demo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">SkillLink</h3>
+                    <p class="text-gray-400">
+                        Connecting skills to opportunities through innovative technology and verified credentials.
+                    </p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-cyan-400 transition-colors"><i
+                                class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-cyan-400 transition-colors"><i
+                                class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-cyan-400 transition-colors"><i
+                                class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-cyan-400 transition-colors"><i
+                                class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4 text-white">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="home_candidate.html" class="hover:text-cyan-400 transition-colors">Home</a></li>
+                        <li><a href="about.html" class="hover:text-cyan-400 transition-colors">About</a></li>
+                        <li><a href="opportunities2.html" class="hover:text-cyan-400 transition-colors">Opportunities</a></li>
+                        <li><a href="privacy_policy.html" class="hover:text-cyan-400 transition-colors">Privacy Policy</a></li>
+                        <li><a href="contact.html" class="hover:text-cyan-400 transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4 text-white">Resources</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="help&support.html" class="hover:text-cyan-400 transition-colors">Help Center</a></li>
+                        <!-- <li><a href="career_guide.html" class="hover:text-cyan-400 transition-colors">Career Guide</a></li>
+                        <li><a href="skill_assessment.html" class="hover:text-cyan-400 transition-colors">Skill Assessment</a></li> -->
+                        <li><a href="privacy_policy.html" class="hover:text-cyan-400 transition-colors">Privacy Policy</a></li>
+                        <li><a href="terms&conditions.html" class="hover:text-cyan-400 transition-colors">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4 text-white">Contact Us</h4>
+                    <address class="text-gray-400 not-italic">
+                        <p class="flex items-center mb-2"><i class="fas fa-map-marker-alt mr-2 text-cyan-400"></i> 123
+                            Innovation Drive</p>
+                        <p class="ml-6 mb-2">Tech City, TC 12345</p>
+                        <p class="flex items-center mb-2"><i class="fas fa-envelope mr-2 text-cyan-400"></i>
+                            info@skilllink.com</p>
+                        <p class="flex items-center"><i class="fas fa-phone mr-2 text-cyan-400"></i> +1 (555) 123-4567
+                        </p>
+                    </address>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; <span id="current-year"></span> SkillLink. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Set current year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function () {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+
+                    // Close mobile menu if open
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                }
+            });
+        });
+
+        // Scroll animation for elements
+        function handleScrollAnimations() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        // Animate counters
+        function animateCounters() {
+            const counters = [
+                { element: document.getElementById('counter1'), target: 50000, suffix: '+' },
+                { element: document.getElementById('counter2'), target: 250000, suffix: '+' },
+                { element: document.getElementById('counter3'), target: 10000, suffix: '+' }
+            ];
+
+            counters.forEach(counter => {
+                let current = 0;
+                const increment = counter.target / 100;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= counter.target) {
+                        counter.element.textContent = counter.target.toLocaleString() + counter.suffix;
+                        clearInterval(timer);
+                    } else {
+                        counter.element.textContent = Math.floor(current).toLocaleString();
+                    }
+                }, 20);
+            });
+        }
+
+        // Animate skill meters
+        function animateSkillMeters() {
+            const skills = [
+                { progress: document.getElementById('web-dev-progress'), percent: document.getElementById('web-dev-percent'), value: 85 },
+                { progress: document.getElementById('data-progress'), percent: document.getElementById('data-percent'), value: 70 },
+                { progress: document.getElementById('design-progress'), percent: document.getElementById('design-percent'), value: 60 },
+                { progress: document.getElementById('pm-progress'), percent: document.getElementById('pm-percent'), value: 75 }
+            ];
+
+            skills.forEach(skill => {
+                let current = 0;
+                const timer = setInterval(() => {
+                    current += 1;
+                    if (current >= skill.value) {
+                        skill.progress.style.width = skill.value + '%';
+                        skill.percent.textContent = skill.value + '%';
+                        clearInterval(timer);
+                    } else {
+                        skill.progress.style.width = current + '%';
+                        skill.percent.textContent = current + '%';
+                    }
+                }, 20);
+            });
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            // Set up scroll listener for animations
+            window.addEventListener('scroll', handleScrollAnimations);
+            handleScrollAnimations(); // Check on load
+
+            // Start counter animations when in view
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounters();
+                        animateSkillMeters();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            // Observe the hero section for counters
+            observer.observe(document.getElementById('home'));
+
+            // Observe skills section for skill meters
+            observer.observe(document.getElementById('skills'));
+
+            // Add hover effects to all buttons with btn-hover class
+            document.querySelectorAll('.btn-hover').forEach(button => {
+                button.addEventListener('mouseenter', function () {
+                    this.style.transform = 'scale(1.05)';
+                });
+
+                button.addEventListener('mouseleave', function () {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+
+            // Simple particles effect
+            const particlesContainer = document.getElementById('particles-js');
+            if (particlesContainer) {
+                for (let i = 0; i < 50; i++) {
+                    const particle = document.createElement('div');
+                    particle.style.position = 'absolute';
+                    particle.style.width = Math.random() * 5 + 2 + 'px';
+                    particle.style.height = particle.style.width;
+                    particle.style.backgroundColor = 'rgba(139, 92, 246, 0.5)';
+                    particle.style.borderRadius = '50%';
+                    particle.style.top = Math.random() * 100 + '%';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animation = `float ${Math.random() * 10 + 5}s ease-in-out infinite`;
+                    particlesContainer.appendChild(particle);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

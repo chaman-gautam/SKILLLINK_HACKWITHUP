@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Challenges</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+            color: #ccd6f6;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: #64ffda;
+            text-shadow: 0 0 10px #64ffda, 0 0 20px #64ffda;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { text-shadow: 0 0 10px #64ffda, 0 0 20px #64ffda; }
+            50% { text-shadow: 0 0 15px #64ffda, 0 0 30px #64ffda, 0 0 40px #64ffda; }
+            100% { text-shadow: 0 0 10px #64ffda, 0 0 20px #64ffda; }
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .filter-btn {
+            background: transparent;
+            color: #8892b0;
+            border: 1px solid #64ffda;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: rgba(100, 255, 218, 0.1);
+            color: #64ffda;
+            box-shadow: 0 0 10px #64ffda;
+        }
+
+        .search-box {
+            position: relative;
+            margin: 10px 0;
+        }
+
+        .search-input {
+            background: rgba(17, 34, 64, 0.7);
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            border-radius: 20px;
+            padding: 10px 15px 10px 40px;
+            color: #ccd6f6;
+            width: 250px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #64ffda;
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.5);
+            width: 300px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64ffda;
+        }
+
+        .streak-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .streak-ring {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: rgba(17, 34, 64, 0.7);
+            box-shadow: 0 0 20px #64ffda;
+            animation: glow 3s infinite;
+            transition: all 0.5s ease;
+        }
+
+        .streak-ring.level-up {
+            animation: levelUp 1s ease;
+        }
+
+        @keyframes levelUp {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); box-shadow: 0 0 40px #64ffda; }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 15px #64ffda; }
+            50% { box-shadow: 0 0 30px #64ffda, 0 0 40px #64ffda; }
+            100% { box-shadow: 0 0 15px #64ffda; }
+        }
+
+        .streak-count {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #64ffda;
+        }
+
+        .streak-label {
+            margin-left: 15px;
+            font-size: 1.2rem;
+            color: #8892b0;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            background: rgba(17, 34, 64, 0.7);
+            border-radius: 10px;
+            padding: 15px 20px;
+            text-align: center;
+            min-width: 120px;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            color: #64ffda;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #8892b0;
+            font-size: 0.9rem;
+        }
+
+        .challenges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .challenge-card {
+            background: rgba(17, 34, 64, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transform: translateY(0);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .challenge-card:nth-child(2n) {
+            animation-delay: 1s;
+        }
+
+        .challenge-card:nth-child(3n) {
+            animation-delay: 2s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+
+        .challenge-card:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 12px 40px rgba(100, 255, 218, 0.4);
+            border: 1px solid rgba(100, 255, 218, 0.5);
+        }
+
+        .challenge-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #64ffda;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .challenge-icon {
+            font-size: 1.8rem;
+            color: #64ffda;
+        }
+
+        .challenge-description {
+            color: #8892b0;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            height: 60px;
+            overflow: hidden;
+            transition: height 0.3s ease;
+        }
+
+        .challenge-card.expanded .challenge-description {
+            height: auto;
+        }
+
+        .progress-container {
+            height: 10px;
+            background: rgba(136, 146, 176, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 15px 0;
+            cursor: pointer;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #64ffda;
+            border-radius: 5px;
+            width: 0;
+            box-shadow: 0 0 10px #64ffda;
+            transition: width 1.5s ease-out;
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-image: linear-gradient(
+                -45deg,
+                rgba(255, 255, 255, 0.2) 25%,
+                transparent 25%,
+                transparent 50%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0.2) 75%,
+                transparent 75%,
+                transparent
+            );
+            z-index: 1;
+            background-size: 20px 20px;
+            animation: move 2s linear infinite;
+            overflow: hidden;
+        }
+
+        @keyframes move {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 20px 20px;
+            }
+        }
+
+        .challenge-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            color: #a8b2d1;
+        }
+
+        .challenge-card.expanded .challenge-details {
+            max-height: 300px;
+        }
+
+        .challenge-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            color: #8892b0;
+            font-size: 0.9rem;
+        }
+
+        .difficulty {
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+
+        .difficulty.easy {
+            background: rgba(100, 255, 218, 0.2);
+            color: #64ffda;
+        }
+
+        .difficulty.medium {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .difficulty.hard {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+        }
+
+        .submit-btn {
+            background: transparent;
+            color: #64ffda;
+            border: 1px solid #64ffda;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background: rgba(100, 255, 218, 0.1);
+            box-shadow: 0 0 10px #64ffda;
+        }
+
+        .submit-btn.completed {
+            background: rgba(100, 255, 218, 0.2);
+            color: #ccd6f6;
+        }
+
+        .submit-btn.completed:hover {
+            background: rgba(100, 255, 218, 0.3);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 25, 47, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: rgba(17, 34, 64, 0.95);
+            width: 90%;
+            max-width: 500px;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 40px rgba(100, 255, 218, 0.5);
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #64ffda;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            text-shadow: 0 0 10px #64ffda;
+        }
+
+        .modal-title {
+            color: #64ffda;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #8892b0;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 4px;
+            background: rgba(10, 25, 47, 0.7);
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            color: #ccd6f6;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #64ffda;
+            box-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .submit-form-btn {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            color: #64ffda;
+            border: 1px solid #64ffda;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-form-btn:hover {
+            background: rgba(100, 255, 218, 0.1);
+            box-shadow: 0 0 15px #64ffda;
+        }
+
+        .submit-form-btn:active {
+            transform: scale(0.98);
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: rgba(17, 34, 64, 0.9);
+            color: #64ffda;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(100, 255, 218, 0.3);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.5s ease;
+            z-index: 1001;
+        }
+
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #64ffda;
+            opacity: 0;
+            z-index: 1002;
+            pointer-events: none;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                opacity: 1;
+                transform: translateY(-100px) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .challenges-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .header-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .search-input:focus {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Code Challenges</h1>
+            
+            <div class="header-controls">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="easy">Easy</button>
+                    <button class="filter-btn" data-filter="medium">Medium</button>
+                    <button class="filter-btn" data-filter="hard">Hard</button>
+                    <button class="filter-btn" data-filter="incomplete">In Progress</button>
+                    <button class="filter-btn" data-filter="completed">Completed</button>
+                </div>
+                
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search challenges...">
+                </div>
+            </div>
+            
+            <div class="streak-container">
+                <div class="streak-ring">
+                    <div class="streak-count">12</div>
+                </div>
+                <div class="streak-label">Day Streak</div>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="stat-value">6</div>
+                    <div class="stat-label">Total Challenges</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">450</div>
+                    <div class="stat-label">XP Earned</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">2</div>
+                    <div class="stat-label">In Progress</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="challenges-grid">
+            <!-- Challenge cards will be generated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <h2 class="modal-title">Submit Solution</h2>
+            <form id="submission-form">
+                <div class="form-group">
+                    <label for="challenge">Challenge</label>
+                    <select id="challenge" required>
+                        <option value="">Select a challenge</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="github-url">GitHub Repository URL</label>
+                    <input type="url" id="github-url" placeholder="https://github.com/your-username/repo-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="live-demo">Live Demo URL (optional)</label>
+                    <input type="url" id="live-demo" placeholder="https://your-site.com/demo">
+                </div>
+                <div class="form-group">
+                    <label for="notes">Notes (optional)</label>
+                    <textarea id="notes" placeholder="Any additional information about your solution..."></textarea>
+                </div>
+                <button type="submit" class="submit-form-btn">Submit Solution</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">
+        Challenge submitted successfully!
+    </div>
+
+    <script>
+        // Challenge data
+        const challenges = [
+            {
+                id: 1,
+                title: "Responsive Layout",
+                icon: "laptop-code",
+                description: "Create a responsive web page that works on mobile, tablet, and desktop.",
+                difficulty: "medium",
+                progress: 75,
+                xp: 250,
+                deadline: "2 days remaining",
+                requirements: [
+                    "Use CSS Grid or Flexbox",
+                    "Implement mobile-first design",
+                    "Test on at least 3 screen sizes"
+                ],
+                completed: false
+            },
+            {
+                id: 2,
+                title: "API Integration",
+                icon: "cloud",
+                description: "Build a weather app that fetches data from a public API and displays it.",
+                difficulty: "hard",
+                progress: 30,
+                xp: 450,
+                deadline: "5 days remaining",
+                requirements: [
+                    "Use Fetch API or Axios",
+                    "Handle loading and error states",
+                    "Display at least 3 data points"
+                ],
+                completed: false
+            },
+            {
+                id: 3,
+                title: "JavaScript Calculator",
+                icon: "calculator",
+                description: "Build a functional calculator with basic arithmetic operations.",
+                difficulty: "easy",
+                progress: 90,
+                xp: 150,
+                deadline: "1 day remaining",
+                requirements: [
+                    "Add, subtract, multiply, divide",
+                    "Clear button",
+                    "Error handling for division by zero"
+                ],
+                completed: false
+            },
+            {
+                id: 4,
+                title: "Animated Navigation",
+                icon: "bars",
+                description: "Create a responsive navigation menu with smooth animations.",
+                difficulty: "medium",
+                progress: 50,
+                xp: 300,
+                deadline: "3 days remaining",
+                requirements: [
+                    "Hamburger menu for mobile",
+                    "Smooth transitions",
+                    "Dropdown support"
+                ],
+                completed: false
+            },
+            {
+                id: 5,
+                title: "Data Visualization",
+                icon: "chart-bar",
+                description: "Visualize a dataset using charts or interactive graphs.",
+                difficulty: "hard",
+                progress: 10,
+                xp: 500,
+                deadline: "7 days remaining",
+                requirements: [
+                    "Use Chart.js or D3.js",
+                    "Include at least 2 chart types",
+                    "Make it interactive"
+                ],
+                completed: false
+            },
+            {
+                id: 6,
+                title: "Password Generator",
+                icon: "key",
+                description: "Build a secure password generator with customizable options.",
+                difficulty: "medium",
+                progress: 100,
+                xp: 350,
+                deadline: "Completed! 🎉",
+                requirements: [
+                    "Length customization",
+                    "Character type options",
+                    "Copy to clipboard功能"
+                ],
+                completed: true
+            }
+        ];
+
+        // App state
+        let state = {
+            streak: 12,
+            totalChallenges: challenges.length,
+            completedChallenges: challenges.filter(c => c.completed).length,
+            xpEarned: challenges.filter(c => c.completed).reduce((sum, c) => sum + c.xp, 0),
+            inProgressChallenges: challenges.filter(c => !c.completed && c.progress > 0).length,
+            currentFilter: 'all',
+            searchQuery: ''
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the app
+            initApp();
+            
+            // Card expansion
+            document.addEventListener('click', function(e) {
+                const card = e.target.closest('.challenge-card');
+                if (card && !e.target.classList.contains('submit-btn') && !e.target.closest('.progress-container')) {
+                    card.classList.toggle('expanded');
+                }
+            });
+
+            // Modal functionality
+            const modal = document.querySelector('.modal');
+            const closeModalButton = document.querySelector('.close-modal');
+            const form = document.getElementById('submission-form');
+
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('submit-btn')) {
+                    const challengeId = parseInt(e.target.dataset.id);
+                    openModal(challengeId);
+                }
+            });
+
+            closeModalButton.addEventListener('click', function() {
+                closeModal();
+            });
+
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitSolution();
+            });
+
+            // Filter functionality
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    state.currentFilter = this.dataset.filter;
+                    renderChallenges();
+                });
+            });
+
+            // Search functionality
+            const searchInput = document.querySelector('.search-input');
+            searchInput.addEventListener('input', function() {
+                state.searchQuery = this.value.toLowerCase();
+                renderChallenges();
+            });
+
+            // Progress bar interaction
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.progress-container')) {
+                    const card = e.target.closest('.challenge-card');
+                    const challengeId = parseInt(card.dataset.id);
+                    increaseProgress(challengeId);
+                }
+            });
+        });
+
+        function initApp() {
+            // Load state from localStorage if available
+            const savedState = localStorage.getItem('challengesState');
+            if (savedState) {
+                const parsed = JSON.parse(savedState);
+                // Update challenges with saved progress
+                parsed.challenges.forEach(savedChallenge => {
+                    const challenge = challenges.find(c => c.id === savedChallenge.id);
+                    if (challenge) {
+                        challenge.progress = savedChallenge.progress;
+                        challenge.completed = savedChallenge.completed;
+                    }
+                });
+                
+                // Update state
+                state.streak = parsed.streak || state.streak;
+            }
+            
+            // Save initial state
+            saveState();
+            
+            // Render initial challenges
+            renderChallenges();
+            
+            // Update stats
+            updateStats();
+            
+            // Populate challenge dropdown
+            populateChallengeDropdown();
+        }
+
+        function renderChallenges() {
+            const challengesGrid = document.querySelector('.challenges-grid');
+            challengesGrid.innerHTML = '';
+            
+            const filteredChallenges = challenges.filter(challenge => {
+                // Filter by selected difficulty
+                if (state.currentFilter !== 'all' && state.currentFilter !== 'completed' && state.currentFilter !== 'incomplete') {
+                    if (challenge.difficulty !== state.currentFilter) return false;
+                }
+                
+                // Filter by completion status
+                if (state.currentFilter === 'completed' && !challenge.completed) return false;
+                if (state.currentFilter === 'incomplete' && challenge.completed) return false;
+                
+                // Filter by search query
+                if (state.searchQuery && !challenge.title.toLowerCase().includes(state.searchQuery) && 
+                    !challenge.description.toLowerCase().includes(state.searchQuery)) {
+                    return false;
+                }
+                
+                return true;
+            });
+            
+            if (filteredChallenges.length === 0) {
+                challengesGrid.innerHTML = `
+                    <div class="no-challenges" style="grid-column: 1 / -1; text-align: center; padding: 40px;">
+                        <i class="fas fa-search" style="font-size: 3rem; color: #64ffda; margin-bottom: 20px;"></i>
+                        <h3 style="color: #64ffda;">No challenges found</h3>
+                        <p style="color: #8892b0;">Try changing your filters or search query</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            filteredChallenges.forEach(challenge => {
+                const challengeCard = document.createElement('div');
+                challengeCard.className = `challenge-card ${challenge.completed ? 'completed' : ''}`;
+                challengeCard.dataset.id = challenge.id;
+                
+                challengeCard.innerHTML = `
+                    <div class="challenge-title">
+                        <span>${challenge.title}</span>
+                        <i class="fas fa-${challenge.icon} challenge-icon"></i>
+                    </div>
+                    <div class="challenge-description">
+                        ${challenge.description}
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar" style="width: ${challenge.progress}%"></div>
+                    </div>
+                    <div class="challenge-details">
+                        <p>Requirements:</p>
+                        <ul>
+                            ${challenge.requirements.map(req => `<li>${req}</li>`).join('')}
+                        </ul>
+                        <p>Deadline: ${challenge.deadline}</p>
+                    </div>
+                    <div class="challenge-meta">
+                        <span class="difficulty ${challenge.difficulty}">${challenge.difficulty.charAt(0).toUpperCase() + challenge.difficulty.slice(1)}</span>
+                        <span>XP: ${challenge.xp}</span>
+                    </div>
+                    <button class="submit-btn ${challenge.completed ? 'completed' : ''}" data-id="${challenge.id}">
+                        ${challenge.completed ? 'Completed' : 'Submit Solution'}
+                    </button>
+                `;
+                
+                challengesGrid.appendChild(challengeCard);
+            });
+            
+            // Reinitialize progress bar animations
+            document.querySelectorAll('.progress-bar').forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 500);
+            });
+        }
+
+        function updateStats() {
+            state.completedChallenges = challenges.filter(c => c.completed).length;
+            state.xpEarned = challenges.filter(c => c.completed).reduce((sum, c) => sum + c.xp, 0);
+            state.inProgressChallenges = challenges.filter(c => !c.completed && c.progress > 0).length;
+            
+            document.querySelector('.streak-count').textContent = state.streak;
+            document.querySelectorAll('.stat-box .stat-value')[0].textContent = state.totalChallenges;
+            document.querySelectorAll('.stat-box .stat-value')[1].textContent = state.completedChallenges;
+            document.querySelectorAll('.stat-box .stat-value')[2].textContent = state.xpEarned;
+            document.querySelectorAll('.stat-box .stat-value')[3].textContent = state.inProgressChallenges;
+        }
+
+        function populateChallengeDropdown() {
+            const dropdown = document.getElementById('challenge');
+            dropdown.innerHTML = '<option value="">Select a challenge</option>';
+            
+            challenges.forEach(challenge => {
+                if (!challenge.completed) {
+                    const option = document.createElement('option');
+                    option.value = challenge.id;
+                    option.textContent = challenge.title;
+                    dropdown.appendChild(option);
+                }
+            });
+        }
+
+        function openModal(challengeId) {
+            const challenge = challenges.find(c => c.id === challengeId);
+            if (challenge && challenge.completed) return;
+            
+            const modal = document.querySelector('.modal');
+            const dropdown = document.getElementById('challenge');
+            
+            if (challengeId) {
+                dropdown.value = challengeId;
+            }
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.querySelector('.modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            document.getElementById('submission-form').reset();
+        }
+
+        function submitSolution() {
+            const challengeId = parseInt(document.getElementById('challenge').value);
+            const githubUrl = document.getElementById('github-url').value;
+            
+            if (!challengeId || !githubUrl) return;
+            
+            const challenge = challenges.find(c => c.id === challengeId);
+            if (challenge) {
+                challenge.progress = 100;
+                challenge.completed = true;
+                challenge.deadline = "Completed! 🎉";
+                
+                // Increase streak
+                state.streak++;
+                
+                // Show confetti animation
+                createConfetti();
+                
+                // Show notification
+                showNotification('Challenge completed successfully! +' + challenge.xp + ' XP');
+                
+                // Update UI
+                renderChallenges();
+                updateStats();
+                populateChallengeDropdown();
+                
+                // Save state
+                saveState();
+                
+                // Close modal
+                closeModal();
+            }
+        }
+
+        function increaseProgress(challengeId) {
+            const challenge = challenges.find(c => c.id === challengeId);
+            if (challenge && !challenge.completed) {
+                challenge.progress = Math.min(challenge.progress + 25, 100);
+                
+                if (challenge.progress === 100) {
+                    challenge.completed = true;
+                    challenge.deadline = "Completed! 🎉";
+                    state.streak++;
+                    createConfetti();
+                    showNotification('Challenge completed! +' + challenge.xp + ' XP');
+                }
+                
+                renderChallenges();
+                updateStats();
+                saveState();
+            }
+        }
+
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function createConfetti() {
+            const colors = ['#64ffda', '#ffc107', '#dc3545', '#0dcaf0', '#6f42c1'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = Math.random() * 10 + 5 + 'px';
+                
+                document.body.appendChild(confetti);
+                
+                const animationDuration = Math.random() * 3 + 2;
+                
+                confetti.style.animation = `confettiFall ${animationDuration}s linear forwards`;
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, animationDuration * 1000);
+            }
+            
+            // Animate streak ring
+            const streakRing = document.querySelector('.streak-ring');
+            streakRing.classList.add('level-up');
+            setTimeout(() => {
+                streakRing.classList.remove('level-up');
+            }, 1000);
+        }
+
+        function saveState() {
+            const stateToSave = {
+                streak: state.streak,
+                challenges: challenges.map(c => ({
+                    id: c.id,
+                    progress: c.progress,
+                    completed: c.completed
+                }))
+            };
+            
+            localStorage.setItem('challengesState', JSON.stringify(stateToSave));
+        }
+    </script>
+</body>
+</html>

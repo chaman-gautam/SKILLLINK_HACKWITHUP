@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student-Recruiter DM System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-bg: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            --sidebar-bg: rgba(25, 25, 50, 0.7);
+            --chat-bg: rgba(30, 30, 60, 0.6);
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --text-light: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.7);
+            --accent-blue: #4776E6;
+            --accent-purple: #8E54E9;
+            --student-msg: linear-gradient(135deg, #0072ff, #00c6ff);
+            --recruiter-msg: linear-gradient(135deg, #4776E6, #8E54E9);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --border-radius: 16px;
+        }
+
+        body {
+            background: var(--primary-bg);
+            color: var(--text-light);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 350px;
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--accent-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .user-details h2 {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        .user-details p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 12px 40px 12px 16px;
+            border-radius: 24px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            outline: none;
+        }
+
+        .search-container i {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .contacts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .contacts-list {
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: var(--border-radius);
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .contact-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .contact-item.active {
+            background: rgba(71, 118, 230, 0.2);
+        }
+
+        .contact-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .contact-info h3 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .contact-info p {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* Chat Container Styles */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--chat-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .chat-header {
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-header-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--accent-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .chat-header-info h2 {
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .chat-header-info p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .messages-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease;
+            position: relative;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            margin-top: 4px;
+            opacity: 0.7;
+            text-align: right;
+        }
+
+        .student-message {
+            align-self: flex-end;
+            background: var(--student-msg);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .recruiter-message {
+            align-self: flex-start;
+            background: var(--recruiter-msg);
+            color: white;
+            border-bottom-left-radius: 5px;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #message-input {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        #message-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        #send-btn {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        #send-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: var(--accent-purple);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            color: white;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+        }
+
+        .no-conversation {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+        }
+
+        .no-conversation i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .firebase-info {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .firebase-info h3 {
+            margin-bottom: 10px;
+            color: #FFA500;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 900px) {
+            .app-container {
+                padding: 10px;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: -400px;
+                top: 0;
+                bottom: 0;
+                z-index: 100;
+                width: 320px;
+                border-radius: 0;
+                padding-top: 70px;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .mobile-toggle {
+                display: flex;
+            }
+
+            .chat-container {
+                border-radius: var(--border-radius);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .message {
+                max-width: 85%;
+            }
+
+            .user-details h2 {
+                font-size: 1rem;
+            }
+
+            .contact-info h3 {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="mobile-toggle" id="sidebar-toggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="user-info">
+                <div class="avatar" id="user-avatar">TA</div>
+                <div class="user-details">
+                    <h2 id="user-name">Tech Alchemists</h2>
+                    <p id="user-role">Recruiter</p>
+                </div>
+            </div>
+
+            <div class="search-container">
+                <input type="text" placeholder="Search contacts..." id="search-contacts">
+                <i class="fas fa-search"></i>
+            </div>
+
+            <div class="contacts-header">
+                <h3>Contacts</h3>
+                <span id="contacts-count">0</span>
+            </div>
+
+            <div class="contacts-list" id="contacts-list">
+                <!-- Contacts will be populated here -->
+            </div>
+
+            <div class="firebase-info">
+                <h3><i class="fas fa-info-circle"></i> Firebase Integration</h3>
+                <p>To enable real-time messaging with Firebase, add your configuration in the JavaScript section.</p>
+            </div>
+        </div>
+
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <div class="chat-header" id="chat-header">
+                <div class="no-conversation" id="no-conversation">
+                    <i class="fas fa-comments"></i>
+                    <h3>Select a contact to start messaging</h3>
+                    <p>Your conversations will appear here</p>
+                </div>
+            </div>
+
+            <div class="messages-container" id="messages-container">
+                <!-- Messages will be displayed here -->
+            </div>
+
+            <div class="input-container">
+                <input type="text" id="message-input" placeholder="Type your message here...">
+                <button id="send-btn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =============================================
+        // CONFIGURATION - SET THESE VALUES AS NEEDED
+        // =============================================
+
+        // Set the current user (usually set after login)
+        // Replace this with your actual user object from your auth system
+        window.CURRENT_USER = {
+            uid: "user-001",
+            name: "John Doe",
+            role: "student", // or "recruiter"
+            title: "Computer Science Student",
+            company: "University of Tech"
+        };
+
+        // Firebase configuration (replace with your own)
+        const firebaseConfig = {
+            // apiKey: "your-api-key",
+            // authDomain: "your-project.firebaseapp.com",
+            // projectId: "your-project-id",
+            // storageBucket: "your-project.appspot.com",
+            // messagingSenderId: "123456789",
+            // appId: "your-app-id"
+        };
+
+        // =============================================
+        // APPLICATION CODE
+        // =============================================
+
+        // DOM Elements
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const contactsList = document.getElementById('contacts-list');
+        const messagesContainer = document.getElementById('messages-container');
+        const messageInput = document.getElementById('message-input');
+        const sendBtn = document.getElementById('send-btn');
+        const searchContacts = document.getElementById('search-contacts');
+        const chatHeader = document.getElementById('chat-header');
+        const noConversation = document.getElementById('no-conversation');
+        const userAvatar = document.getElementById('user-avatar');
+        const userName = document.getElementById('user-name');
+        const userRole = document.getElementById('user-role');
+        const contactsCount = document.getElementById('contacts-count');
+
+        // Application State
+        let currentUser = null;
+        let contacts = [];
+        let selectedContact = null;
+        let messages = [];
+        let firebaseInitialized = false;
+
+        // Initialize the application
+        function initApp() {
+            // Set current user
+            currentUser = window.CURRENT_USER;
+            
+            // Update UI with current user info
+            if (currentUser) {
+                userAvatar.textContent = getInitials(currentUser.name);
+                userName.textContent = currentUser.name;
+                userRole.textContent = currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1);
+            }
+
+            // Check if Firebase is configured
+            if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "your-api-key") {
+                initFirebase();
+            } else {
+                // Use local storage mode
+                loadMockData();
+            }
+
+            // Set up event listeners
+            setupEventListeners();
+        }
+
+        // Initialize Firebase (if configured)
+        function initFirebase() {
+            console.log("Firebase is not fully implemented in this example. Using localStorage as fallback.");
+            // In a real implementation, you would:
+            // 1. Initialize Firebase app
+            // 2. Get references to Firestore collections
+            // 3. Set up real-time listeners for conversations
+            // 4. Implement methods to send and receive messages
+            
+            firebaseInitialized = true;
+            loadMockData();
+        }
+
+        // Load mock data for demonstration
+        function loadMockData() {
+            // Generate mock contacts based on user role
+            if (currentUser.role === 'student') {
+                contacts = [
+                    {
+                        uid: "rec-001",
+                        name: "Sarah Johnson",
+                        role: "recruiter",
+                        title: "Senior Talent Acquisition",
+                        company: "Tech Innovations Inc."
+                    },
+                    {
+                        uid: "rec-002",
+                        name: "Michael Chen",
+                        role: "recruiter",
+                        title: "HR Manager",
+                        company: "DataWorks Ltd."
+                    },
+                    {
+                        uid: "rec-003",
+                        name: "Emily Williams",
+                        role: "recruiter",
+                        title: "Technical Recruiter",
+                        company: "Cloud Solutions Corp."
+                    }
+                ];
+            } else {
+                contacts = [
+                    {
+                        uid: "stu-001",
+                        name: "Alex Rodriguez",
+                        role: "student",
+                        title: "Computer Science Senior",
+                        company: "State University"
+                    },
+                    {
+                        uid: "stu-002",
+                        name: "Jessica Miller",
+                        role: "student",
+                        title: "Data Science Major",
+                        company: "Tech Institute"
+                    },
+                    {
+                        uid: "stu-003",
+                        name: "David Kim",
+                        role: "student",
+                        title: "Engineering Student",
+                        company: "Polytechnic University"
+                    }
+                ];
+            }
+
+            // Load any existing messages from localStorage
+            loadMessagesFromStorage();
+            
+            // Render contacts
+            renderContacts();
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Sidebar toggle for mobile
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+
+            // Send message on button click
+            sendBtn.addEventListener('click', sendMessage);
+
+            // Send message on Enter key
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            // Search contacts
+            searchContacts.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                renderContacts(searchTerm);
+            });
+
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', (e) => {
+                if (window.innerWidth <= 900 && 
+                    !sidebar.contains(e.target) && 
+                    !sidebarToggle.contains(e.target) &&
+                    sidebar.classList.contains('active')) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+
+        // Render contacts list
+        function renderContacts(searchTerm = '') {
+            let filteredContacts = contacts;
+            
+            if (searchTerm) {
+                filteredContacts = contacts.filter(contact => 
+                    contact.name.toLowerCase().includes(searchTerm) ||
+                    contact.company.toLowerCase().includes(searchTerm) ||
+                    contact.title.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            contactsList.innerHTML = '';
+            contactsCount.textContent = filteredContacts.length;
+            
+            filteredContacts.forEach(contact => {
+                const contactEl = document.createElement('div');
+                contactEl.classList.add('contact-item');
+                if (selectedContact && selectedContact.uid === contact.uid) {
+                    contactEl.classList.add('active');
+                }
+                
+                contactEl.innerHTML = `
+                    <div class="contact-avatar">${getInitials(contact.name)}</div>
+                    <div class="contact-info">
+                        <h3>${contact.name}</h3>
+                        <p>${contact.title} at ${contact.company}</p>
+                    </div>
+                `;
+                
+                contactEl.addEventListener('click', () => selectContact(contact));
+                contactsList.appendChild(contactEl);
+            });
+        }
+
+        // Select a contact to chat with
+        function selectContact(contact) {
+            selectedContact = contact;
+            renderContacts();
+            
+            // Update chat header
+            chatHeader.innerHTML = `
+                <div class="chat-header-avatar">${getInitials(contact.name)}</div>
+                <div class="chat-header-info">
+                    <h2>${contact.name}</h2>
+                    <p>${contact.title} at ${contact.company}</p>
+                </div>
+            `;
+            
+            noConversation.style.display = 'none';
+            
+            // Load messages for this conversation
+            loadMessages();
+            
+            // On mobile, close sidebar after selecting a contact
+            if (window.innerWidth <= 900) {
+                sidebar.classList.remove('active');
+            }
+        }
+
+        // Load messages for the current conversation
+        function loadMessages() {
+            const conversationId = generateConversationId(currentUser.uid, selectedContact.uid);
+            messages = getMessagesFromStorage(conversationId);
+            renderMessages();
+        }
+
+        // Send a new message
+        function sendMessage() {
+            const text = messageInput.value.trim();
+            if (!text || !selectedContact) return;
+            
+            const newMessage = {
+                text: text,
+                from: currentUser.uid,
+                to: selectedContact.uid,
+                createdAt: new Date().toISOString()
+            };
+            
+            // Add to local messages array
+            messages.push(newMessage);
+            
+            // Save to storage
+            saveMessageToStorage(newMessage);
+            
+            // Render updated messages
+            renderMessages();
+            
+            // Clear input
+            messageInput.value = '';
+            
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // In a real implementation, send to Firebase
+            if (firebaseInitialized) {
+                // sendMessageToFirebase(newMessage);
+            }
+        }
+
+        // Render messages in the chat
+        function renderMessages() {
+            messagesContainer.innerHTML = '';
+            
+            messages.forEach(message => {
+                const isFromCurrentUser = message.from === currentUser.uid;
+                
+                const messageEl = document.createElement('div');
+                messageEl.classList.add('message');
+                messageEl.classList.add(isFromCurrentUser ? 'student-message' : 'recruiter-message');
+                
+                const time = new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
+                messageEl.innerHTML = `
+                    <div class="message-text">${message.text}</div>
+                    <div class="message-time">${time}</div>
+                `;
+                
+                messagesContainer.appendChild(messageEl);
+            });
+            
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Generate a consistent conversation ID
+        function generateConversationId(uid1, uid2) {
+            return [uid1, uid2].sort().join('__');
+        }
+
+        // Get initials from name
+        function getInitials(name) {
+            return name.split(' ').map(part => part[0]).join('').toUpperCase();
+        }
+
+        // Local storage functions (fallback when Firebase is not available)
+        function getMessagesFromStorage(conversationId) {
+            const stored = localStorage.getItem(`conversation_${conversationId}`);
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        function saveMessageToStorage(message) {
+            const conversationId = generateConversationId(message.from, message.to);
+            const messages = getMessagesFromStorage(conversationId);
+            messages.push(message);
+            localStorage.setItem(`conversation_${conversationId}`, JSON.stringify(messages));
+        }
+
+        function loadMessagesFromStorage() {
+            // Preload some demo messages for each conversation
+            if (currentUser.role === 'student') {
+                const convoId1 = generateConversationId(currentUser.uid, "rec-001");
+                if (!localStorage.getItem(`conversation_${convoId1}`)) {
+                    const demoMessages = [
+                        {
+                            text: "Hi Sarah, I'm interested in the software engineer position at your company.",
+                            from: currentUser.uid,
+                            to: "rec-001",
+                            createdAt: new Date(Date.now() - 86400000).toISOString()
+                        },
+                        {
+                            text: "Hello! I'd be happy to tell you more about the role. What would you like to know?",
+                            from: "rec-001",
+                            to: currentUser.uid,
+                            createdAt: new Date(Date.now() - 85400000).toISOString()
+                        },
+                        {
+                            text: "What are the main technologies used in your backend systems?",
+                            from: currentUser.uid,
+                            to: "rec-001",
+                            createdAt: new Date(Date.now() - 84400000).toISOString()
+                        },
+                        {
+                            text: "We primarily use Node.js, Python, and AWS infrastructure. Are you familiar with these?",
+                            from: "rec-001",
+                            to: currentUser.uid,
+                            createdAt: new Date(Date.now() - 83400000).toISOString()
+                        }
+                    ];
+                    localStorage.setItem(`conversation_${convoId1}`, JSON.stringify(demoMessages));
+                }
+            }
+        }
+
+        // Initialize the app when the page loads
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>

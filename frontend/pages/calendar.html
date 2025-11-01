@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon SkillLink Calendar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Variables for neon theming */
+        :root {
+            --neon-blue: #08f7fe;
+            --neon-pink: #fe53bb;
+            --neon-green: #09fbd3;
+            --neon-purple: #c04df9;
+            --neon-yellow: #f5d300;
+            --dark-bg: #0f0f1e;
+            --darker-bg: #070710;
+            --glass-bg: rgba(15, 15, 30, 0.7);
+            --text-color: #ffffff;
+            --text-glow: rgba(255, 255, 255, 0.8);
+            --border-radius: 10px;
+            --transition: all 0.3s ease;
+        }
+
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--darker-bg), var(--dark-bg));
+            color: var(--text-color);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Neon glow effect */
+        .neon-border {
+            border: 1px solid var(--neon-blue);
+            box-shadow: 
+                0 0 5px var(--neon-blue),
+                0 0 10px var(--neon-blue),
+                0 0 15px var(--neon-blue),
+                inset 0 0 5px var(--neon-blue);
+        }
+
+        .neon-text-blue {
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
+        }
+
+        .neon-text-pink {
+            color: var(--neon-pink);
+            text-shadow: 0 0 5px var(--neon-pink), 0 0 10px var(--neon-pink);
+        }
+
+        .neon-text-green {
+            color: var(--neon-green);
+            text-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green);
+        }
+
+        .neon-text-purple {
+            color: var(--neon-purple);
+            text-shadow: 0 0 5px var(--neon-purple), 0 0 10px var(--neon-purple);
+        }
+
+        /* Glassmorphism effect */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Layout */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+            height: calc(100vh - 40px);
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            background: var(--darker-bg);
+            border-radius: var(--border-radius);
+            box-shadow: 0 0 15px rgba(8, 247, 254, 0.3);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--neon-blue);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: var(--text-color);
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        .nav-links {
+            list-style: none;
+            flex-grow: 1;
+        }
+
+        .nav-links li {
+            margin-bottom: 10px;
+        }
+
+        .nav-links a {
+            display: block;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: var(--text-color);
+            border-radius: 8px;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            color: var(--text-color);
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .nav-links a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: var(--darker-bg);
+            border-radius: var(--border-radius);
+            box-shadow: 0 0 15px rgba(8, 247, 254, 0.3);
+        }
+
+        .month-navigation {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: var(--dark-bg);
+            border: 1px solid var(--neon-blue);
+            font-size: 20px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            color: var(--neon-blue);
+            box-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        .nav-btn:hover {
+            background: var(--neon-blue);
+            color: var(--dark-bg);
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .current-month {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0 15px;
+            min-width: 200px;
+            text-align: center;
+            color: var(--neon-green);
+            text-shadow: 0 0 5px var(--neon-green);
+        }
+
+        .filter-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .filter-label {
+            margin-right: 10px;
+            font-weight: 500;
+            color: var(--neon-blue);
+        }
+
+        .event-filter {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--neon-blue);
+            background: var(--dark-bg);
+            cursor: pointer;
+            color: var(--text-color);
+            box-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        .event-filter option {
+            background: var(--dark-bg);
+        }
+
+        /* Calendar Grid Styles */
+        .calendar {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--darker-bg);
+            border-radius: var(--border-radius);
+            box-shadow: 0 0 15px rgba(8, 247, 254, 0.3);
+            padding: 10px;
+        }
+
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding: 0 10px;
+        }
+
+        .weekdays div {
+            padding: 15px 10px;
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        .days-grid {
+            flex-grow: 1;
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            grid-template-rows: repeat(6, 1fr);
+            gap: 8px;
+            padding: 10px;
+        }
+
+        .day {
+            padding: 10px;
+            border-radius: 8px;
+            min-height: 80px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            background: var(--dark-bg);
+            border: 1px solid transparent;
+        }
+
+        .day:hover {
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .day.other-month {
+            color: #444;
+        }
+
+        .day.today {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            color: var(--text-color);
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        .day-number {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .event-indicators {
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 3px;
+        }
+
+        .event-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        /* Event Types Colors */
+        .Interview {
+            background-color: var(--neon-pink);
+            box-shadow: 0 0 5px var(--neon-pink);
+        }
+
+        .Webinar {
+            background-color: var(--neon-green);
+            box-shadow: 0 0 5px var(--neon-green);
+        }
+
+        .Assignment {
+            background-color: var(--neon-yellow);
+            box-shadow: 0 0 5px var(--neon-yellow);
+        }
+
+        .Meeting {
+            background-color: var(--neon-purple);
+            box-shadow: 0 0 5px var(--neon-purple);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal {
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 25px;
+            background: var(--darker-bg);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 20px var(--neon-blue);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--neon-blue);
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--neon-green);
+            text-shadow: 0 0 5px var(--neon-green);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--neon-blue);
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--neon-pink);
+            text-shadow: 0 0 5px var(--neon-pink);
+        }
+
+        .events-list {
+            margin-bottom: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .event-item {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background: var(--dark-bg);
+            box-shadow: 0 0 5px var(--neon-blue);
+            border: 1px solid transparent;
+            transition: var(--transition);
+        }
+
+        .event-item:hover {
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .event-title {
+            font-weight: bold;
+            color: var(--neon-green);
+        }
+
+        .event-type {
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--text-color);
+        }
+
+        .event-description {
+            font-size: 14px;
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+
+        .event-actions {
+            text-align: right;
+        }
+
+        .delete-event {
+            background: none;
+            border: none;
+            color: var(--neon-pink);
+            cursor: pointer;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .delete-event:hover {
+            text-shadow: 0 0 5px var(--neon-pink);
+        }
+
+        .add-event-form {
+            border-top: 1px solid var(--neon-blue);
+            padding-top: 20px;
+        }
+
+        .form-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: var(--neon-blue);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--neon-green);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--neon-blue);
+            font-size: 14px;
+            background: var(--dark-bg);
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .btn {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            color: var(--text-color);
+            box-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 15px var(--neon-blue);
+            opacity: 0.9;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 900px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .calendar-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .filter-container {
+                margin-top: 15px;
+                width: 100%;
+            }
+            
+            .event-filter {
+                width: 100%;
+            }
+            
+            .days-grid {
+                gap: 4px;
+            }
+            
+            .day {
+                min-height: 60px;
+                padding: 5px;
+            }
+            
+            .day-number {
+                font-size: 14px;
+            }
+        }
+
+        /* Neon animation for background */
+        @keyframes neonPulse {
+            0% {
+                box-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
+            }
+            50% {
+                box-shadow: 0 0 15px var(--neon-blue), 0 0 20px var(--neon-blue);
+            }
+            100% {
+                box-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue);
+            }
+        }
+
+        .neon-pulse {
+            animation: neonPulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar neon-pulse">
+            <div class="logo">
+                <div class="logo-icon">SL</div>
+                <div class="logo-text">SkillLink</div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="recruiter2.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="library.html"><i class="fas fa-chart-bar"></i> Library</a></li>
+                <li><a href="calendar.html" class="active"><i class="fas fa-calendar-alt"></i> Calendar</a></li>
+                <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="calendar-header neon-pulse">
+                <div class="month-navigation">
+                    <button class="nav-btn" id="prev-month">&lt;</button>
+                    <h2 class="current-month" id="current-month">September 2025</h2>
+                    <button class="nav-btn" id="next-month">&gt;</button>
+                </div>
+                <div class="filter-container">
+                    <span class="filter-label">Filter:</span>
+                    <select class="event-filter" id="event-filter">
+                        <option value="all">All Events</option>
+                        <option value="Interview">Interviews</option>
+                        <option value="Webinar">Webinars</option>
+                        <option value="Assignment">Assignments</option>
+                        <option value="Meeting">Meetings</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="calendar neon-pulse">
+                <div class="weekdays">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                </div>
+                <div class="days-grid" id="days-grid">
+                    <!-- Calendar days will be populated by JavaScript -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Event Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-date">September 10, 2025</h3>
+                <button class="close-modal" id="close-modal">&times;</button>
+            </div>
+            <div class="events-list" id="events-list">
+                <!-- Events will be populated by JavaScript -->
+            </div>
+            <div class="add-event-form">
+                <h4 class="form-title">Add New Event</h4>
+                <form id="event-form">
+                    <input type="hidden" id="event-date">
+                    <div class="form-group">
+                        <label for="event-title">Title</label>
+                        <input type="text" class="form-control" id="event-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-type">Type</label>
+                        <select class="form-control" id="event-type" required>
+                            <option value="Interview">Interview</option>
+                            <option value="Webinar">Webinar</option>
+                            <option value="Assignment">Assignment</option>
+                            <option value="Meeting">Meeting</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-description">Description</label>
+                        <textarea class="form-control" id="event-description" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Event</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock data for events - This can be replaced with API data later
+        let events = [
+            {
+                id: 1,
+                title: "Interview with TechOrbit",
+                date: "2025-09-10",
+                type: "Interview",
+                description: "Scheduled interview with recruiter at 2:00 PM"
+            },
+            {
+                id: 2,
+                title: "Webinar: Frontend Trends",
+                date: "2025-09-15",
+                type: "Webinar",
+                description: "Join us to learn about the latest frontend development trends"
+            },
+            {
+                id: 3,
+                title: "Complete Project Assignment",
+                date: "2025-09-18",
+                type: "Assignment",
+                description: "Deadline for submitting the portfolio project"
+            },
+            {
+                id: 4,
+                title: "Team Meeting",
+                date: "2025-09-20",
+                type: "Meeting",
+                description: "Weekly team standup meeting"
+            },
+            {
+                id: 5,
+                title: "Interview with CloudFlex",
+                date: "2025-09-22",
+                type: "Interview",
+                description: "Technical interview with engineering team"
+            }
+        ];
+
+        // Global variables
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
+        let selectedDate = null;
+        let eventFilter = "all";
+
+        // DOM Elements
+        const daysGrid = document.getElementById('days-grid');
+        const currentMonthElement = document.getElementById('current-month');
+        const prevMonthButton = document.getElementById('prev-month');
+        const nextMonthButton = document.getElementById('next-month');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const closeModalButton = document.getElementById('close-modal');
+        const modalDateElement = document.getElementById('modal-date');
+        const eventsListElement = document.getElementById('events-list');
+        const eventForm = document.getElementById('event-form');
+        const eventDateInput = document.getElementById('event-date');
+        const eventFilterSelect = document.getElementById('event-filter');
+
+        // Month names for display
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        // Initialize the calendar
+        function initCalendar() {
+            updateCalendar();
+            setupEventListeners();
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            prevMonthButton.addEventListener('click', () => {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                updateCalendar();
+            });
+
+            nextMonthButton.addEventListener('click', () => {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                updateCalendar();
+            });
+
+            closeModalButton.addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) closeModal();
+            });
+
+            eventForm.addEventListener('submit', handleEventFormSubmit);
+            eventFilterSelect.addEventListener('change', (e) => {
+                eventFilter = e.target.value;
+                updateCalendar();
+            });
+        }
+
+        // Update the calendar display
+        function updateCalendar() {
+            // Update the current month display
+            currentMonthElement.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            
+            // Clear the days grid
+            daysGrid.innerHTML = '';
+            
+            // Get first day of month and number of days in month
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            
+            // Get number of days in previous month
+            const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
+            
+            // Create days from previous month
+            for (let i = 0; i < firstDay; i++) {
+                const day = document.createElement('div');
+                day.className = 'day other-month';
+                const dayNumber = daysInPrevMonth - firstDay + i + 1;
+                day.innerHTML = `<div class="day-number">${dayNumber}</div>`;
+                daysGrid.appendChild(day);
+            }
+            
+            // Create days for current month
+            const today = new Date();
+            for (let i = 1; i <= daysInMonth; i++) {
+                const day = document.createElement('div');
+                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                
+                // Check if this is today
+                if (i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
+                    day.classList.add('today');
+                }
+                
+                day.classList.add('day');
+                day.innerHTML = `<div class="day-number">${i}</div>`;
+                
+                // Add event indicators
+                const dayEvents = getEventsForDate(dateStr);
+                if (dayEvents.length > 0) {
+                    const indicators = document.createElement('div');
+                    indicators.className = 'event-indicators';
+                    
+                    dayEvents.forEach(event => {
+                        if (eventFilter === 'all' || event.type === eventFilter) {
+                            const indicator = document.createElement('div');
+                            indicator.className = `event-indicator ${event.type}`;
+                            indicators.appendChild(indicator);
+                        }
+                    });
+                    
+                    day.appendChild(indicators);
+                }
+                
+                // Add click event to show events for this day
+                day.addEventListener('click', () => openModal(dateStr));
+                
+                daysGrid.appendChild(day);
+            }
+            
+            // Calculate how many days we need to add to complete the grid (6 rows)
+            const totalDaysDisplayed = firstDay + daysInMonth;
+            const remainingDays = 42 - totalDaysDisplayed; // 6 rows x 7 days = 42 cells
+            
+            // Add days from next month if needed
+            for (let i = 1; i <= remainingDays; i++) {
+                const day = document.createElement('div');
+                day.className = 'day other-month';
+                day.innerHTML = `<div class="day-number">${i}</div>`;
+                daysGrid.appendChild(day);
+            }
+        }
+
+        // Get events for a specific date
+        function getEventsForDate(dateStr) {
+            return events.filter(event => event.date === dateStr);
+        }
+
+        // Open modal with events for selected date
+        function openModal(dateStr) {
+            selectedDate = dateStr;
+            
+            // Format date for display
+            const date = new Date(dateStr);
+            const formattedDate = `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+            modalDateElement.textContent = formattedDate;
+            eventDateInput.value = dateStr;
+            
+            // Display events for this date
+            displayEvents(dateStr);
+            
+            // Show modal
+            modalOverlay.classList.add('active');
+        }
+
+        // Close modal
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+            eventForm.reset();
+        }
+
+        // Display events for a specific date
+        function displayEvents(dateStr) {
+            eventsListElement.innerHTML = '';
+            
+            const dateEvents = getEventsForDate(dateStr);
+            
+            if (dateEvents.length === 0) {
+                eventsListElement.innerHTML = '<p>No events scheduled for this day.</p>';
+                return;
+            }
+            
+            dateEvents.forEach(event => {
+                const eventElement = document.createElement('div');
+                eventElement.className = 'event-item';
+                eventElement.innerHTML = `
+                    <div class="event-header">
+                        <div class="event-title">${event.title}</div>
+                        <div class="event-type ${event.type}">${event.type}</div>
+                    </div>
+                    <div class="event-description">${event.description}</div>
+                    <div class="event-actions">
+                        <button class="delete-event" data-id="${event.id}">Delete</button>
+                    </div>
+                `;
+                eventsListElement.appendChild(eventElement);
+            });
+            
+            // Add event listeners to delete buttons
+            const deleteButtons = eventsListElement.querySelectorAll('.delete-event');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const eventId = parseInt(e.target.getAttribute('data-id'));
+                    deleteEvent(eventId);
+                });
+            });
+        }
+
+        // Handle event form submission
+        function handleEventFormSubmit(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('event-title').value;
+            const type = document.getElementById('event-type').value;
+            const description = document.getElementById('event-description').value;
+            const date = eventDateInput.value;
+            
+            // Create new event
+            const newEvent = {
+                id: events.length > 0 ? Math.max(...events.map(e => e.id)) + 1 : 1,
+                title,
+                date,
+                type,
+                description
+            };
+            
+            // Add to events array
+            events.push(newEvent);
+            
+            // Update UI
+            displayEvents(date);
+            updateCalendar();
+            
+            // Reset form
+            eventForm.reset();
+        }
+
+        // Delete an event
+        function deleteEvent(eventId) {
+            events = events.filter(event => event.id !== eventId);
+            displayEvents(selectedDate);
+            updateCalendar();
+        }
+
+        // Initialize the calendar when the page loads
+        document.addEventListener('DOMContentLoaded', initCalendar);
+    </script>
+</body>
+</html>

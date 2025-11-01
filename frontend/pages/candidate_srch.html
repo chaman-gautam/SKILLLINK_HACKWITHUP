@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Candidate Search</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #001f3f, #0a3d6d, #001f3f);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 10% 20%, rgba(0, 31, 63, 0.7) 0%, rgba(0, 31, 63, 0.3) 40%, transparent 70%),
+                        radial-gradient(circle at 90% 80%, rgba(0, 86, 179, 0.6) 0%, rgba(0, 31, 63, 0.3) 40%, transparent 70%);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(0, 31, 63, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 162, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to right, transparent, rgba(0, 162, 255, 0.2), transparent);
+            transform: rotate(30deg);
+            animation: shine 6s infinite linear;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 162, 255, 0.7);
+            position: relative;
+            z-index: 1;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .search-bar {
+            width: 70%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            background: rgba(0, 31, 63, 0.8);
+            color: white;
+            box-shadow: 0 0 10px rgba(0, 162, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(0, 162, 255, 0.8);
+            transform: scale(1.02);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #00a2ff;
+        }
+
+        .advanced-search-btn {
+            margin-left: 15px;
+            padding: 15px 20px;
+            background: rgba(0, 31, 63, 0.8);
+            color: #00a2ff;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 162, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .advanced-search-btn:hover {
+            box-shadow: 0 0 15px rgba(0, 162, 255, 0.6);
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+        }
+
+        .filters-sidebar {
+            flex: 0 0 280px;
+            background: rgba(0, 31, 63, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 162, 255, 0.4);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .filters-sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .filters-sidebar::-webkit-scrollbar-thumb {
+            background: #00a2ff;
+            border-radius: 4px;
+        }
+
+        .filter-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 162, 255, 0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .reset-filters {
+            background: transparent;
+            color: #00a2ff;
+            border: 1px solid #00a2ff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .reset-filters:hover {
+            background: rgba(0, 162, 255, 0.1);
+            box-shadow: 0 0 8px rgba(0, 162, 255, 0.4);
+        }
+
+        .filter-group {
+            margin-bottom: 25px;
+        }
+
+        .filter-group h3 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #003366;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #00a2ff;
+            box-shadow: 0 0 10px rgba(0, 162, 255, 0.8);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .skill-pill {
+            background: rgba(0, 162, 255, 0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .skill-pill:hover {
+            background: rgba(0, 162, 255, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 0 8px rgba(0, 162, 255, 0.5);
+        }
+
+        .skill-pill.active {
+            background: rgba(0, 162, 255, 0.8);
+            box-shadow: 0 0 12px rgba(0, 162, 255, 0.7);
+        }
+
+        .range-slider {
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .candidates-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .candidate-card {
+            background: rgba(0, 31, 63, 0.7);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 162, 255, 0.3);
+            position: relative;
+        }
+
+        .candidate-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(0, 162, 255, 0.6);
+        }
+
+        .card-header {
+            padding: 20px;
+            text-align: center;
+            background: rgba(0, 49, 94, 0.7);
+        }
+
+        .candidate-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(0, 162, 255, 0.5);
+            box-shadow: 0 0 15px rgba(0, 162, 255, 0.4);
+            margin-bottom: 15px;
+        }
+
+        .candidate-name {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+
+        .candidate-title {
+            color: #00a2ff;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .trust-score {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(0, 162, 255, 0.2);
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-section {
+            margin-bottom: 15px;
+        }
+
+        .card-section h4 {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nft-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            border-radius: 10px;
+            font-size: 0.8rem;
+            margin: 3px;
+            box-shadow: 0 0 8px rgba(106, 17, 203, 0.6);
+        }
+
+        .quick-preview {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 31, 63, 0.95);
+            padding: 20px;
+            transform: translateY(100%);
+            transition: transform 0.4s ease;
+            border-top: 1px solid rgba(0, 162, 255, 0.3);
+        }
+
+        .candidate-card:hover .quick-preview {
+            transform: translateY(0);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #00a2ff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0088cc;
+            box-shadow: 0 0 10px rgba(0, 162, 255, 0.7);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #00a2ff;
+            border: 1px solid #00a2ff;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 162, 255, 0.1);
+            box-shadow: 0 0 10px rgba(0, 162, 255, 0.4);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 10px;
+        }
+
+        .pagination-btn {
+            padding: 10px 15px;
+            background: rgba(0, 31, 63, 0.7);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pagination-btn:hover {
+            background: rgba(0, 162, 255, 0.5);
+            box-shadow: 0 0 10px rgba(0, 162, 255, 0.5);
+        }
+
+        .pagination-btn.active {
+            background: #00a2ff;
+            box-shadow: 0 0 10px rgba(0, 162, 255, 0.7);
+        }
+
+        .results-info {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 992px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .filters-sidebar {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .search-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .search-bar {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            .advanced-search-btn {
+                margin-left: 0;
+                width: 100%;
+                max-width: 600px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .candidates-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .glow {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 5px rgba(0, 162, 255, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(0, 162, 255, 0.8);
+            }
+            100% {
+                box-shadow: 0 0 5px rgba(0, 162, 255, 0.5);
+            }
+        }
+
+        .advanced-filters {
+            background: rgba(0, 31, 63, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 15px rgba(0, 162, 255, 0.4);
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .advanced-filters.active {
+            display: grid;
+        }
+
+        .filter-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Advanced Candidate Search</h1>
+            <p class="tagline">Find the perfect talent with our advanced filtering system</p>
+        </header>
+
+        <div class="search-container">
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search by name, skill, experience or NFT...">
+                <div class="search-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+            <button class="advanced-search-btn">
+                <i class="fas fa-cog"></i> Advanced Filters
+            </button>
+        </div>
+
+        <div class="advanced-filters" id="advancedFilters">
+            <div class="filter-group">
+                <h3><i class="fas fa-graduation-cap"></i> Education</h3>
+                <select class="search-input">
+                    <option value="">Any Education</option>
+                    <option value="bs">Bachelor's Degree</option>
+                    <option value="ms">Master's Degree</option>
+                    <option value="phd">PhD</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <h3><i class="fas fa-map-marker-alt"></i> Location</h3>
+                <select class="search-input">
+                    <option value="">Any Location</option>
+                    <option value="us">United States</option>
+                    <option value="eu">Europe</option>
+                    <option value="asia">Asia</option>
+                    <option value="remote">Remote</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <h3><i class="fas fa-briefcase"></i> Experience Level</h3>
+                <select class="search-input">
+                    <option value="">Any Experience</option>
+                    <option value="intern">Intern</option>
+                    <option value="junior">Junior (0-2 yrs)</option>
+                    <option value="mid">Mid (3-5 yrs)</option>
+                    <option value="senior">Senior (5+ yrs)</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <h3><i class="fas fa-money-bill-wave"></i> Salary Range</h3>
+                <select class="search-input">
+                    <option value="">Any Salary</option>
+                    <option value="50">$50k+</option>
+                    <option value="75">$75k+</option>
+                    <option value="100">$100k+</option>
+                    <option value="125">$125k+</option>
+                </select>
+            </div>
+            <div class="filter-actions">
+                <button class="btn btn-secondary">Cancel</button>
+                <button class="btn btn-primary">Apply Filters</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <aside class="filters-sidebar">
+                <h2 class="filter-title">
+                    Filters
+                    <button class="reset-filters">Reset</button>
+                </h2>
+                
+                <div class="filter-group">
+                    <h3>
+                        <i class="fas fa-code"></i>
+                        Skills
+                        <span class="toggle-switch">
+                            <input type="checkbox" checked id="skills-toggle">
+                            <span class="slider"></span>
+                        </span>
+                    </h3>
+                    <div class="skills-list">
+                        <div class="skill-pill active">JavaScript</div>
+                        <div class="skill-pill">React</div>
+                        <div class="skill-pill">Node.js</div>
+                        <div class="skill-pill">Python</div>
+                        <div class="skill-pill">UI/UX</div>
+                        <div class="skill-pill">Solidity</div>
+                        <div class="skill-pill">Web3</div>
+                        <div class="skill-pill">AWS</div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h3>
+                        <i class="fas fa-coins"></i>
+                        NFTs
+                        <span class="toggle-switch">
+                            <input type="checkbox" id="nfts-toggle">
+                            <span class="slider"></span>
+                        </span>
+                    </h3>
+                    <div class="skills-list">
+                        <div class="skill-pill">Bored Ape</div>
+                        <div class="skill-pill">CryptoPunk</div>
+                        <div class="skill-pill">Art Blocks</div>
+                        <div class="skill-pill">Moonbirds</div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <h3>
+                        <i class="fas fa-star"></i>
+                        Trust Score
+                        <span class="toggle-switch">
+                            <input type="checkbox" checked id="trust-toggle">
+                            <span class="slider"></span>
+                        </span>
+                    </h3>
+                    <input type="range" min="0" max="100" value="70" class="range-slider" id="trust-range">
+                    <p>Minimum: <span id="trust-value">70</span>%</p>
+                </div>
+
+                <div class="filter-group">
+                    <h3>
+                        <i class="fas fa-briefcase"></i>
+                        Experience
+                        <span class="toggle-switch">
+                            <input type="checkbox" id="exp-toggle">
+                            <span class="slider"></span>
+                        </span>
+                    </h3>
+                    <input type="range" min="0" max="20" value="5" class="range-slider" id="exp-range">
+                    <p>Minimum: <span id="exp-value">5</span> years</p>
+                </div>
+            </aside>
+
+            <div class="candidates-section">
+                <div class="results-info">
+                    Showing <strong>8</strong> candidates out of <strong>24</strong> matches
+                </div>
+
+                <div class="candidates-grid">
+                    <!-- Candidate 1 -->
+                    <div class="candidate-card glow">
+                        <div class="card-header">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Candidate" class="candidate-img">
+                            <h2 class="candidate-name">Sarah Johnson</h2>
+                            <p class="candidate-title">Full Stack Developer</p>
+                            <span class="trust-score">87%</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-section">
+                                <h4><i class="fas fa-code"></i> Skills</h4>
+                                <p>JavaScript, React, Node.js, MongoDB</p>
+                            </div>
+                            <div class="card-section">
+                                <h4><i class="fas fa-coins"></i> NFTs</h4>
+                                <div>
+                                    <span class="nft-badge">Bored Ape #3421</span>
+                                    <span class="nft-badge">CryptoPunk #6543</span>
+                                </div>
+                            </div>
+                            <div class="card-section">
+                                <h4><i class="fas fa-briefcase"></i> Experience</h4>
+                                <p>5 years</p>
+                            </div>
+                        </div>
+                        <div class="quick-preview">
+                            <p>5+ years of experience building scalable web applications. Previously worked at TechCorp.</p>
+                            <div class="action-buttons">
+                                <button class="btn btn-primary">View Profile</button>
+                                <button class="btn btn-secondary">Message</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Candidate 2 -->
+                    <div class="candidate-card">
+                        <div class="card-header">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Candidate" class="candidate-img">
+                            <h2 class="candidate-name">Michael Chen</h2>
+                            <p class="candidate-title">Blockchain Developer</p>
+                            <span class="trust-score">92%</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-section">
+                                <h4><i class="fas fa-code"></i> Skills</h4>
+                                <p>Solidity, Web3, Ethereum, Smart Contracts</p>
+                            </div>
+                            <div class="card-section">
+                                <h4><i class="fas fa-coins"></i> NFTs</h4>
+                                <div>
+                                    <span class="nft-badge">Art Blocks #1234</span>
+                                    <span class="nft-badge">Moonbirds #8765</span>
+                                </div>
+                            </div>
+                            <div class="card-section">
+                                <h4><i class="fas fa-briefcase"></i> Experience</h4>
+                                <p>7 years</p>
+                            </div>
+                        </div>
+                        <div class="quick-preview">
+                            <p>Expert in DeFi protocols and NFT marketplaces. Contributed to major Ethereum projects.</p>
+                            <div class="action-buttons">
+                                <button class="btn btn-primary">View Profile</button>
+                                <button class="btn btn-secondary">Message</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Candidate 3 -->
+                    <div class="candidate-card">
+                        <div class="card-header">
+                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Candidate" class="candidate-img">
+                            <h2 class="candidate-name">Jessica Williams</h2>
+                            <p class="candidate-title">UX/UI Designer</p>
+                            <span class="trust-score">78%</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-section">
+                                <h4><i class="fas fa-code"></i> Skills</h4>
+                                <p>Figma, Adobe XD, User Research, Prototyping</p>
+                            </div>
+                            <div class="card-section">
+                                <h4><i class="fas fa-coins"></i> NFTs</h4>
+                                <div>
+                                    <span class="nft-badge">Doodle #4321</span>
+                                </div>
+                            </div>
+                            <div class="card-section">
+                                <h4><i class="fas fa-briefcase"></i> Experience</h4>
+                                <p>4 years</p>
+                            </div>
+                        </div>
+                        <div class="quick-preview">
+                            <p>Creates intuitive and beautiful user interfaces. Specializes in Web3 and fintech applications.</p>
+                            <div class="action-buttons">
+                                <button class="btn btn-primary">View Profile</button>
+                                <button class="btn btn-secondary">Message</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Candidate 4 -->
+                    <div class="candidate-card">
+                        <div class="card-header">
+                            <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Candidate" class="candidate-img">
+                            <h2 class="candidate-name">David Kim</h2>
+                            <p class="candidate-title">DevOps Engineer</p>
+                            <span class="trust-score">85%</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-section">
+                                <h4><i class="fas fa-code"></i> Skills</h4>
+                                <p>AWS, Docker, Kubernetes, CI/CD</p>
+                            </div>
+                            <div class="card-section">
+                                <h4><i class="fas fa-coins"></i> NFTs</h4>
+                                <div>
+                                    <span class="nft-badge">World of Women #7890</span>
+                                    <span class="nft-badge">Cool Cats #2468</span>
+                                </div>
+                            </div>
+                            <div class="card-section">
+                                <h4><i class="fas fa-briefcase"></i> Experience</h4>
+                                <p>6 years</p>
+                            </div>
+                        </div>
+                        <div class="quick-preview">
+                            <p>Automates and optimizes deployment pipelines. Ensures high availability and scalability.</p>
+                            <div class="action-buttons">
+                                <button class="btn btn-primary">View Profile</button>
+                                <button class="btn btn-secondary">Message</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pagination">
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <button class="pagination-btn">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add glow effect to search bar when focused
+        const searchInput = document.querySelector('.search-input');
+        
+        searchInput.addEventListener('focus', () => {
+            searchInput.classList.add('glow');
+        });
+        
+        searchInput.addEventListener('blur', () => {
+            searchInput.classList.remove('glow');
+        });
+
+        // Toggle skill pills
+        const skillPills = document.querySelectorAll('.skill-pill');
+        
+        skillPills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                pill.classList.toggle('active');
+            });
+        });
+
+        // Add animation to candidate cards on hover
+        const candidateCards = document.querySelectorAll('.candidate-card');
+        
+        candidateCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.classList.add('glow');
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.classList.remove('glow');
+            });
+        });
+
+        // Update trust score value
+        const trustRange = document.getElementById('trust-range');
+        const trustValue = document.getElementById('trust-value');
+        
+        trustRange.addEventListener('input', () => {
+            trustValue.textContent = trustRange.value;
+        });
+
+        // Update experience value
+        const expRange = document.getElementById('exp-range');
+        const expValue = document.getElementById('exp-value');
+        
+        expRange.addEventListener('input', () => {
+            expValue.textContent = expRange.value;
+        });
+
+        // Toggle advanced filters
+        const advancedSearchBtn = document.querySelector('.advanced-search-btn');
+        const advancedFilters = document.getElementById('advancedFilters');
+        
+        advancedSearchBtn.addEventListener('click', () => {
+            advancedFilters.classList.toggle('active');
+        });
+
+        // Pagination buttons
+        const paginationBtns = document.querySelectorAll('.pagination-btn');
+        
+        paginationBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                paginationBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // Reset filters
+        const resetFiltersBtn = document.querySelector('.reset-filters');
+        
+        resetFiltersBtn.addEventListener('click', () => {
+            // Reset skill pills
+            skillPills.forEach(pill => {
+                pill.classList.remove('active');
+            });
+            
+            // Reset trust score
+            trustRange.value = 70;
+            trustValue.textContent = '70';
+            
+            // Reset experience
+            expRange.value = 5;
+            expValue.textContent = '5';
+            
+            // Reset toggles
+            document.getElementById('skills-toggle').checked = true;
+            document.getElementById('nfts-toggle').checked = false;
+            document.getElementById('trust-toggle').checked = true;
+            document.getElementById('exp-toggle').checked = false;
+            
+            // Reset search
+            searchInput.value = '';
+            
+            alert('Filters have been reset to default values!');
+        });
+    </script>
+</body>
+</html>
