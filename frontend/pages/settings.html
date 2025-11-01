@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Navy Glow Settings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --navy-dark: #0a192f;
+            --navy-medium: #112240;
+            --navy-light: #233554;
+            --accent-blue: #00d4ff;
+            --accent-green: #64ffda;
+            --text-primary: #e6f1ff;
+            --text-secondary: #a8b2d1;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-medium) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .settings-container {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(13, 25, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 0 25px rgba(0, 217, 255, 0.4),
+                        0 0 50px rgba(0, 119, 255, 0.3),
+                        inset 0 0 20px rgba(0, 153, 255, 0.3);
+            border: 1px solid rgba(0, 162, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .settings-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+            transform: rotate(0deg);
+            animation: rotateBackground 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rotateBackground {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.8rem;
+            text-shadow: 0 0 15px rgba(0, 212, 255, 0.8);
+            color: var(--accent-green);
+            position: relative;
+            z-index: 1;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .settings-section {
+            padding: 25px;
+            border-radius: 15px;
+            background: rgba(10, 25, 47, 0.6);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .settings-section:hover {
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            color: var(--accent-green);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.6rem;
+        }
+
+        h2 i {
+            font-size: 1.4rem;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 212, 255, 0.2);
+            border-radius: 50%;
+            padding: 5px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        label i {
+            color: var(--accent-blue);
+            font-size: 1.1rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 2px solid rgba(0, 162, 255, 0.4);
+            background: rgba(13, 25, 42, 0.8);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.9);
+            background: rgba(13, 25, 42, 0.95);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 45px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: var(--accent-blue);
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            padding: 12px;
+            border-radius: 12px;
+            background: rgba(13, 25, 42, 0.6);
+            transition: background 0.3s ease;
+        }
+
+        .toggle-container:hover {
+            background: rgba(13, 25, 42, 0.8);
+        }
+
+        .toggle-text {
+            font-weight: 500;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-text i {
+            color: var(--accent-blue);
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 65px;
+            height: 32px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(13, 25, 42, 0.9);
+            border: 2px solid rgba(0, 162, 255, 0.6);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 3px;
+            background-color: var(--accent-green);
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-green);
+        }
+
+        input:checked + .slider {
+            background-color: rgba(0, 162, 255, 0.4);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.7);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(29px);
+            background-color: var(--accent-blue);
+            box-shadow: 0 0 15px var(--accent-blue);
+        }
+
+        .wallet-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 18px;
+            margin-top: 20px;
+        }
+
+        .wallet-option {
+            background: rgba(13, 25, 42, 0.8);
+            border: 2px solid rgba(0, 162, 255, 0.4);
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .wallet-option:hover {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            transform: translateY(-5px);
+        }
+
+        .wallet-option.active {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.9);
+            background: rgba(0, 162, 255, 0.25);
+        }
+
+        .wallet-option i {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            color: var(--accent-green);
+        }
+
+        .wallet-option p {
+            margin-top: 8px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .accordion {
+            margin-top: 20px;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.5s ease-out;
+            background: rgba(13, 25, 42, 0.6);
+            border-radius: 12px;
+        }
+
+        .accordion-content {
+            padding: 25px;
+        }
+
+        .accordion-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px;
+            background: rgba(13, 25, 42, 0.8);
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-weight: 500;
+            color: var(--accent-green);
+            transition: all 0.3s ease;
+        }
+
+        .accordion-toggle:hover {
+            background: rgba(0, 162, 255, 0.25);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .accordion.active {
+            max-height: 1000px;
+            transition: max-height 0.7s ease-in;
+        }
+
+        .save-button {
+            display: block;
+            width: 220px;
+            margin: 40px auto 15px;
+            padding: 18px;
+            background: rgba(0, 162, 255, 0.4);
+            color: var(--text-primary);
+            border: none;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .save-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .save-button:hover::before {
+            left: 100%;
+        }
+
+        .save-button:hover {
+            background: rgba(0, 162, 255, 0.6);
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.9);
+            transform: scale(1.05);
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.8);
+            }
+            70% {
+                box-shadow: 0 0 0 20px rgba(0, 212, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 212, 255, 0);
+            }
+        }
+
+        .notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            padding: 18px 25px;
+            background: rgba(13, 25, 42, 0.95);
+            border-left: 4px solid var(--accent-green);
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            transform: translateX(150%);
+            transition: transform 0.5s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification i {
+            color: var(--accent-green);
+            font-size: 1.5rem;
+        }
+
+        .profile-avatar {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--navy-light), var(--navy-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid var(--accent-blue);
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.7);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .avatar i {
+            font-size: 3.5rem;
+            color: var(--accent-green);
+        }
+
+        .avatar-upload {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px;
+            text-align: center;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .avatar:hover .avatar-upload {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .wallet-options {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .settings-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .wallet-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .save-button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="settings-container">
+        <h1><i class="fas fa-cogs"></i> Advanced Settings</h1>
+        
+        <div class="settings-grid">
+            <!-- Profile Section -->
+            <div class="settings-section">
+                <h2><i class="fas fa-user"></i> Profile Information</h2>
+                
+                <div class="profile-avatar">
+                    <div class="avatar">
+                        <i class="fas fa-user"></i>
+                        <div class="avatar-upload">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="username"><i class="fas fa-user-tag"></i> Username</label>
+                    <input type="text" id="username" placeholder="Enter your username">
+                </div>
+                
+                <div class="input-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+                    <input type="email" id="email" placeholder="Enter your email">
+                </div>
+                
+                <div class="input-group">
+                    <label for="password"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="password" placeholder="Enter new password">
+                    <span class="password-toggle" id="passwordToggle">
+                        <i class="fas fa-eye"></i>
+                    </span>
+                </div>
+                
+                <div class="input-group">
+                    <label for="bio"><i class="fas fa-info-circle"></i> Bio</label>
+                    <textarea id="bio" placeholder="Tell us about yourself"></textarea>
+                </div>
+            </div>
+            
+            <!-- Preferences Section -->
+            <div class="settings-section">
+                <h2><i class="fas fa-sliders-h"></i> Preferences</h2>
+                
+                <div class="toggle-container">
+                    <span class="toggle-text"><i class="fas fa-globe"></i> Auto-detect language</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="autoLanguage">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="input-group">
+                    <label for="language"><i class="fas fa-language"></i> Select Language</label>
+                    <select id="language">
+                        <option value="en">English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                        <option value="jp">Japanese</option>
+                    </select>
+                </div>
+                
+                <div class="toggle-container">
+                    <span class="toggle-text"><i class="fas fa-bell"></i> Notifications</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked id="notifications">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="toggle-container">
+                    <span class="toggle-text"><i class="fas fa-moon"></i> Dark Mode</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked id="darkMode">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="accordion-toggle">
+                    <span><i class="fas fa-cog"></i> Advanced Preferences</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                
+                <div class="accordion">
+                    <div class="accordion-content">
+                        <div class="toggle-container">
+                            <span class="toggle-text"><i class="fas fa-history"></i> Auto-save</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-container">
+                            <span class="toggle-text"><i class="fas fa-share-alt"></i> Share analytics</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="refreshRate"><i class="fas fa-sync-alt"></i> Refresh Rate</label>
+                            <select id="refreshRate">
+                                <option value="5">5 minutes</option>
+                                <option value="15">15 minutes</option>
+                                <option value="30">30 minutes</option>
+                                <option value="60">60 minutes</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Wallet Section -->
+            <div class="settings-section">
+                <h2><i class="fas fa-wallet"></i> Wallet Connection</h2>
+                
+                <p>Connect your wallet to access all features</p>
+                
+                <div class="wallet-options">
+                    <div class="wallet-option">
+                        <i class="fab fa-bitcoin"></i>
+                        <p>Bitcoin</p>
+                        <small>BTC</small>
+                    </div>
+                    <div class="wallet-option active">
+                        <i class="fab fa-ethereum"></i>
+                        <p>Ethereum</p>
+                        <small>ETH</small>
+                    </div>
+                    <div class="wallet-option">
+                        <i class="fas fa-wallet"></i>
+                        <p>MetaMask</p>
+                        <small>Web3</small>
+                    </div>
+                    <div class="wallet-option">
+                        <i class="fas fa-coins"></i>
+                        <p>Coinbase</p>
+                        <small>Exchange</small>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="walletAddress"><i class="fas fa-key"></i> Wallet Address</label>
+                    <input type="text" id="walletAddress" placeholder="Enter your wallet address">
+                </div>
+                
+                <div class="accordion-toggle">
+                    <span><i class="fas fa-cog"></i> Advanced Wallet Settings</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                
+                <div class="accordion">
+                    <div class="accordion-content">
+                        <div class="input-group">
+                            <label for="network"><i class="fas fa-network-wired"></i> Network</label>
+                            <select id="network">
+                                <option value="mainnet">Mainnet</option>
+                                <option value="ropsten">Ropsten Testnet</option>
+                                <option value="kovan">Kovan Testnet</option>
+                                <option value="rinkeby">Rinkeby Testnet</option>
+                            </select>
+                        </div>
+                        
+                        <div class="toggle-container">
+                            <span class="toggle-text"><i class="fas fa-plug"></i> Auto-connect wallet</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-container">
+                            <span class="toggle-text"><i class="fas fa-receipt"></i> Show transaction details</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-container">
+                            <span class="toggle-text"><i class="fas fa-shield-alt"></i> Enhanced security</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Privacy Section -->
+            <div class="settings-section">
+                <h2><i class="fas fa-user-shield"></i> Privacy & Security</h2>
+                
+                <div class="toggle-container">
+                    <span class="toggle-text"><i class="fas fa-user-lock"></i> Private account</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="privateAccount">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="toggle-container">
+                    <span class="toggle-text"><i class="fas fa-location-arrow"></i> Location tracking</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked id="locationTracking">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="toggle-container">
+                    <span class="toggle-text"><i class="fas fa-cookie"></i> Allow cookies</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked id="allowCookies">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="input-group">
+                    <label for="dataRetention"><i class="fas fa-database"></i> Data Retention</label>
+                    <select id="dataRetention">
+                        <option value="30">30 days</option>
+                        <option value="90">90 days</option>
+                        <option value="365">1 year</option>
+                        <option value="forever">Forever</option>
+                    </select>
+                </div>
+                
+                <div class="accordion-toggle">
+                    <span><i class="fas fa-shield-alt"></i> Advanced Security</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                
+                <div class="accordion">
+                    <div class="accordion-content">
+                        <div class="toggle-container">
+                            <span class="toggle-text"><i class="fas fa-fingerprint"></i> Two-factor authentication</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="twoFactor">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-container">
+                            <span class="toggle-text"><i class="fas fa-envelope"></i> Email verification</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="toggle-container">
+                            <span class="toggle-text"><i class="fas fa-exclamation-triangle"></i> Security alerts</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Save Button -->
+        <button class="save-button pulse" id="saveButton">
+            <i class="fas fa-save"></i> Save Settings
+        </button>
+    </div>
+
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span>Your settings have been saved successfully!</span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle accordions
+            const accordionToggles = document.querySelectorAll('.accordion-toggle');
+            accordionToggles.forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    const accordion = this.nextElementSibling;
+                    const icon = this.querySelector('i.fas');
+                    
+                    accordion.classList.toggle('active');
+                    if (accordion.classList.contains('active')) {
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                    } else {
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    }
+                });
+            });
+            
+            // Wallet selection
+            const walletOptions = document.querySelectorAll('.wallet-option');
+            walletOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    walletOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Password toggle
+            const passwordToggle = document.getElementById('passwordToggle');
+            const passwordInput = document.getElementById('password');
+            
+            passwordToggle.addEventListener('click', function() {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    passwordToggle.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                } else {
+                    passwordInput.type = 'password';
+                    passwordToggle.innerHTML = '<i class="fas fa-eye"></i>';
+                }
+            });
+            
+            // Save button animation
+            const saveButton = document.getElementById('saveButton');
+            const notification = document.getElementById('notification');
+            
+            saveButton.addEventListener('click', function() {
+                // Remove pulse animation
+                this.classList.remove('pulse');
+                void this.offsetWidth; // Trigger reflow
+                
+                // Show saving state
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Saving...';
+                this.disabled = true;
+                
+                // Simulate save action
+                setTimeout(() => {
+                    // Show success state
+                    this.innerHTML = '<i class="fas fa-check"></i> Saved!';
+                    this.style.background = 'rgba(100, 255, 218, 0.3)';
+                    this.style.color = '#64ffda';
+                    
+                    // Show notification
+                    notification.classList.add('show');
+                    
+                    setTimeout(() => {
+                        // Reset button
+                        this.innerHTML = originalText;
+                        this.style.background = '';
+                        this.style.color = '';
+                        this.disabled = false;
+                        this.classList.add('pulse');
+                        
+                        // Hide notification
+                        setTimeout(() => {
+                            notification.classList.remove('show');
+                        }, 2000);
+                    }, 1500);
+                }, 1500);
+            });
+            
+            // Dark mode toggle
+            const darkModeToggle = document.getElementById('darkMode');
+            const body = document.body;
+            
+            darkModeToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    body.style.background = 'linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-medium) 100%)';
+                } else {
+                    body.style.background = 'linear-gradient(135deg, #6b7b8f 0%, #9aaabf 100%)';
+                }
+            });
+            
+            // Initialize tooltips
+            const labels = document.querySelectorAll('label');
+            labels.forEach(label => {
+                label.addEventListener('mouseenter', function() {
+                    const input = this.nextElementSibling;
+                    if (input) {
+                        input.style.boxShadow = '0 0 15px rgba(0, 212, 255, 0.5)';
+                    }
+                });
+                
+                label.addEventListener('mouseleave', function() {
+                    const input = this.nextElementSibling;
+                    if (input && document.activeElement !== input) {
+                        input.style.boxShadow = '';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

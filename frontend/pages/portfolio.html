@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Project Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --navy: #0a192f;
+            --light-navy: #172a45;
+            --lightest-navy: #303C55;
+            --cyan: #64ffda;
+            --lavender: #bba4ff;
+            --white: #e6f1ff;
+            --transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--navy) 0%, #162b4d 100%);
+            color: var(--white);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 15px rgba(102, 252, 241, 0.7);
+            color: var(--cyan);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Controls Section */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(23, 42, 69, 0.5);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px;
+            padding-left: 45px;
+            border: none;
+            background: rgba(23, 42, 69, 0.8);
+            border-radius: 30px;
+            color: var(--white);
+            font-size: 1rem;
+            box-shadow: 0 0 15px rgba(102, 252, 241, 0.1);
+            transition: var(--transition);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(102, 252, 241, 0.3);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--cyan);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(187, 164, 255, 0.1);
+            color: var(--lavender);
+            border: 1px solid rgba(187, 164, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: rgba(187, 164, 255, 0.3);
+            box-shadow: 0 0 15px rgba(187, 164, 255, 0.4);
+        }
+
+        .sort-select {
+            padding: 10px 15px;
+            background: rgba(23, 42, 69, 0.8);
+            color: var(--white);
+            border: 1px solid rgba(102, 252, 241, 0.3);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .sort-select:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(102, 252, 241, 0.3);
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            padding: 30px 0;
+        }
+
+        .project-card {
+            height: 380px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            box-shadow: 0 0 25px rgba(102, 252, 241, 0.3);
+            border-radius: 15px;
+        }
+
+        .project-card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+            overflow: hidden;
+        }
+
+        .card-front {
+            background: linear-gradient(145deg, var(--light-navy), #152347);
+            border: 1px solid rgba(102, 252, 241, 0.3);
+        }
+
+        .card-back {
+            background: linear-gradient(145deg, var(--lightest-navy), #152347);
+            transform: rotateY(180deg);
+            border: 1px solid rgba(187, 164, 255, 0.3);
+            text-align: center;
+            justify-content: space-around;
+        }
+
+        .project-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            background: rgba(102, 252, 241, 0.1);
+            box-shadow: 0 0 20px rgba(102, 252, 241, 0.3);
+        }
+
+        .project-image i {
+            font-size: 2.5rem;
+            color: var(--cyan);
+        }
+
+        .project-title {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--cyan);
+            text-shadow: 0 0 10px rgba(102, 252, 241, 0.5);
+        }
+
+        .project-desc {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #c5c6c7;
+            text-align: center;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .tech-tag {
+            background: rgba(187, 164, 255, 0.2);
+            color: var(--lavender);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            box-shadow: 0 0 10px rgba(187, 164, 255, 0.3);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .view-project, .validate-btn {
+            background: transparent;
+            color: var(--cyan);
+            border: 1px solid var(--cyan);
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            box-shadow: 0 0 15px rgba(102, 252, 241, 0.2);
+        }
+
+        .view-project:hover, .validate-btn:hover {
+            background: rgba(102, 252, 241, 0.1);
+            box-shadow: 0 0 20px rgba(102, 252, 241, 0.5);
+        }
+
+        .validate-btn {
+            color: var(--lavender);
+            border: 1px solid var(--lavender);
+            box-shadow: 0 0 15px rgba(187, 164, 255, 0.2);
+        }
+
+        .validate-btn:hover {
+            background: rgba(187, 164, 255, 0.1);
+            box-shadow: 0 0 20px rgba(187, 164, 255, 0.4);
+        }
+
+        /* Upload Button */
+        .upload-btn-container {
+            text-align: center;
+            padding: 40px 0;
+            position: relative;
+        }
+
+        .upload-btn {
+            background: linear-gradient(45deg, var(--cyan), var(--lavender));
+            color: var(--navy);
+            border: none;
+            padding: 16px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(187, 164, 255, 0.7);
+            animation: pulse 2s infinite;
+            transition: var(--transition);
+            font-weight: bold;
+        }
+
+        .upload-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(187, 164, 255, 0.9);
+            animation: none;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 20px rgba(187, 164, 255, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(102, 252, 241, 0.9);
+            }
+            100% {
+                box-shadow: 0 0 20px rgba(187, 164, 255, 0.7);
+            }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 25, 47, 0.95);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, var(--light-navy), var(--lightest-navy));
+            width: 90%;
+            max-width: 600px;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 40px rgba(102, 252, 241, 0.3);
+            border: 1px solid rgba(102, 252, 241, 0.2);
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            color: var(--cyan);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--lavender);
+            transform: rotate(90deg);
+        }
+
+        .modal-title {
+            color: var(--cyan);
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+
+        .validation-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .validation-item {
+            background: rgba(187, 164, 255, 0.1);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(187, 164, 255, 0.2);
+            border: 1px solid rgba(187, 164, 255, 0.2);
+            transition: var(--transition);
+        }
+
+        .validation-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 0 15px rgba(187, 164, 255, 0.3);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--cyan);
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(102, 252, 241, 0.3);
+            border-radius: 8px;
+            background: rgba(23, 42, 69, 0.8);
+            color: var(--white);
+            transition: var(--transition);
+        }
+
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--cyan);
+            box-shadow: 0 0 15px rgba(102, 252, 241, 0.3);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, var(--cyan), var(--lavender));
+            color: var(--navy);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: var(--transition);
+            display: block;
+            margin: 20px auto 0;
+            box-shadow: 0 0 20px rgba(187, 164, 255, 0.5);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(187, 164, 255, 0.7);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--cyan);
+            opacity: 0.7;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: var(--light-navy);
+            color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--cyan);
+        }
+
+        .toast.error {
+            border-left: 4px solid #ff6b6b;
+        }
+
+        /* Loading Animation */
+        .loader {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .loader.show {
+            opacity: 1;
+        }
+
+        .loader:after {
+            content: " ";
+            display: block;
+            width: 64px;
+            height: 64px;
+            margin: 8px;
+            border-radius: 50%;
+            border: 6px solid var(--cyan);
+            border-color: var(--cyan) transparent var(--cyan) transparent;
+            animation: loader 1.2s linear infinite;
+        }
+
+        @keyframes loader {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .projects-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-buttons {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>My Project Portfolio</h1>
+            <p class="subtitle">Explore my collection of web development, design, and creative projects. Click on cards to flip and see details.</p>
+            
+            <div class="controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search projects...">
+                </div>
+                
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="web">Web Dev</button>
+                    <button class="filter-btn" data-filter="mobile">Mobile</button>
+                    <button class="filter-btn" data-filter="design">Design</button>
+                    <button class="filter-btn" data-filter="ai">AI/ML</button>
+                </div>
+                
+                <select class="sort-select" id="sortSelect">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="az">A-Z</option>
+                    <option value="za">Z-A</option>
+                </select>
+            </div>
+        </header>
+
+        <div class="projects-grid" id="projectsGrid">
+            <!-- Project cards will be dynamically generated -->
+        </div>
+
+        <div class="upload-btn-container">
+            <button class="upload-btn" id="uploadBtn">
+                <i class="fas fa-cloud-upload-alt"></i> Upload New Project
+            </button>
+        </div>
+
+        <!-- Validation Modal -->
+        <div class="modal" id="validationModal">
+            <div class="modal-content">
+                <span class="close-modal" id="closeModal">&times;</span>
+                <h2 class="modal-title">Project Validation</h2>
+                
+                <div class="form-group">
+                    <label for="projectName">Project Name</label>
+                    <input type="text" id="projectName" placeholder="Enter project name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="projectDesc">Project Description</label>
+                    <textarea id="projectDesc" placeholder="Describe your project"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="projectTech">Technologies Used</label>
+                    <select id="projectTech" multiple>
+                        <option value="html">HTML/CSS</option>
+                        <option value="js">JavaScript</option>
+                        <option value="react">React</option>
+                        <option value="node">Node.js</option>
+                        <option value="python">Python</option>
+                        <option value="ai">AI/ML</option>
+                    </select>
+                    <small>Hold Ctrl/Cmd to select multiple</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="projectImage">Upload Screenshot</label>
+                    <input type="file" id="projectImage">
+                </div>
+                
+                <button class="submit-btn">Submit for Validation</button>
+            </div>
+        </div>
+
+        <!-- Peer Validation Modal -->
+        <div class="modal" id="peerValidationModal">
+            <div class="modal-content">
+                <span class="close-modal" id="closePeerModal">&times;</span>
+                <h2 class="modal-title">Peer Validation Requests</h2>
+                
+                <ul class="validation-list" id="validationList">
+                    <!-- Validation requests will be added here -->
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2023 Advanced Project Portfolio | Designed with 💙</p>
+        </footer>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Operation completed successfully!</span>
+    </div>
+
+    <!-- Loader -->
+    <div class="loader" id="loader"></div>
+
+    <script>
+        // Project data
+        const projects = [
+            {
+                id: 1,
+                title: "Portfolio Website",
+                description: "A responsive portfolio website with dark mode, animations, and project filtering.",
+                technologies: ["HTML", "CSS", "JS"],
+                category: "web",
+                icon: "fa-globe",
+                date: "2023-05-15",
+                validated: true
+            },
+            {
+                id: 2,
+                title: "E-Commerce App",
+                description: "Full-featured online store with shopping cart, user auth, and payment processing.",
+                technologies: ["React", "Node.js", "MongoDB"],
+                category: "web",
+                icon: "fa-shopping-cart",
+                date: "2023-04-20",
+                validated: true
+            },
+            {
+                id: 3,
+                title: "Weather App",
+                description: "Real-time weather application with 5-day forecast and location detection.",
+                technologies: ["JavaScript", "API", "CSS"],
+                category: "mobile",
+                icon: "fa-mobile-alt",
+                date: "2023-06-10",
+                validated: false
+            },
+            {
+                id: 4,
+                title: "Game Development",
+                description: "A browser-based puzzle game with multiple levels and interactive elements.",
+                technologies: ["Phaser", "JavaScript", "Canvas"],
+                category: "web",
+                icon: "fa-gamepad",
+                date: "2023-03-05",
+                validated: true
+            },
+            {
+                id: 5,
+                title: "Data Visualization",
+                description: "Interactive dashboard for visualizing complex datasets with multiple chart types.",
+                technologies: ["D3.js", "SVG", "Python"],
+                category: "web",
+                icon: "fa-chart-line",
+                date: "2023-02-18",
+                validated: false
+            },
+            {
+                id: 6,
+                title: "UI/UX Design",
+                description: "Collection of UI/UX designs for mobile and web applications with prototypes.",
+                technologies: ["Figma", "Adobe XD", "Illustrator"],
+                category: "design",
+                icon: "fa-paint-brush",
+                date: "2023-07-22",
+                validated: true
+            },
+            {
+                id: 7,
+                title: "AI Chatbot",
+                description: "Intelligent chatbot using natural language processing and machine learning.",
+                technologies: ["Python", "NLP", "TensorFlow"],
+                category: "ai",
+                icon: "fa-robot",
+                date: "2023-01-30",
+                validated: true
+            },
+            {
+                id: 8,
+                title: "Fitness Tracker",
+                description: "Mobile application for tracking workouts, nutrition, and health metrics.",
+                technologies: ["React Native", "Firebase", "API"],
+                category: "mobile",
+                icon: "fa-heartbeat",
+                date: "2023-08-12",
+                validated: false
+            }
+        ];
+
+        // Peer validation requests
+        const validationRequests = [
+            {
+                id: 1,
+                project: "Weather App",
+                user: "Alex Johnson",
+                date: "2023-09-15"
+            },
+            {
+                id: 2,
+                project: "Data Visualization",
+                user: "Maria Garcia",
+                date: "2023-09-14"
+            },
+            {
+                id: 3,
+                project: "Fitness Tracker",
+                user: "David Smith",
+                date: "2023-09-13"
+            }
+        ];
+
+        // DOM elements
+        const projectsGrid = document.getElementById('projectsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const sortSelect = document.getElementById('sortSelect');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const validationModal = document.getElementById('validationModal');
+        const peerValidationModal = document.getElementById('peerValidationModal');
+        const closeModal = document.getElementById('closeModal');
+        const closePeerModal = document.getElementById('closePeerModal');
+        const validationList = document.getElementById('validationList');
+        const toast = document.getElementById('toast');
+        const loader = document.getElementById('loader');
+
+        // Initialize the page
+        function init() {
+            renderProjects(projects);
+            renderValidationRequests();
+            setupEventListeners();
+        }
+
+        // Render projects to the grid
+        function renderProjects(projectsArray) {
+            projectsGrid.innerHTML = '';
+            
+            projectsArray.forEach(project => {
+                const projectCard = document.createElement('div');
+                projectCard.className = 'project-card';
+                projectCard.dataset.category = project.category;
+                
+                projectCard.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="project-image">
+                                <i class="fas ${project.icon}"></i>
+                            </div>
+                            <h3 class="project-title">${project.title}</h3>
+                            <p class="project-desc">Click to see details</p>
+                            ${project.validated ? '<div class="validated-badge"><i class="fas fa-check-circle"></i> Validated</div>' : ''}
+                        </div>
+                        <div class="card-back">
+                            <h3 class="project-title">${project.title}</h3>
+                            <p class="project-desc">${project.description}</p>
+                            <div class="project-tech">
+                                ${project.technologies.map(tech => `<span class="tech-tag">${tech}</span>`).join('')}
+                            </div>
+                            <div class="card-actions">
+                                <button class="view-project">View Project</button>
+                                <button class="validate-btn">Request Validation</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                projectsGrid.appendChild(projectCard);
+            });
+            
+            // Add click event to flip cards
+            document.querySelectorAll('.project-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Don't flip if clicked on a button
+                    if (!e.target.closest('.view-project') && !e.target.closest('.validate-btn')) {
+                        this.classList.toggle('flipped');
+                    }
+                });
+            });
+            
+            // Add event to validate buttons
+            document.querySelectorAll('.validate-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    showPeerValidationModal();
+                });
+            });
+        }
+
+        // Render validation requests
+        function renderValidationRequests() {
+            validationList.innerHTML = '';
+            
+            validationRequests.forEach(request => {
+                const listItem = document.createElement('li');
+                listItem.className = 'validation-item';
+                listItem.innerHTML = `
+                    <span>${request.project} - <em>by ${request.user}</em></span>
+                    <button class="validate-btn">Validate</button>
+                `;
+                validationList.appendChild(listItem);
+            });
+            
+            // Add event to validate buttons
+            document.querySelectorAll('#validationList .validate-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const listItem = this.parentElement;
+                    listItem.style.opacity = '0.5';
+                    this.innerHTML = 'Validated <i class="fas fa-check"></i>';
+                    this.disabled = true;
+                    
+                    showToast('Validation submitted successfully!', 'success');
+                });
+            });
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Search functionality
+            searchInput.addEventListener('input', function() {
+                filterProjects();
+            });
+            
+            // Filter functionality
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    filterProjects();
+                });
+            });
+            
+            // Sort functionality
+            sortSelect.addEventListener('change', function() {
+                filterProjects();
+            });
+            
+            // Modal functionality
+            uploadBtn.addEventListener('click', () => {
+                showLoader();
+                setTimeout(() => {
+                    hideLoader();
+                    validationModal.classList.add('active');
+                }, 1000);
+            });
+            
+            closeModal.addEventListener('click', () => {
+                validationModal.classList.remove('active');
+            });
+            
+            closePeerModal.addEventListener('click', () => {
+                peerValidationModal.classList.remove('active');
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', (event) => {
+                if (event.target === validationModal) {
+                    validationModal.classList.remove('active');
+                }
+                if (event.target === peerValidationModal) {
+                    peerValidationModal.classList.remove('active');
+                }
+            });
+            
+            // Form submission
+            document.querySelector('.submit-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                showLoader();
+                
+                setTimeout(() => {
+                    hideLoader();
+                    validationModal.classList.remove('active');
+                    showToast('Project submitted for validation!', 'success');
+                    
+                    // Reset form
+                    document.getElementById('projectName').value = '';
+                    document.getElementById('projectDesc').value = '';
+                }, 1500);
+            });
+        }
+
+        // Filter and sort projects
+        function filterProjects() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            const sortValue = sortSelect.value;
+            
+            let filteredProjects = projects.filter(project => {
+                const matchesSearch = project.title.toLowerCase().includes(searchTerm) || 
+                                    project.description.toLowerCase().includes(searchTerm) ||
+                                    project.technologies.some(tech => tech.toLowerCase().includes(searchTerm));
+                
+                const matchesFilter = activeFilter === 'all' || project.category === activeFilter;
+                
+                return matchesSearch && matchesFilter;
+            });
+            
+            // Sort projects
+            switch(sortValue) {
+                case 'newest':
+                    filteredProjects.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    break;
+                case 'oldest':
+                    filteredProjects.sort((a, b) => new Date(a.date) - new Date(b.date));
+                    break;
+                case 'az':
+                    filteredProjects.sort((a, b) => a.title.localeCompare(b.title));
+                    break;
+                case 'za':
+                    filteredProjects.sort((a, b) => b.title.localeCompare(a.title));
+                    break;
+            }
+            
+            renderProjects(filteredProjects);
+        }
+
+        // Show peer validation modal
+        function showPeerValidationModal() {
+            peerValidationModal.classList.add('active');
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toastMessage = document.getElementById('toastMessage');
+            toastMessage.textContent = message;
+            
+            toast.className = 'toast';
+            toast.classList.add(type, 'show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Show loader
+        function showLoader() {
+            loader.classList.add('show');
+        }
+
+        // Hide loader
+        function hideLoader() {
+            loader.classList.remove('show');
+        }
+
+        // Initialize the application
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms & Conditions | SkillLink</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #3a86ff;
+            --secondary: #8338ec;
+            --accent: #ff006e;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+        }
+
+        body {
+            background: linear-gradient(135deg, #000000, #0d1b3a, #2d1b69);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 100px;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background: rgba(26, 26, 46, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--light);
+        }
+
+        .logo i {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: rgba(0, 0, 0, 0.3);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(58, 134, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 15s infinite linear;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #3a86ff, #8338ec);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            color: #d0d0d0;
+            position: relative;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .terms-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 2rem;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .terms-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .terms-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .terms-container::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 0.5rem 0;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .section-content {
+            padding-top: 1rem;
+            display: none;
+        }
+
+        .section-content.active {
+            display: block;
+        }
+
+        .section-content p {
+            margin-bottom: 1rem;
+            color: #d0d0d0;
+        }
+
+        .section-content ul {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            background: var(--secondary);
+        }
+
+        /* Last Updated */
+        .last-updated {
+            text-align: center;
+            color: #a0a0a0;
+            margin-top: 2rem;
+            font-style: italic;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #000000, #0d1b3a);
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            width: 100%;
+            text-align: center;
+            margin-top: 2rem;
+            color: #a0a0a0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section-header h2 {
+                font-size: 1.2rem;
+            }
+
+            .terms-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-link"></i>
+            <span>SkillLink</span>
+        </div>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="reports.html">Reports</a>
+            <a href="calendar.html">Calendar</a>
+            <a href="notifications.html">Notifications</a>
+            <a href="help&support.html">Support</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Terms & Conditions</h1>
+        <p>Please read carefully before using SkillLink.</p>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="terms-container">
+            <div class="section">
+                <div class="section-header">
+                    <h2>Introduction</h2>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="section-content">
+                    <p>Welcome to SkillLink! These Terms and Conditions govern your use of our platform that connects students and recruiters. By accessing or using SkillLink, you agree to comply with and be bound by these terms.</p>
+                    <p>SkillLink provides a platform for students to showcase their skills and for recruiters to find talented individuals. Our services include but are not limited to profile creation, skill verification, job matching, and communication tools.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2>Eligibility & Account Use</h2>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="section-content">
+                    <p>To use SkillLink, you must be at least 16 years of age. By using our platform, you represent and warrant that you meet this age requirement.</p>
+                    <p>When creating an account, you agree to:</p>
+                    <ul>
+                        <li>Provide accurate, current, and complete information</li>
+                        <li>Maintain the security of your password and accept all risks of unauthorized access</li>
+                        <li>Notify us immediately if you discover or suspect any security breaches related to your account</li>
+                        <li>Take responsibility for all activities that occur under your account</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2>User Responsibilities</h2>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="section-content">
+                    <p>As a user of SkillLink, you agree to:</p>
+                    <ul>
+                        <li>Use the platform only for lawful purposes</li>
+                        <li>Not engage in any fraudulent, misleading, or deceptive activities</li>
+                        <li>Respect the privacy and rights of other users</li>
+                        <li>Not upload or share content that is offensive, defamatory, or infringes on intellectual property rights</li>
+                        <li>Not attempt to interfere with or disrupt the platform's security features</li>
+                    </ul>
+                    <p>Violation of these responsibilities may result in termination of your account.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2>Recruiter & Student Guidelines</h2>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="section-content">
+                    <h3>For Recruiters:</h3>
+                    <ul>
+                        <li>Provide accurate information about job opportunities</li>
+                        <li>Not discriminate against applicants based on protected characteristics</li>
+                        <li>Respect the privacy of student information</li>
+                        <li>Not use student data for any purpose other than recruitment</li>
+                    </ul>
+
+                    <h3>For Students:</h3>
+                    <ul>
+                        <li>Provide accurate information about your skills, qualifications, and experience</li>
+                        <li>Not misrepresent your abilities or background</li>
+                        <li>Respect the communication boundaries set by recruiters</li>
+                        <li>Not share confidential information about recruiters or companies</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2>Intellectual Property Rights</h2>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="section-content">
+                    <p>SkillLink and its original content, features, and functionality are owned by SkillLink Inc. and are protected by international copyright, trademark, and other intellectual property laws.</p>
+                    <p>Users retain ownership of the content they create and share on SkillLink. However, by posting content, you grant SkillLink a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, and display that content for the purpose of operating and improving the platform.</p>
+                    <p>You may not copy, reproduce, distribute, transmit, display, sell, license, or otherwise exploit any content from SkillLink without prior written consent from us or the respective owners.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2>Limitation of Liability</h2>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="section-content">
+                    <p>To the fullest extent permitted by law, SkillLink shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, use, goodwill, or other intangible losses, resulting from:</p>
+                    <ul>
+                        <li>Your access to or use of or inability to access or use the platform</li>
+                        <li>Any conduct or content of any third party on the platform</li>
+                        <li>Any unauthorized access to or use of our servers and/or any personal information stored therein</li>
+                        <li>Any interruption or cessation of transmission to or from the platform</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2>Termination of Services</h2>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="section-content">
+                    <p>We may terminate or suspend your account and access to SkillLink immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach these Terms and Conditions.</p>
+                    <p>Upon termination, your right to use the platform will immediately cease. If you wish to terminate your account, you may simply discontinue using the platform or delete your account through the account settings.</p>
+                    <p>All provisions of the Terms which by their nature should survive termination shall survive termination, including ownership provisions, warranty disclaimers, indemnity, and limitations of liability.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2>Governing Law</h2>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="section-content">
+                    <p>These Terms shall be governed and construed in accordance with the laws of the State of California, United States, without regard to its conflict of law provisions.</p>
+                    <p>Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights. If any provision of these Terms is held to be invalid or unenforceable by a court, the remaining provisions of these Terms will remain in effect.</p>
+                    <p>We reserve the right to modify or replace these Terms at any time. If a revision is material, we will provide at least 30 days' notice prior to any new terms taking effect.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="last-updated">
+            <p>Last updated: September 6, 2025</p>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">SkillLink</div>
+            <div class="footer-links">
+                <a href="privacy_policy.html">Privacy Policy</a>
+                <a href="help&support.html">Support</a>
+                <a href="contact.html">Contact Us</a>
+            </div>
+            <div class="copyright">
+                &copy; 2025 SkillLink. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Accordion functionality
+            const sectionHeaders = document.querySelectorAll('.section-header');
+            
+            sectionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const icon = header.querySelector('i');
+                    
+                    // Toggle active class
+                    content.classList.toggle('active');
+                    
+                    // Change icon
+                    if (content.classList.contains('active')) {
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                    } else {
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    }
+                });
+            });
+
+            // Back to top button
+            const backToTopButton = document.querySelector('.back-to-top');
+            
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.classList.add('visible');
+                } else {
+                    backToTopButton.classList.remove('visible');
+                }
+            });
+            
+            backToTopButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Open first section by default
+            if (sectionHeaders.length > 0) {
+                sectionHeaders[0].click();
+            }
+        });
+    </script>
+</body>
+</html>

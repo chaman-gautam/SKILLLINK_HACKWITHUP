@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillLink Resume Builder</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary-bg: linear-gradient(135deg, #000000, #1a1a2e, #16213e);
+            --gradient: linear-gradient(90deg, #0066ff, #5d3fd3, #8b5cf6);
+            --card-bg: rgba(255, 255, 255, 0.07);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-color: #f8f9fa;
+            --accent: #8b5cf6;
+            --hover: #7c4dff;
+        }
+
+        body {
+            background: var(--primary-bg);
+            color: var(--text-color);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 1.2rem;
+            align-items: center;
+        }
+
+        .nav-icons i {
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .nav-icons i:hover {
+            color: var(--accent);
+        }
+
+        .profile {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--gradient);
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #000000, #1a1a2e 60%, #16213e);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(91, 63, 211, 0.2), transparent 60%);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            color: #d1d5db;
+        }
+
+        /* Main Content */
+        .container {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            gap: 2rem;
+        }
+
+        /* Left Panel - Form */
+        .left-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+        }
+
+        .section-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .section-header i {
+            transition: transform 0.3s;
+        }
+
+        .collapsed .section-header i {
+            transform: rotate(180deg);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #e5e7eb;
+        }
+
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .skills-input {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .skills-input input {
+            flex: 1;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .skill-tag {
+            background: var(--gradient);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .skill-tag i {
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .add-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .add-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Right Panel - Preview */
+        .right-panel {
+            flex: 1;
+            position: sticky;
+            top: 6rem;
+            height: fit-content;
+        }
+
+        .preview-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .preview-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .preview-header .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .preview-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .preview-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            color: var(--accent);
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 0.5rem;
+        }
+
+        .education-item, .experience-item, .project-item {
+            margin-bottom: 1rem;
+        }
+
+        .education-item h4, .experience-item h4, .project-item h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .education-details, .experience-details {
+            display: flex;
+            justify-content: space-between;
+            color: #d1d5db;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skills-list span {
+            background: rgba(139, 92, 246, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(90deg, #000000, #16213e, #1a1a2e);
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .copyright {
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .right-panel {
+                position: relative;
+                top: 0;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--gradient);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #d1d5db;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">SkillLink</div>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="library.html">Library</a>
+            <a href="calendar.html">Calendar</a>
+            <a href="about.html">About</a>
+            <a href="help&support.html">Support</a>
+        </div>
+        <div class="nav-icons">
+            <a href="Notifications.html">
+                <i class="fas fa-bell"></i>
+            </a>
+            <a href="profile2.html">
+                <div class="profile"></div>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>SkillLink Resume Builder</h1>
+        <p>Create a professional resume in minutes. Impress employers with a tailored resume that highlights your skills and experience.</p>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Left Panel - Form -->
+        <div class="left-panel">
+            <div class="progress-text">Resume Completion: <span id="progress-percent">0%</span></div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-header">
+                    <h3>Personal Information</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="form-content">
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="john.doe@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="tel" id="phone" placeholder="+1 (234) 567-8901">
+                    </div>
+                    <div class="form-group">
+                        <label for="linkedin">LinkedIn</label>
+                        <input type="url" id="linkedin" placeholder="linkedin.com/in/johndoe">
+                    </div>
+                    <div class="form-group">
+                        <label for="github">GitHub</label>
+                        <input type="url" id="github" placeholder="github.com/johndoe">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-header">
+                    <h3>Education</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="form-content">
+                    <div class="form-group">
+                        <label for="school">School/University</label>
+                        <input type="text" id="school" placeholder="University of Technology">
+                    </div>
+                    <div class="form-group">
+                        <label for="degree">Degree</label>
+                        <input type="text" id="degree" placeholder="Bachelor of Science in Computer Science">
+                    </div>
+                    <div class="form-group">
+                        <label for="eduYears">Years</label>
+                        <input type="text" id="eduYears" placeholder="2018 - 2022">
+                    </div>
+                    <button class="add-btn"><i class="fas fa-plus"></i> Add More Education</button>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-header">
+                    <h3>Work Experience</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="form-content">
+                    <div class="form-group">
+                        <label for="company">Company</label>
+                        <input type="text" id="company" placeholder="Tech Solutions Inc.">
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <input type="text" id="role" placeholder="Frontend Developer">
+                    </div>
+                    <div class="form-group">
+                        <label for="workDuration">Duration</label>
+                        <input type="text" id="workDuration" placeholder="Jan 2022 - Present">
+                    </div>
+                    <div class="form-group">
+                        <label for="workDesc">Description</label>
+                        <textarea id="workDesc" placeholder="Developed responsive web applications using React and Node.js..."></textarea>
+                    </div>
+                    <button class="add-btn"><i class="fas fa-plus"></i> Add More Experience</button>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-header">
+                    <h3>Skills</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="form-content">
+                    <div class="form-group">
+                        <label>Add Skills</label>
+                        <div class="skills-input">
+                            <input type="text" id="skillInput" placeholder="e.g., JavaScript, React, UI/UX Design">
+                            <button class="btn btn-primary" id="addSkill">Add</button>
+                        </div>
+                    </div>
+                    <div class="skill-tags" id="skillsContainer">
+                        <!-- Skills will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-header">
+                    <h3>Projects</h3>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="form-content">
+                    <div class="form-group">
+                        <label for="projectTitle">Project Title</label>
+                        <input type="text" id="projectTitle" placeholder="E-Commerce Website">
+                    </div>
+                    <div class="form-group">
+                        <label for="projectLink">Project Link</label>
+                        <input type="url" id="projectLink" placeholder="https://example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="projectDesc">Description</label>
+                        <textarea id="projectDesc" placeholder="Developed a full-stack e-commerce platform with payment integration..."></textarea>
+                    </div>
+                    <button class="add-btn"><i class="fas fa-plus"></i> Add More Projects</button>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="downloadBtn">Download PDF</button>
+                <button class="btn btn-secondary" id="resetBtn">Reset</button>
+            </div>
+        </div>
+
+        <!-- Right Panel - Preview -->
+        <div class="right-panel">
+            <div class="preview-container">
+                <div class="preview-header">
+                    <h2 id="previewName">John Doe</h2>
+                    <p id="previewTitle">Frontend Developer</p>
+                    <div class="contact-info">
+                        <span id="previewEmail">john.doe@example.com</span>
+                        <span id="previewPhone">+1 (234) 567-8901</span>
+                        <span id="previewLinkedIn">linkedin.com/in/johndoe</span>
+                        <span id="previewGithub">github.com/johndoe</span>
+                    </div>
+                </div>
+
+                <div class="preview-section">
+                    <h3>Education</h3>
+                    <div class="education-item">
+                        <h4 id="previewSchool">University of Technology</h4>
+                        <div class="education-details">
+                            <span id="previewDegree">Bachelor of Science in Computer Science</span>
+                            <span id="previewEduYears">2018 - 2022</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preview-section">
+                    <h3>Experience</h3>
+                    <div class="experience-item">
+                        <h4 id="previewRole">Frontend Developer</h4>
+                        <div class="experience-details">
+                            <span id="previewCompany">Tech Solutions Inc.</span>
+                            <span id="previewWorkDuration">Jan 2022 - Present</span>
+                        </div>
+                        <p id="previewWorkDesc">Developed responsive web applications using React and Node.js...</p>
+                    </div>
+                </div>
+
+                <div class="preview-section">
+                    <h3>Skills</h3>
+                    <div class="skills-list" id="previewSkills">
+                        <!-- Skills will be added here dynamically -->
+                    </div>
+                </div>
+
+                <div class="preview-section">
+                    <h3>Projects</h3>
+                    <div class="project-item">
+                        <h4 id="previewProjectTitle">E-Commerce Website</h4>
+                        <p id="previewProjectLink">https://example.com</p>
+                        <p id="previewProjectDesc">Developed a full-stack e-commerce platform with payment integration...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="privacy_policy.html">Privacy Policy</a>
+            <a href="terms&conditions.html">Terms & Conditions</a>
+            <a href="help&support.html">Help Center</a>
+        </div>
+        <p class="copyright">© 2025 SkillLink. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load saved data from localStorage
+            loadSavedData();
+            
+            // Set up event listeners for form inputs
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('input', updatePreview);
+                input.addEventListener('input', updateProgress);
+                input.addEventListener('input', saveToLocalStorage);
+            });
+            
+            // Set up skill adding functionality
+            document.getElementById('addSkill').addEventListener('click', addSkill);
+            document.getElementById('skillInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addSkill();
+                }
+            });
+            
+            // Set up section collapsing
+            const sectionHeaders = document.querySelectorAll('.section-header');
+            sectionHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    content.style.display = content.style.display === 'none' ? 'block' : 'none';
+                    this.parentElement.classList.toggle('collapsed');
+                });
+            });
+            
+            // Set up download button
+            document.getElementById('downloadBtn').addEventListener('click', function() {
+                alert('PDF download functionality would be implemented here. In a real application, this would generate and download a PDF version of the resume.');
+            });
+            
+            // Set up reset button
+            document.getElementById('resetBtn').addEventListener('click', function() {
+                if (confirm('Are you sure you want to reset all data?')) {
+                    localStorage.clear();
+                    inputs.forEach(input => {
+                        if (input.type !== 'button') {
+                            input.value = '';
+                        }
+                    });
+                    document.getElementById('skillsContainer').innerHTML = '';
+                    document.getElementById('previewSkills').innerHTML = '';
+                    updatePreview();
+                    updateProgress();
+                }
+            });
+            
+            // Initialize progress
+            updateProgress();
+        });
+        
+        function updatePreview() {
+            // Update personal info
+            document.getElementById('previewName').textContent = document.getElementById('fullName').value || 'John Doe';
+            document.getElementById('previewEmail').textContent = document.getElementById('email').value || 'john.doe@example.com';
+            document.getElementById('previewPhone').textContent = document.getElementById('phone').value || '+1 (234) 567-8901';
+            document.getElementById('previewLinkedIn').textContent = document.getElementById('linkedin').value || 'linkedin.com/in/johndoe';
+            document.getElementById('previewGithub').textContent = document.getElementById('github').value || 'github.com/johndoe';
+            
+            // Update education
+            document.getElementById('previewSchool').textContent = document.getElementById('school').value || 'University of Technology';
+            document.getElementById('previewDegree').textContent = document.getElementById('degree').value || 'Bachelor of Science in Computer Science';
+            document.getElementById('previewEduYears').textContent = document.getElementById('eduYears').value || '2018 - 2022';
+            
+            // Update experience
+            document.getElementById('previewRole').textContent = document.getElementById('role').value || 'Frontend Developer';
+            document.getElementById('previewCompany').textContent = document.getElementById('company').value || 'Tech Solutions Inc.';
+            document.getElementById('previewWorkDuration').textContent = document.getElementById('workDuration').value || 'Jan 2022 - Present';
+            document.getElementById('previewWorkDesc').textContent = document.getElementById('workDesc').value || 'Developed responsive web applications using React and Node.js...';
+            
+            // Update projects
+            document.getElementById('previewProjectTitle').textContent = document.getElementById('projectTitle').value || 'E-Commerce Website';
+            document.getElementById('previewProjectLink').textContent = document.getElementById('projectLink').value || 'https://example.com';
+            document.getElementById('previewProjectDesc').textContent = document.getElementById('projectDesc').value || 'Developed a full-stack e-commerce platform with payment integration...';
+        }
+        
+        function addSkill() {
+            const skillInput = document.getElementById('skillInput');
+            const skill = skillInput.value.trim();
+            
+            if (skill) {
+                // Add to skills container
+                const skillTag = document.createElement('div');
+                skillTag.className = 'skill-tag';
+                skillTag.innerHTML = `
+                    ${skill}
+                    <i class="fas fa-times" onclick="removeSkill(this)"></i>
+                `;
+                document.getElementById('skillsContainer').appendChild(skillTag);
+                
+                // Add to preview
+                const previewSkill = document.createElement('span');
+                previewSkill.textContent = skill;
+                document.getElementById('previewSkills').appendChild(previewSkill);
+                
+                // Clear input
+                skillInput.value = '';
+                
+                // Save to localStorage
+                saveSkillsToLocalStorage();
+                updateProgress();
+            }
+        }
+        
+        function removeSkill(element) {
+            const skillTag = element.parentElement;
+            const skill = skillTag.textContent.trim();
+            
+            // Remove from skills container
+            skillTag.remove();
+            
+            // Remove from preview
+            const previewSkills = document.getElementById('previewSkills').children;
+            for (let i = 0; i < previewSkills.length; i++) {
+                if (previewSkills[i].textContent === skill) {
+                    previewSkills[i].remove();
+                    break;
+                }
+            }
+            
+            // Update localStorage
+            saveSkillsToLocalStorage();
+            updateProgress();
+        }
+        
+        function saveToLocalStorage() {
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                if (input.id) {
+                    localStorage.setItem(input.id, input.value);
+                }
+            });
+        }
+        
+        function saveSkillsToLocalStorage() {
+            const skills = [];
+            const skillTags = document.getElementById('skillsContainer').children;
+            
+            for (let i = 0; i < skillTags.length; i++) {
+                skills.push(skillTags[i].textContent.trim());
+            }
+            
+            localStorage.setItem('skills', JSON.stringify(skills));
+        }
+        
+        function loadSavedData() {
+            // Load input values
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                if (input.id) {
+                    const savedValue = localStorage.getItem(input.id);
+                    if (savedValue) {
+                        input.value = savedValue;
+                    }
+                }
+            });
+            
+            // Load skills
+            const savedSkills = localStorage.getItem('skills');
+            if (savedSkills) {
+                const skills = JSON.parse(savedSkills);
+                skills.forEach(skill => {
+                    // Add to skills container
+                    const skillTag = document.createElement('div');
+                    skillTag.className = 'skill-tag';
+                    skillTag.innerHTML = `
+                        ${skill}
+                        <i class="fas fa-times" onclick="removeSkill(this)"></i>
+                    `;
+                    document.getElementById('skillsContainer').appendChild(skillTag);
+                    
+                    // Add to preview
+                    const previewSkill = document.createElement('span');
+                    previewSkill.textContent = skill;
+                    document.getElementById('previewSkills').appendChild(previewSkill);
+                });
+            }
+            
+            // Update preview with loaded data
+            updatePreview();
+        }
+        
+        function updateProgress() {
+            let filledCount = 0;
+            const inputs = document.querySelectorAll('input:not(#skillInput), textarea');
+            
+            // Count filled inputs
+            inputs.forEach(input => {
+                if (input.value.trim() !== '') {
+                    filledCount++;
+                }
+            });
+            
+            // Count skills
+            const skillCount = document.getElementById('skillsContainer').children.length;
+            filledCount += skillCount;
+            
+            // Calculate percentage (not all fields are equally important, but this is a simple implementation)
+            const totalCount = inputs.length + 5; // Approximate total fields
+            const percentage = Math.min(100, Math.round((filledCount / totalCount) * 100));
+            
+            // Update progress bar and text
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+            document.getElementById('progress-percent').textContent = `${percentage}%`;
+        }
+    </script>
+</body>
+</html>

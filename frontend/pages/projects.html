@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Showcase</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            /* -webkit-background-clip: text; */
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Spotlight Carousel */
+        .spotlight {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .carousel {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .carousel-inner {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 100%;
+        }
+
+        .carousel-item {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7);
+        }
+
+        .carousel-caption {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            max-width: 60%;
+        }
+
+        .carousel-caption h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .carousel-nav button {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-nav button.active {
+            background: #ff7e5f;
+            transform: scale(1.2);
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .project-card {
+            height: 350px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .project-card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-front {
+            background: linear-gradient(45deg, #2c3e50, #4ca1af);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card-front i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .card-front h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .card-back {
+            background: linear-gradient(45deg, #232526, #414345);
+            transform: rotateY(180deg);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .card-back h3 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            color: #ff7e5f;
+        }
+
+        .card-back p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: auto;
+        }
+
+        .tech-stack span {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #ff7e5f, #feb47b);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 20px rgba(255, 126, 95, 0.5);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            animation: glow 2s infinite;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 126, 95, 0.7);
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 5px 20px rgba(255, 126, 95, 0.5); }
+            50% { box-shadow: 0 5px 30px rgba(255, 126, 95, 0.9); }
+            100% { box-shadow: 0 5px 20px rgba(255, 126, 95, 0.5); }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            width: 90%;
+            max-width: 500px;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transform: translateY(-50px);
+            transition: transform 0.5s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: #ff7e5f;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input, 
+        .form-group textarea, 
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #ff7e5f, #feb47b);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 126, 95, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .projects-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .carousel-caption {
+                max-width: 80%;
+            }
+            
+            .carousel-caption h3 {
+                font-size: 1.4rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .carousel {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Project Showcase</h1>
+            <p class="subtitle">Discover amazing projects created by our community</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Spotlight Carousel -->
+        <section class="spotlight">
+            <h2>Featured Projects</h2>
+            <div class="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item">
+                        <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="E-Commerce Platform">
+                        <div class="carousel-caption">
+                            <h3>E-Commerce Platform</h3>
+                            <p>Revolutionary shopping experience with AI recommendations</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Health Tracker App">
+                        <div class="carousel-caption">
+                            <h3>Health Tracker App</h3>
+                            <p>Track your fitness goals with our intelligent health platform</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Smart Home Dashboard">
+                        <div class="carousel-caption">
+                            <h3>Smart Home Dashboard</h3>
+                            <p>Control your entire home with this intuitive interface</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-nav">
+                    <button class="active"></button>
+                    <button></button>
+                    <button></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Grid -->
+        <section>
+            <h2>All Projects</h2>
+            <div class="projects-grid">
+                <!-- Project Card 1 -->
+                <div class="project-card">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-shopping-cart"></i>
+                            <h3>E-Commerce Platform</h3>
+                            <p>Click to see details</p>
+                        </div>
+                        <div class="card-back">
+                            <h3>E-Commerce Platform</h3>
+                            <p>A full-featured online shopping platform with product recommendations, secure payments, and order tracking.</p>
+                            <div class="tech-stack">
+                                <span>React</span>
+                                <span>Node.js</span>
+                                <span>MongoDB</span>
+                                <span>Stripe API</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 2 -->
+                <div class="project-card">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-heartbeat"></i>
+                            <h3>Health Tracker App</h3>
+                            <p>Click to see details</p>
+                        </div>
+                        <div class="card-back">
+                            <h3>Health Tracker App</h3>
+                            <p>Monitor your health metrics, track workouts, and get personalized health insights.</p>
+                            <div class="tech-stack">
+                                <span>React Native</span>
+                                <span>Firebase</span>
+                                <span>Chart.js</span>
+                                <span>HealthKit</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 3 -->
+                <div class="project-card">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-home"></i>
+                            <h3>Smart Home Dashboard</h3>
+                            <p>Click to see details</p>
+                        </div>
+                        <div class="card-back">
+                            <h3>Smart Home Dashboard</h3>
+                            <p>Control your smart home devices, set routines, and monitor energy consumption.</p>
+                            <div class="tech-stack">
+                                <span>Vue.js</span>
+                                <span>IoT</span>
+                                <span>WebSockets</span>
+                                <span>Python</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 4 -->
+                <div class="project-card">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-graduation-cap"></i>
+                            <h3>E-Learning Platform</h3>
+                            <p>Click to see details</p>
+                        </div>
+                        <div class="card-back">
+                            <h3>E-Learning Platform</h3>
+                            <p>Interactive courses with video lessons, quizzes, and progress tracking.</p>
+                            <div class="tech-stack">
+                                <span>Angular</span>
+                                <span>Django</span>
+                                <span>PostgreSQL</span>
+                                <span>AWS S3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 5 -->
+                <div class="project-card">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>Financial Analytics</h3>
+                            <p>Click to see details</p>
+                        </div>
+                        <div class="card-back">
+                            <h3>Financial Analytics</h3>
+                            <p>Visualize your financial data, track investments, and get market insights.</p>
+                            <div class="tech-stack">
+                                <span>React</span>
+                                <span>D3.js</span>
+                                <span>Express</span>
+                                <span>Plaid API</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 6 -->
+                <div class="project-card">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <i class="fas fa-robot"></i>
+                            <h3>AI Chatbot</h3>
+                            <p>Click to see details</p>
+                        </div>
+                        <div class="card-back">
+                            <h3>AI Chatbot</h3>
+                            <p>Intelligent customer support chatbot with natural language processing.</p>
+                            <div class="tech-stack">
+                                <span>Python</span>
+                                <span>TensorFlow</span>
+                                <span>NLTK</span>
+                                <span>WebSocket</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating Action Button -->
+    <div class="fab" id="fab">
+        <i class="fas fa-plus"></i>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Upload New Project</h2>
+                <button class="close-btn" id="close-modal">&times;</button>
+            </div>
+            <form id="project-form">
+                <div class="form-group">
+                    <label for="project-name">Project Name</label>
+                    <input type="text" id="project-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="project-desc">Description</label>
+                    <textarea id="project-desc" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="project-tech">Technologies (comma separated)</label>
+                    <input type="text" id="project-tech" required>
+                </div>
+                <div class="form-group">
+                    <label for="project-image">Cover Image URL</label>
+                    <input type="url" id="project-image">
+                </div>
+                <div class="form-group">
+                    <label for="project-category">Category</label>
+                    <select id="project-category">
+                        <option>Web Application</option>
+                        <option>Mobile App</option>
+                        <option>Data Science</option>
+                        <option>IoT</option>
+                        <option>AI/ML</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">Submit Project</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Carousel functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const carousel = document.querySelector('.carousel-inner');
+            const carouselItems = document.querySelectorAll('.carousel-item');
+            const navButtons = document.querySelectorAll('.carousel-nav button');
+            let currentIndex = 0;
+            
+            // Set initial active state
+            function setActiveSlide(index) {
+                carousel.style.transform = `translateX(-${index * 100}%)`;
+                navButtons.forEach((btn, i) => {
+                    btn.classList.toggle('active', i === index);
+                });
+                currentIndex = index;
+            }
+            
+            // Add click events to nav buttons
+            navButtons.forEach((button, index) => {
+                button.addEventListener('click', () => {
+                    setActiveSlide(index);
+                });
+            });
+            
+            // Auto-advance carousel
+            setInterval(() => {
+                currentIndex = (currentIndex + 1) % carouselItems.length;
+                setActiveSlide(currentIndex);
+            }, 5000);
+            
+            // Modal functionality
+            const fab = document.getElementById('fab');
+            const modal = document.getElementById('modal');
+            const closeModal = document.getElementById('close-modal');
+            const projectForm = document.getElementById('project-form');
+            
+            fab.addEventListener('click', () => {
+                modal.classList.add('active');
+            });
+            
+            closeModal.addEventListener('click', () => {
+                modal.classList.remove('active');
+            });
+            
+            // Close modal when clicking outside
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+            
+            // Form submission
+            projectForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // In a real application, you would process the form data here
+                alert('Project submitted successfully!');
+                modal.classList.remove('active');
+                projectForm.reset();
+            });
+        });
+    </script>
+</body>
+</html>

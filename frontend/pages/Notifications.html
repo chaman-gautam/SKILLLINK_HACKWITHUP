@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillLink - Notifications</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-blue: #3a86ff;
+            --primary-purple: #8338ec;
+            --accent-pink: #ff006e;
+            --text-light: #f8f9fa;
+            --text-muted: #adb5bd;
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --card-border: rgba(255, 255, 255, 0.15);
+            --card-hover: rgba(255, 255, 255, 0.15);
+        }
+
+        body {
+            background: linear-gradient(135deg, #000000, #1a1f3b, #2d1b69);
+            color: var(--text-light);
+            min-height: 100vh;
+            padding-bottom: 60px;
+            position: relative;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background: rgba(10, 15, 35, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary-blue), var(--primary-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 8px;
+            color: var(--primary-blue);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-links a.active {
+            color: var(--primary-blue);
+            background: rgba(58, 134, 255, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, var(--text-light), var(--primary-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Controls Section */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .filter-dropdown {
+            position: relative;
+        }
+
+        .filter-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-light);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(20, 25, 45, 0.95);
+            min-width: 160px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 5px;
+            z-index: 10;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
+        }
+
+        .dropdown-content.show {
+            display: block;
+        }
+
+        .dropdown-content button {
+            width: 100%;
+            text-align: left;
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .dropdown-content button:hover {
+            background: rgba(58, 134, 255, 0.1);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .action-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-light);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .action-btn.mark-all-read {
+            background: rgba(58, 134, 255, 0.2);
+        }
+
+        .action-btn.clear-all {
+            background: rgba(255, 0, 110, 0.2);
+        }
+
+        /* Notifications Container */
+        .notifications-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 5%;
+        }
+
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Notification Item */
+        .notification {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border);
+            position: relative;
+        }
+
+        .notification.unread {
+            border-left: 4px solid var(--primary-blue);
+            background: rgba(58, 134, 255, 0.1);
+        }
+
+        .notification.unread:hover {
+            box-shadow: 0 0 15px rgba(58, 134, 255, 0.3);
+        }
+
+        .notification.read {
+            opacity: 0.8;
+        }
+
+        .notification.read:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .notification-icon {
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .icon-message {
+            background: rgba(58, 134, 255, 0.2);
+            color: var(--primary-blue);
+        }
+
+        .icon-info {
+            background: rgba(131, 56, 236, 0.2);
+            color: var(--primary-purple);
+        }
+
+        .icon-success {
+            background: rgba(0, 200, 83, 0.2);
+            color: #00c853;
+        }
+
+        .icon-warning {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notification.unread .notification-title {
+            color: var(--text-light);
+        }
+
+        .notification.read .notification-title {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .notification-message {
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        .notification-time {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .notification-action {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .notification-action:hover {
+            color: var(--text-light);
+        }
+
+        .delete-btn:hover {
+            color: var(--accent-pink);
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(to right, #0a0f23, #151a35);
+            padding: 30px 5%;
+            text-align: center;
+            margin-top: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .copyright {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 15px;
+            }
+            
+            .nav-links {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+            
+            .action-buttons {
+                justify-content: center;
+            }
+            
+            .notification {
+                padding: 15px;
+            }
+            
+            .notification-title {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        /* Animation for notification removal */
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+        }
+
+        .fade-out {
+            animation: fadeOut 0.5s forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-link"></i>
+            <span>SkillLink</span>
+        </div>
+        <div class="nav-links">
+            <a href="home candidate.html">Home</a>
+            <a href="about.html">About</a>
+            <!-- <a href="reports.html">Reports</a>
+            <a href="calendar.html">Calendar</a> -->
+            <a href="help&support.html">Support</a>
+            <a href="Notifications.html" class="active">Notifications</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Notifications</h1>
+        <p>Stay updated with the latest alerts, messages, and system updates.</p>
+    </section>
+
+    <!-- Controls Section -->
+    <div class="controls">
+        <div class="filter-dropdown">
+            <button class="filter-btn">
+                <i class="fas fa-filter"></i>
+                <span>Show All</span>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <button data-filter="all">Show All</button>
+                <button data-filter="message">Messages</button>
+                <button data-filter="alert">Alerts</button>
+                <button data-filter="report">Reports</button>
+            </div>
+        </div>
+        <div class="action-buttons">
+            <button class="action-btn mark-all-read">
+                <i class="fas fa-check-double"></i>
+                <span>Mark All as Read</span>
+            </button>
+            <button class="action-btn clear-all">
+                <i class="fas fa-trash"></i>
+                <span>Clear All</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Notifications Container -->
+    <div class="notifications-container">
+        <div class="notification-list" id="notificationList">
+            <!-- Notifications will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="privacy_policy.html">Privacy Policy</a>
+            <a href="terms&conditions.html">Terms of Service</a>
+            <a href="help&support.html">Help & Support</a>
+        </div>
+        <div class="copyright">
+            &copy; 2025 SkillLink. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Notification data
+        const notifications = [
+            {
+                id: 1,
+                icon: 'icon-info',
+                symbol: '🎓',
+                title: 'Recruiter viewed your profile',
+                message: 'Vishal Mehra checked your resume.',
+                time: '2h ago',
+                type: 'alert',
+                unread: true
+            },
+            {
+                id: 2,
+                icon: 'icon-message',
+                symbol: '💬',
+                title: 'New message',
+                message: 'You have a new message from Aman Gautam.',
+                time: '5h ago',
+                type: 'message',
+                unread: true
+            },
+            {
+                id: 3,
+                icon: 'icon-success',
+                symbol: '📊',
+                title: 'Report ready',
+                message: 'Your Skill Progress Report for August is available.',
+                time: '1d ago',
+                type: 'report',
+                unread: true
+            },
+            {
+                id: 4,
+                icon: 'icon-warning',
+                symbol: '⚠️',
+                title: 'System update',
+                message: 'Maintenance scheduled for Sept 5, 2 AM – 4 AM.',
+                time: '3d ago',
+                type: 'alert',
+                unread: true
+            },
+            {
+                id: 5,
+                icon: 'icon-message',
+                symbol: '💬',
+                title: 'New message',
+                message: 'You have a new message from Priya Sharma.',
+                time: '1 week ago',
+                type: 'message',
+                unread: false
+            },
+            {
+                id: 6,
+                icon: 'icon-success',
+                symbol: '✅',
+                title: 'Profile completed',
+                message: 'Congratulations! Your profile is now 100% complete.',
+                time: '2 weeks ago',
+                type: 'alert',
+                unread: false
+            }
+        ];
+
+        // DOM elements
+        const notificationList = document.getElementById('notificationList');
+        const filterBtn = document.querySelector('.filter-btn');
+        const dropdownContent = document.querySelector('.dropdown-content');
+        const filterButtons = document.querySelectorAll('.dropdown-content button');
+        const markAllReadBtn = document.querySelector('.mark-all-read');
+        const clearAllBtn = document.querySelector('.clear-all');
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            renderNotifications('all');
+            setupEventListeners();
+        });
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Filter dropdown toggle
+            filterBtn.addEventListener('click', () => {
+                dropdownContent.classList.toggle('show');
+            });
+
+            // Filter buttons
+            filterButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const filter = e.target.getAttribute('data-filter');
+                    filterBtn.querySelector('span').textContent = e.target.textContent;
+                    dropdownContent.classList.remove('show');
+                    renderNotifications(filter);
+                });
+            });
+
+            // Mark all as read
+            markAllReadBtn.addEventListener('click', markAllAsRead);
+
+            // Clear all notifications
+            clearAllBtn.addEventListener('click', clearAllNotifications);
+
+            // Close dropdown when clicking outside
+            window.addEventListener('click', (e) => {
+                if (!filterBtn.contains(e.target)) {
+                    dropdownContent.classList.remove('show');
+                }
+            });
+        }
+
+        // Render notifications based on filter
+        function renderNotifications(filter) {
+            notificationList.innerHTML = '';
+            
+            const filteredNotifications = filter === 'all' 
+                ? notifications 
+                : notifications.filter(notification => notification.type === filter);
+            
+            if (filteredNotifications.length === 0) {
+                notificationList.innerHTML = `
+                    <div class="notification">
+                        <div class="notification-content">
+                            <p>No notifications found</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            filteredNotifications.forEach(notification => {
+                const notificationElement = createNotificationElement(notification);
+                notificationList.appendChild(notificationElement);
+            });
+        }
+
+        // Create notification element
+        function createNotificationElement(notification) {
+            const div = document.createElement('div');
+            div.classList.add('notification');
+            div.classList.add(notification.unread ? 'unread' : 'read');
+            div.setAttribute('data-id', notification.id);
+            
+            div.innerHTML = `
+                <div class="notification-icon ${notification.icon}">
+                    ${notification.symbol}
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">
+                        <span>${notification.title}</span>
+                    </div>
+                    <div class="notification-message">${notification.message}</div>
+                    <div class="notification-time">${notification.time}</div>
+                </div>
+                <div class="notification-actions">
+                    <button class="notification-action delete-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            // Add click event to mark as read
+            div.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('delete-btn') && 
+                    !e.target.parentElement.classList.contains('delete-btn')) {
+                    markAsRead(notification.id);
+                }
+            });
+            
+            // Add click event to delete button
+            const deleteBtn = div.querySelector('.delete-btn');
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                deleteNotification(notification.id, div);
+            });
+            
+            return div;
+        }
+
+        // Mark notification as read
+        function markAsRead(id) {
+            const notification = notifications.find(n => n.id === id);
+            if (notification && notification.unread) {
+                notification.unread = false;
+                
+                const notificationElement = document.querySelector(`.notification[data-id="${id}"]`);
+                if (notificationElement) {
+                    notificationElement.classList.remove('unread');
+                    notificationElement.classList.add('read');
+                }
+            }
+        }
+
+        // Mark all notifications as read
+        function markAllAsRead() {
+            notifications.forEach(notification => {
+                notification.unread = false;
+            });
+            
+            document.querySelectorAll('.notification').forEach(notificationElement => {
+                notificationElement.classList.remove('unread');
+                notificationElement.classList.add('read');
+            });
+        }
+
+        // Delete a single notification
+        function deleteNotification(id, element) {
+            element.classList.add('fade-out');
+            
+            setTimeout(() => {
+                const index = notifications.findIndex(n => n.id === id);
+                if (index !== -1) {
+                    notifications.splice(index, 1);
+                }
+                
+                const filter = document.querySelector('.filter-btn span').textContent.toLowerCase();
+                renderNotifications(filter === 'show all' ? 'all' : filter);
+            }, 500);
+        }
+
+        // Clear all notifications
+        function clearAllNotifications() {
+            if (notifications.length === 0) return;
+            
+            // Fade out all notifications
+            document.querySelectorAll('.notification').forEach(notificationElement => {
+                notificationElement.classList.add('fade-out');
+            });
+            
+            // Clear the notifications array after animation
+            setTimeout(() => {
+                notifications.length = 0;
+                renderNotifications('all');
+            }, 500);
+        }
+    </script>
+</body>
+</html>
