@@ -483,6 +483,166 @@
             }
         }
 
+        /* =======================
+   Responsive Design
+======================= */
+
+        /* Medium screens (tablets) */
+        @media (max-width: 1024px) {
+            .stats-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+
+            .search-bar {
+                width: 250px;
+            }
+
+            .sidebar {
+                width: 200px;
+            }
+
+            .course-card,
+            .chart-card,
+            .assignment-card {
+                padding: 15px;
+            }
+
+            .course-name {
+                font-size: 16px;
+            }
+
+            .dashboard-title {
+                font-size: 20px;
+            }
+        }
+
+        /* Small screens (mobile) */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                padding: 10px;
+                border-bottom: 1px solid rgba(0, 255, 252, 0.2);
+                box-shadow: 0 0 10px rgba(0, 255, 252, 0.1);
+            }
+
+            .logo {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .menu-title {
+                display: none;
+            }
+
+            .menu-item {
+                flex: 1 1 45%;
+                justify-content: center;
+                font-size: 12px;
+                padding: 10px;
+                margin: 5px;
+            }
+
+            .main-content {
+                padding: 10px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .search-bar {
+                width: 100%;
+            }
+
+            .user-profile {
+                align-self: flex-end;
+            }
+
+            .stats-cards {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .charts-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .courses-container {
+                grid-template-columns: 1fr;
+            }
+
+            .course-card,
+            .assignment-card {
+                padding: 10px;
+            }
+
+            .dashboard-title {
+                font-size: 18px;
+                margin-bottom: 10px;
+            }
+
+            .stat-value {
+                font-size: 24px;
+            }
+
+            .user-avatar {
+                width: 35px;
+                height: 35px;
+                font-size: 14px;
+            }
+        }
+
+        /* Extra small screens */
+        @media (max-width: 480px) {
+            .menu-item span {
+                display: none;
+            }
+
+            .menu-item i {
+                margin-right: 0;
+            }
+
+            .stats-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-title {
+                text-align: center;
+            }
+
+            .course-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+
         .pulse-glow {
             animation: pulse 2s infinite;
         }
@@ -542,6 +702,12 @@
                     <span>Portfolio</span>
                 </div>
             </a>
+            <a href="./ai_interview.html" style="text-decoration: none;">
+                <div class="menu-item">
+                    <i class="fas fa-network-wired"></i>
+                    <span>Ai Interview preparation</span>
+                </div>
+            </a>
             <a href="./resume_builder.html" style="text-decoration: none;">
                 <div class="menu-item">
                     <i class="fas fa-tasks"></i>
@@ -590,28 +756,28 @@
                     <div class="stat-icon">
                         <i class="fas fa-book"></i>
                     </div>
-                    <div class="stat-value" id="courses-count">5</div>
+                    <div class="stat-value" id="courses-count">0</div>
                     <div class="stat-title">Active Courses</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">
                         <i class="fas fa-tasks"></i>
                     </div>
-                    <div class="stat-value" id="assignments-due">3</div>
+                    <div class="stat-value" id="assignments-due">0</div>
                     <div class="stat-title">Assignments Due</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">
                         <i class="fas fa-clock"></i>
                     </div>
-                    <div class="stat-value" id="upcoming-exams">2</div>
+                    <div class="stat-value" id="upcoming-exams">0</div>
                     <div class="stat-title">Upcoming Exams</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">
                         <i class="fas fa-chart-line"></i>
                     </div>
-                    <div class="stat-value">88%</div>
+                    <div class="stat-value">%</div>
                     <div class="stat-title">Average Grade</div>
                 </div>
             </div>

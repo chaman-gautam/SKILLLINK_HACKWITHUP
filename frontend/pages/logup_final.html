@@ -507,6 +507,10 @@
                 font-size: 16px;
             }
         }
+
+        .pointer-otp {
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -621,8 +625,8 @@
                 <button type="submit" class="btn" id="signup-btn" disabled>Sign Up</button>
 
                 <div class="otp-container" id="otp-container">
-                    <h3>Enter OTP Sent to Your Email</h3>
-                    <div style="margin: 20px 0;">
+                    <h3>Choose one from these options</h3>
+                    <div style="margin: 20px 0;" class="pointer-otp">
                         <input type="text" class="otp-input" maxlength="1" id="otp1">
                         <input type="text" class="otp-input" maxlength="1" id="otp2">
                         <input type="text" class="otp-input" maxlength="1" id="otp3">
@@ -712,6 +716,7 @@
             signupForm.addEventListener('submit', function (e) {
                 e.preventDefault();
                 handleSignup();
+
             });
 
             verifyOtpBtn.addEventListener('click', function () {
@@ -884,7 +889,7 @@
 
                 // In a real app, we would send the OTP to the user's email here
                 // For demo purposes, we'll just log it
-                const demoOtp = '123456';
+                const demoOtp = '1';
                 console.log(`Demo OTP: ${demoOtp}`);
 
                 // Auto-fill OTP for demo purposes
@@ -894,6 +899,7 @@
                 document.getElementById('otp4').value = '4';
                 document.getElementById('otp5').value = '5';
                 document.getElementById('otp6').value = '6';
+                // alert("there is some issue while sending otp ,for now just use 3");
             }
 
             function verifyOtp() {
